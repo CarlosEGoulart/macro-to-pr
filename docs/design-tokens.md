@@ -69,6 +69,6 @@ Uma progressão só, usada em tudo. Base 4px.
 **Telas** (5 essenciais):
 1. **Dashboard** — visão geral de projetos e demandas
 2. **Detalhe da Demanda** — status, plano, tarefas e ações
-3. **Revisão de Código** — diff, aprovar/rejeitar, comentários
-4. **Compra de Créditos** — seleção de pacote, pagamento
-5. **Configurações de Projeto** — gerenciamento, membros, integrações
+3. **Revisão de Resultado** — resultado da execução, parecer da Revisão independente e decisão de aprovar/rejeitar
+4. **Compra de Créditos** — seleção de pacote, pagamento e acompanhamento do Pedido
+5. **Saldo e Créditos** — saldo atual, histórico de movimentações e acesso à compra de créditos
