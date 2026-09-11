@@ -1,7 +1,7 @@
 # 🎨 Tokens de Design
 
 **Projeto:** Macro2PR
-**Versão:** 0.0.0 · esqueleto — preencha via `/utf-design`
+**Versão:** 1.0.0
 **Última atualização:** 2026-09-11
 
 > 🤖 **Este documento existe para a IA parar de inventar um botão diferente a cada
