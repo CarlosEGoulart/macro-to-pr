@@ -58,7 +58,7 @@
 
 ## 📝 4. Escopo Funcional (User Stories)
 
-### US01 — Acessar o Macro2PR com conta GitHub · `Must Have` · `M` · Status: `⚪ Draft`
+### US01 — Acessar o Macro2PR com conta GitHub · `Must Have` · `M` · Status: `🟡 Ready`
 
 **Como** Desenvolvedor, **quero** acessar o Macro2PR autorizando minha conta GitHub, **para que** eu possa utilizar na plataforma os Repositórios aos quais tenho acesso.
 
@@ -71,7 +71,7 @@
 
 ---
 
-### US02 — Criar Projeto · `Must Have` · `S` · Status: `⚪ Draft`
+### US02 — Criar Projeto · `Must Have` · `S` · Status: `🟡 Ready`
 
 **Como** Desenvolvedor, **quero** criar um Projeto associando um Repositório ao qual tenho acesso, **para que** eu possa organizar e executar demandas de desenvolvimento relacionadas a esse código.
 
@@ -84,7 +84,7 @@
 
 ---
 
-### US03 — Criar Demanda · `Must Have` · `S` · Status: `⚪ Draft`
+### US03 — Criar Demanda · `Must Have` · `S` · Status: `🟡 Ready`
 
 **Como** Desenvolvedor, **quero** criar uma Demanda em alto nível dentro de um Projeto meu, **para que** eu possa registrar o objetivo de desenvolvimento que desejo realizar.
 
@@ -95,7 +95,7 @@
 
 ---
 
-### US04 — Gerar Plano de Tarefas · `Must Have` · `M` · Status: `⚪ Draft`
+### US04 — Gerar Plano de Tarefas · `Must Have` · `M` · Status: `🟡 Ready`
 
 **Como** Desenvolvedor, **quero** gerar um Plano de Tarefas a partir de uma Demanda minha, **para que** o trabalho necessário seja decomposto em unidades menores e organizadas antes da execução.
 
@@ -107,7 +107,7 @@
 
 ---
 
-### US05 — Aprovar ou rejeitar Plano de Tarefas · `Must Have` · `S` · Status: `⚪ Draft`
+### US05 — Aprovar ou rejeitar Plano de Tarefas · `Must Have` · `S` · Status: `🟡 Ready`
 
 **Como** Desenvolvedor, **quero** aprovar ou rejeitar um Plano de Tarefas gerado para minha Demanda, **para que** eu decida se o trabalho planejado pode seguir para execução.
 
@@ -121,7 +121,7 @@
 
 ---
 
-### US06 — Iniciar execução de Tarefa · `Must Have` · `M` · Status: `⚪ Draft`
+### US06 — Iniciar execução de Tarefa · `Must Have` · `M` · Status: `🟡 Ready`
 
 **Como** Desenvolvedor, **quero** iniciar a execução de uma Tarefa pertencente a um Plano de Tarefas aprovado, **para que** o trabalho planejado seja realizado e produza um resultado que possa ser revisado.
 
@@ -137,7 +137,7 @@
 
 ---
 
-### US07 — Obter Revisão independente do Resultado de execução · `Must Have` · `M` · Status: `⚪ Draft`
+### US07 — Obter Revisão independente do Resultado de execução · `Must Have` · `M` · Status: `🟡 Ready`
 
 **Como** Desenvolvedor, **quero** que o Resultado de execução de uma Tentativa seja submetido a uma Revisão independente, **para que** eu receba uma análise do que foi produzido antes de decidir se aceito ou rejeito o resultado.
 
@@ -150,7 +150,7 @@
 
 ---
 
-### US08 — Aprovar ou rejeitar Resultado de execução · `Must Have` · `S` · Status: `⚪ Draft`
+### US08 — Aprovar ou rejeitar Resultado de execução · `Must Have` · `S` · Status: `🟡 Ready`
 
 **Como** Desenvolvedor, **quero** aprovar ou rejeitar o Resultado de execução após a Revisão, **para que** eu decida se o trabalho realizado pode ser aceito ou se precisa de uma nova tentativa.
 
@@ -164,7 +164,7 @@
 
 ---
 
-### US09 — Solicitar Regeneração de Tarefa · `Must Have` · `S` · Status: `⚪ Draft`
+### US09 — Solicitar Regeneração de Tarefa · `Must Have` · `S` · Status: `🟡 Ready`
 
 **Como** Desenvolvedor, **quero** solicitar uma nova Tentativa de execução para uma Tarefa cujo Resultado de execução foi rejeitado, **para que** uma nova tentativa possa produzir um novo resultado sem alterar o Plano de Tarefas.
 
@@ -179,7 +179,7 @@
 
 ---
 
-### US10 — Gerar Pull Request final da Demanda · `Must Have` · `M` · Status: `⚪ Draft`
+### US10 — Gerar Pull Request final da Demanda · `Must Have` · `M` · Status: `🟡 Ready`
 
 **Como** Desenvolvedor, **quero** gerar um Pull Request final no Repositório associado ao Projeto depois que todas as Tarefas do Plano aprovado tiverem seus Resultados aceitos, **para que** a alteração completa da Demanda possa ser submetida à integração no código.
 
@@ -195,7 +195,7 @@
 
 ---
 
-### US11 — Criar Pedido de Créditos · `Must Have` · `S` · Status: `⚪ Draft`
+### US11 — Criar Pedido de Créditos · `Must Have` · `S` · Status: `🟡 Ready`
 
 **Como** Desenvolvedor, **quero** criar um Pedido de créditos escolhendo um pacote disponível, **para que** eu possa iniciar a compra de créditos de execução.
 
@@ -207,7 +207,7 @@
 
 ---
 
-### US12 — Pagar Pedido de Créditos e receber créditos · `Must Have` · `M` · Status: `⚪ Draft`
+### US12 — Pagar Pedido de Créditos e receber créditos · `Must Have` · `M` · Status: `🟡 Ready`
 
 **Como** Desenvolvedor, **quero** realizar o pagamento de um Pedido de créditos, **para que** os créditos adquiridos sejam adicionados ao meu Saldo somente após a confirmação do pagamento.
 
@@ -223,7 +223,7 @@
 
 ---
 
-### US13 — Consultar Saldo e Histórico de Movimentações · `Must Have` · `S` · Status: `⚪ Draft`
+### US13 — Consultar Saldo e Histórico de Movimentações · `Must Have` · `S` · Status: `🟡 Ready`
 
 **Como** Desenvolvedor, **quero** consultar meu Saldo atual e o histórico de movimentações de créditos, **para que** eu saiba quantos créditos tenho disponíveis e por quais motivos meu Saldo foi alterado.
 
@@ -239,7 +239,7 @@
 
 ---
 
-### US14 — Consultar contas de Desenvolvedores · `Must Have` · `S` · Status: `⚪ Draft`
+### US14 — Consultar contas de Desenvolvedores · `Must Have` · `S` · Status: `🟡 Ready`
 
 **Como** Admin da plataforma, **quero** consultar as contas de Desenvolvedores cadastradas, **para que** eu possa prestar suporte básico aos usuários da plataforma.
 
