@@ -1,8 +1,8 @@
 # 🎨 Tokens de Design
 
 **Projeto:** Macro2PR
-**Versão:** 1.0.0
-**Última atualização:** 2026-09-11
+**Versão:** 1.1.0
+**Última atualização:** 2026-10-08
 
 > 🤖 **Este documento existe para a IA parar de inventar um botão diferente a cada
 > tela.** Não é um design system — é o mínimo que dá à prototipagem assistida algo a
@@ -64,11 +64,16 @@ Uma progressão só, usada em tudo. Base 4px.
 
 ## Protótipo
 
-**Link:** pendência — protótipo não existe ainda.
+**Link:** https://www.figma.com/proto/edq6lzgx0DPXApm2WZLpxT/Macro2PR?node-id=2-8503&t=gXpPr2kY26pjqXQF-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=2%3A8503
 
-**Telas** (5 essenciais):
-1. **Dashboard** — visão geral de projetos e demandas
-2. **Detalhe da Demanda** — status, plano, tarefas e ações
-3. **Revisão de Resultado** — resultado da execução, parecer da Revisão independente e decisão de aprovar/rejeitar
-4. **Compra de Créditos** — seleção de pacote, pagamento e acompanhamento do Pedido
-5. **Saldo e Créditos** — saldo atual, histórico de movimentações e acesso à compra de créditos
+**Telas** (6 principais):
+1. **Início / Acesso GitHub** — US01: tela de acesso e autorização GitHub
+2. **Workspace** — US02–US03: lista de projetos, criação de projeto, lista de demandas, criação de demanda
+3. **Detalhe da Demanda** — US04–US06, US09–US10: plano de tarefas, execução, regeneração, PR final
+4. **Revisão de Resultado** — US07–US08: resultado da execução, parecer da Revisão independente, decisão de aprovar/rejeitar
+5. **Créditos & Faturamento** — US11–US13: seleção de pacote, criação de Pedido, pagamento, saldo e histórico
+6. **Contas de Desenvolvedores** — US14: área administrativa de listagem de contas
+
+## Descoberta de Prototipação
+
+> Ao transformar as histórias obrigatórias em interface, a lista inicial de telas da Atividade 04 não contemplava explicitamente Acesso GitHub (US01) nem área administrativa (US14); essas áreas precisaram ser incluídas para cobrir todas as Must Have.
