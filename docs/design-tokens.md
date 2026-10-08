@@ -2,7 +2,7 @@
 
 **Projeto:** Macro2PR
 **Versão:** 1.1.0
-**Última atualização:** 2026-10-02
+**Última atualização:** 2026-10-08
 
 > 🤖 **Este documento existe para a IA parar de inventar um botão diferente a cada
 > tela.** Não é um design system — é o mínimo que dá à prototipagem assistida algo a
