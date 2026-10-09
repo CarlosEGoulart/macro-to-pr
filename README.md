@@ -15,7 +15,51 @@ Carlos Eduardo Goulart — @CarlosEGoulart
 
 ## Stack
 
-A definir na etapa de arquitetura.
+**Backend**
+- NestJS v12
+- Node.js 22 LTS
+
+**Frontend**
+- React 18+ (Vite, TypeScript)
+- React Router v6
+- TanStack Query
+
+**ORM & Banco de Dados**
+- Prisma ORM v7 (GA) — Client + Migrate
+- PostgreSQL 16+ (desenvolvimento via Docker; produção no Neon.tech com PgBouncer)
+
+**Ferramentas & Ecossistema**
+- Node.js 22 LTS
+- pnpm 9+ (workspaces)
+- Turborepo (pipeline paralelo: lint, typecheck, test, build)
+
+**Testes & Qualidade**
+- Vitest (unit/integration + coverage)
+- React Testing Library / supertest (E2E)
+- ESLint (flat config) + Prettier
+- TypeScript type-check
+
+**CI/CD**
+- GitHub Actions (pipeline paralelo via Turborepo)
+- pnpm workspaces
+
+**Deploy**
+- Frontend: Vercel
+- Backend: Railway (definido) — Render / Fly.io como alternativas
+- Banco: Neon.tech (PostgreSQL com PgBouncer)
+
+**Autenticação & Segurança**
+- JWT (access + refresh) + GitHub OAuth
+- Passport JWT Strategy + RolesGuard (@Roles)
+- class-validator + ValidationPipe global (whitelist)
+- RBAC: Developer | Admin
+
+**Documentação da API**
+- Swagger/OpenAPI via @nestjs/swagger
+- OpenAPI 3.1 JSON em `/api/docs-json` + Swagger UI em `/api/docs`
+
+**Pagamento (gateway a definir)**
+- Mercado Pago **ou** Stripe (sandbox + webhook assíncrono com verificação de assinatura)
 
 ## Em produção
 
