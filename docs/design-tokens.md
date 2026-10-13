@@ -1,8 +1,8 @@
 # 🎨 Tokens de Design
 
 **Projeto:** Macro2PR
-**Versão:** 1.1.0
-**Última atualização:** 2026-10-08
+**Versão:** 1.1.1
+**Última atualização:** 2026-10-13
 
 > 🤖 **Este documento existe para a IA parar de inventar um botão diferente a cada
 > tela.** Não é um design system — é o mínimo que dá à prototipagem assistida algo a
@@ -18,7 +18,7 @@ Nome semântico, nunca `azul-2` — a cor muda, o papel dela não.
 
 | Token | Light | Dark | Onde se usa |
 | --- | --- | --- | --- |
-| `primaria` | `#6366F1` | `#818CF8` | botões principais, links de ação, indicadores de progresso |
+| `primaria` | `#6164F1` | `#818CF8` | botões principais, links de ação, indicadores de progresso |
 | `superficie-card` | `#FFFFFF` | `#111827` | fundo de card |
 | `superficie-sidebar` | `#F9FAFB` | `#030712` | sidebar e fundo de página |
 | `texto` | `#111827` | `#F9FAFB` | texto padrão (títulos, corpo) |
@@ -56,11 +56,11 @@ Uma progressão só, usada em tudo. Base 4px.
 
 | Estado | Light | Dark |
 | --- | --- | --- |
-| normal | fundo `#6366F1`, texto `#FFFFFF`, sem borda | fundo `#818CF8`, texto `#030712`, sem borda |
+| normal | fundo `#6164F1`, texto `#FFFFFF`, sem borda | fundo `#818CF8`, texto `#030712`, sem borda |
 | hover | fundo `#4F46E5` | fundo `#A5B4FC` |
-| foco (teclado) | borda `2px solid #818CF8`, outline none | borda `2px solid #6366F1`, outline none |
+| foco (teclado) | borda `2px solid #818CF8`, outline none | borda `2px solid #6164F1`, outline none |
 | desabilitado | fundo `#C7D2FE`, texto `#9CA3AF`, sem interação | fundo `#374151`, texto `#6B7280`, sem interação |
-| carregando | fundo `#6366F1` opacidade 70%, spinner branco | fundo `#818CF8` opacidade 70%, spinner preto |
+| carregando | fundo `#6164F1` opacidade 70%, spinner branco | fundo `#818CF8` opacidade 70%, spinner preto |
 
 ## Protótipo
 

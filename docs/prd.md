@@ -214,12 +214,13 @@
 **Critérios de aceite:**
 - [ ] **Dado** que possuo um Pedido de créditos aguardando pagamento, **quando** o pagamento é confirmado pelo meio de pagamento, **então** o Pedido passa a ser considerado pago e a quantidade correspondente de créditos é adicionada ao meu Saldo.
 - [ ] **Dado** que retorno ao Macro2PR após realizar o pagamento, **quando** a confirmação do meio de pagamento ainda não foi recebida, **então** os créditos ainda não são adicionados ao meu Saldo e o Pedido permanece em `Aguardando pagamento` até que a confirmação seja conhecida.
+- [ ] **Dado** que retorno ao Macro2PR após a etapa externa de pagamento e minha sessão expirou, **quando** tento retomar o Pedido, **então** preciso me autenticar novamente antes de consultar o Pedido original e seu estado atual, sem repetir o pagamento nem liberar créditos sem confirmação.
 - [ ] **Dado** que uma confirmação de pagamento é inválida ou não pode ser considerada confiável, **quando** ela é recebida, **então** o Pedido não é considerado pago e nenhum crédito é adicionado ao meu Saldo.
 - [ ] **Dado** que o pagamento não é aprovado ou deixa de poder ser concluído, **quando** essa situação é conhecida pelo Macro2PR, **então** nenhum crédito é adicionado ao meu Saldo e consigo identificar que o Pedido não foi pago.
 - [ ] **Dado** que a mesma confirmação de pagamento é recebida mais de uma vez, **quando** ela é processada novamente, **então** os créditos daquele Pedido não são adicionados uma segunda vez.
 - [ ] **Dado** que um pagamento foi confirmado e os créditos foram adicionados, **quando** consulto meu Saldo, **então** a quantidade disponível reflete a compra realizada.
 
-**Regras relacionadas:** RN07
+**Regras relacionadas:** RN07, RN09
 
 ---
 
@@ -262,6 +263,7 @@
 | **RN06** | Uma Demanda pode possuir no máximo um Pull Request final gerado pelo Macro2PR. |
 | **RN07** | Uma mesma confirmação de pagamento não pode adicionar créditos ao Saldo mais de uma vez. |
 | **RN08** | Um Projeto só pode ser associado a um Repositório que esteja disponível por meio da conta GitHub autorizada do Desenvolvedor. |
+| **RN09** | Se a sessão do Desenvolvedor expirar ao retornar da etapa externa de pagamento, ele deve se autenticar novamente antes de retomar a consulta do Pedido original. O retorno não repete o pagamento nem libera créditos sem confirmação confiável do meio de pagamento. |
 
 ### Estados da **Demanda**
 
