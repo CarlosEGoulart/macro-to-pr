@@ -73,7 +73,7 @@ pontuada**.
 
 | Entrega | O que sobe | Vídeo |
 | --- | --- | --- |
-| **E1 — Planejamento e Setup** | `docs/prd.md`, `docs/user-flows.md`, `docs/design-tokens.md` e `docs/architecture.md` commitados; Kanban no GitHub Projects com as Issues das stories `Ready`; PR do `/utf-setup` mesclado (monorepo verde, `main` protegida — o que exige repositório público na conta gratuita —, Portão de Entendimento ativo) | Vídeo 1: regras de negócio, a jornada com o nó vermelho, o Diagrama ER, o Kanban e a suíte rodando verde |
+| **E1 — Concepção e Planejamento** | `docs/prd.md`, `docs/user-flows.md`, `docs/design-tokens.md` e `docs/architecture.md` commitados; Kanban no GitHub Projects com as Issues das stories `Ready` | Vídeo 1, em quatro blocos: (1) Vitrine e gestão — README, Kanban, tag e explicação da rastreabilidade Issue → PRD; (2) Produto e jornada — regras de negócio, nó vermelho da jornada e navegação correspondente no protótipo; (3) Dados do sistema — entidades, relacionamentos, cardinalidades e regras de negócio que justificam o modelo; (4) Decisão pessoal — uma decisão do estudante, explicando a motivação e distinguindo-a das sugestões do agente |
 | **E2 — Backend e TDD** | API NestJS com Prisma, JWT e testes; specs em `specs/` e PRs com os pareceres dos revisores e as decisões de triagem | Vídeo 2: uma spec derivada da Issue, o TDD rodando e a estrutura de Controllers, Services e Guards |
 | **E3 — Frontend, Pagamento e Deploy** | Front consumindo a API, pagamento sandbox (ordem criada no servidor + webhook), GitHub Actions e deploy público | Vídeo 3: sistema em produção e um pedido mudando de estado pela notificação do gateway |
 

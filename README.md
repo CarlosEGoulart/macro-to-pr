@@ -11,26 +11,27 @@ Carlos Eduardo Goulart — @CarlosEGoulart
 - [docs/prd.md](docs/prd.md) — requisitos e regras de negócio
 - [docs/user-flows.md](docs/user-flows.md) — jornadas de usuário
 - [docs/design-tokens.md](docs/design-tokens.md) — identidade visual e tokens de design
+- [docs/architecture.md](docs/architecture.md) — arquitetura, modelo de dados e decisões técnicas
 - [docs/checklist.md](docs/checklist.md) — acompanhamento dos indicadores da disciplina
+- [Protótipo no Figma](https://www.figma.com/proto/edq6lzgx0DPXApm2WZLpxT/Macro2PR?node-id=2-8503&t=gXpPr2kY26pjqXQF-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=2%3A8503) — telas das principais jornadas
 
 ## Stack
 
 **Backend**
-- NestJS v12
-- Node.js 22 LTS
+- NestJS
+- Node.js
 
 **Frontend**
-- React 18+ (Vite, TypeScript)
-- React Router v6
+- React (Vite, TypeScript)
+- React Router
 - TanStack Query
 
 **ORM & Banco de Dados**
-- Prisma ORM v7 (GA) — Client + Migrate
-- PostgreSQL 16+ (desenvolvimento via Docker; produção no Neon.tech com PgBouncer)
+- Prisma ORM (Client + Migrate)
+- PostgreSQL (desenvolvimento via Docker; produção no Neon.tech com PgBouncer)
 
 **Ferramentas & Ecossistema**
-- Node.js 22 LTS
-- pnpm 9+ (workspaces)
+- pnpm (workspaces)
 - Turborepo (pipeline paralelo: lint, typecheck, test, build)
 
 **Testes & Qualidade**
@@ -58,13 +59,13 @@ Carlos Eduardo Goulart — @CarlosEGoulart
 - Swagger/OpenAPI via @nestjs/swagger
 - OpenAPI 3.1 JSON em `/api/docs-json` + Swagger UI em `/api/docs`
 
-**Pagamento (gateway a definir)**
-- Mercado Pago **ou** Stripe (sandbox + webhook assíncrono com verificação de assinatura)
+**Pagamento**
+- Mercado Pago (sandbox + webhook assíncrono com verificação de assinatura)
 
 ## Em produção
 
-Ainda não disponível.
+O deploy público será entregue na Entrega 3 — até lá, a aplicação não está disponível online.
 
 ## Quick Start
 
-Será preenchido após a criação do scaffold da aplicação.
+O Quick Start (clonagem, instalação, banco e execução local) será preenchido junto com o scaffold da aplicação, na Entrega 2.
