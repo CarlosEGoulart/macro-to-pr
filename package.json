@@ -1,0 +1,23 @@
+{
+  "name": "macro2pr",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Macro2PR — monorepo (NestJS API + React Web)",
+  "packageManager": "pnpm@9.15.9",
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "start": "pnpm run api",
+    "api": "pnpm --filter api run start:dev",
+    "web": "pnpm --filter web run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "test:e2e": "turbo run test:e2e",
+    "test:cov": "turbo run test:cov",
+    "lint:fix": "turbo run lint:fix"
+  },
+  "devDependencies": {
+    "turbo": "^2"
+  }
+}
