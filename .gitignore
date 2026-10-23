@@ -1,0 +1,12 @@
+node_modules/
+dist/
+build/
+.angular/
+coverage/
+.env
+.env.local
+.turbo/
+*.log
+npm-debug.log*
+.DS_Store
+apps/api/generated/

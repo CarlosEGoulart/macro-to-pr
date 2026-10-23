@@ -1,0 +1,30 @@
+{
+  "name": "macro2pr",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Macro2PR — monorepo (NestJS API + React Web)",
+  "packageManager": "npm@12.2.1",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "start": "npm run api",
+    "api": "npm run start:dev --workspace=api",
+    "web": "npm run dev --workspace=web",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "test:e2e": "turbo run test:e2e",
+    "test:cov": "turbo run test:cov",
+    "lint:fix": "turbo run lint:fix"
+  },
+  "devDependencies": {
+    "turbo": "^2"
+  },
+  "allowScripts": {
+    "prisma@7.10.1": true,
+    "@prisma/engines@7.10.1": true
+  }
+}

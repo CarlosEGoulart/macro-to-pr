@@ -18,7 +18,7 @@
 | **Banco (dev)** | PostgreSQL | 16+ | Via Docker Compose |
 | **Banco (prod)** | PostgreSQL | 16+ | Neon.tech (com connection pooling / PgBouncer) |
 | **Runtime** | Node.js | **22 LTS** | Requerido por Nest v12 schematics (v22.22.3+) |
-| **Package Manager** | pnpm | 9+ | Workspaces + lockfile único |
+| **Package Manager** | npm | 12+ | Workspaces (`"workspaces"` no `package.json`) + `package-lock.json` único na raiz |
 | **Build/Task Runner** | Turborepo | 2+ | Pipeline paralelo (lint, typecheck, test, build) |
 
 > 🔒 **Stack fixa da disciplina:** NestJS + Prisma ORM + PostgreSQL (checklist.md). Frontend livre entre React/Angular/Vue — **React** escolhido.
@@ -34,8 +34,8 @@ monorepo/
 │   └── web/          # React 18+ (frontend)
 ├── packages/         # (futuro) shared libs, types, configs
 ├── turbo.json        # Turborepo pipeline
-├── package.json      # root scripts + workspaces
-├── pnpm-workspace.yaml
+├── package.json      # root scripts + workspaces ("apps/*", "packages/*")
+├── package-lock.json # lockfile único do npm
 ├── tsconfig.base.json
 └── docs/
     ├── prd.md
@@ -116,10 +116,10 @@ apps/web/
 
 ### 2.3 Configuração de Workspace
 
-- **pnpm-workspace.yaml** — define `packages: ["apps/*", "packages/*"]`
+- **package.json na raiz** — define `"workspaces": ["apps/*", "packages/*"]`
 - **turbo.json** — pipeline `build`, `lint`, `typecheck`, `test`, `test:e2e` em paralelo
 - **tsconfig.base.json** — `references` para cada app/package; cada app estende o base
-- **pnpm-workspace.yaml** na raiz
+- **package-lock.json** na raiz — lockfile único do npm
 
 ---
 
@@ -392,7 +392,7 @@ erDiagram
 | **ID10** | Interceptors (resposta) + Exception Filters globais (erro) | **ResponseInterceptor** (implementa `NestInterceptor`) padroniza resposta: `{ data, meta?, timestamp, path }`. **AllExceptionsFilter** (implementa `ExceptionFilter`) captura todas as exceções, loga, retorna formato padrão: `{ statusCode, error, message, timestamp, path }`. `HttpExceptionFilter` para `HttpException`. Registrados globalmente em `main.ts` (`app.useGlobalInterceptors`, `app.useGlobalFilters`). |
 | **ID14** | Swagger/OpenAPI interativo | **SwaggerModule** configurado em `main.ts` com `DocumentBuilder`. Endpoints vivos: `GET /api/docs` (Swagger UI) e `GET /api/docs-json` (OpenAPI 3.1 JSON). **`swagger.json` NÃO é commitado** — fonte de verdade é o endpoint vivo. DTOs decorados com `@ApiProperty`/`@ApiPropertyOptional`. Frontend deriva tipos via `openapi-typescript` ou `orval` no build. |
 | **ID17** | Secrets via ConfigModule + env | **ConfigModule** global (`isGlobal: true`) com `validationSchema` (Joi). `ConfigService` tipado via `config.schema.ts`. Secrets: `DATABASE_URL`, `JWT_SECRET`, `JWT_EXPIRES_IN`, `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`, `MERCADO_PAGO_ACCESS_TOKEN`, `MERCADO_PAGO_PUBLIC_KEY`, `MERCADO_PAGO_WEBHOOK_SECRET`. **Nenhum secret no repo** — `.env` nunca é versionado (o `.gitignore` será criado na Entrega 2), injetados na nuvem (Vercel/Neon/GitHub Actions secrets). |
-| **ID18** | GitHub Actions CI | Workflow `.github/workflows/ci.yml`: `on: [push, pull_request]` → `jobs: lint, typecheck, test, test:e2e` (paralelos via Turbo). `pnpm install --frozen-lockfile` → `pnpm lint`, `pnpm typecheck`, `pnpm test:cov`, `pnpm test:e2e`. Coverage threshold mínimo (ex.: 80%). Falha bloqueia merge. |
+| **ID18** | GitHub Actions CI | Workflow `.github/workflows/ci.yml`: `on: [push, pull_request]` → `jobs: lint, typecheck, test, test:e2e` (paralelos via Turbo). `npm ci` → `npm run lint`, `npm run typecheck`, `npm run test:cov`, `npm run test:e2e`. Coverage threshold mínimo (ex.: 80%). Falha bloqueia merge. |
 | **ID19** | Deploy público + banco nuvem + pooling | **Deploy**: Vercel (frontend) + Railway/Render/Fly.io (backend) ou tudo no Vercel. **Banco**: Neon.tech (PostgreSQL) com **Prisma Connection Pooling** (PgBouncer via `?pgbouncer=true` na `DATABASE_URL` ou Prisma Accelerate). `DATABASE_URL` injetada via env da plataforma. Health check `/health` para readiness. |
 | **ID20** | Payment gateway sandbox + webhook | **Gateway escolhido: Mercado Pago** (decisão do estudante). `PaymentService` cria a ordem/preferência de pagamento via API do Mercado Pago → retorna os dados necessários para o frontend iniciar o checkout. **Webhook endpoint** (`/webhooks/payment`) valida assinatura (`MERCADO_PAGO_WEBHOOK_SECRET`), atualiza `Payment` + `CreditOrder` + `CreditBalance` + `CreditMovement` em transação atômica. Idempotência por `gatewayPaymentId` único. |
 | **ID21** | Webhook assíncrono + verificação de assinatura | **Signature verification** obrigatória no webhook do Mercado Pago, validando a assinatura `x-signature` conforme a documentação oficial. Payload validado contra `Payment` existente. Idempotência: `gatewayPaymentId` único + check de `signatureVerified`. Falha de assinatura → 400, não processa. Log de auditoria em `AdminAction`. |
@@ -509,23 +509,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v3
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm lint
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - run: npm run lint
   typecheck:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v3
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm typecheck
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - run: npm run typecheck
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v3
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm test:cov
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - run: npm run test:cov
   test-e2e:
     runs-on: ubuntu-latest
     services:
@@ -536,10 +539,11 @@ jobs:
         options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=5
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v3
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm prisma migrate deploy
-      - run: pnpm test:e2e
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - run: npx prisma migrate deploy
+      - run: npm run test:e2e
 ```
 
 - **Coverage threshold**: 80% (lines, functions, branches)
@@ -551,8 +555,8 @@ jobs:
 
 | Componente | Plataforma | Detalhes |
 |------------|------------|----------|
-| **Frontend** | Vercel | `apps/web` → `vercel.json` com `buildCommand: pnpm build`, `outputDirectory: dist` |
-| **Backend** | Railway / Render / Fly.io | Dockerfile multi-stage (builder → runner), `pnpm build`, `pnpm start:prod` |
+| **Frontend** | Vercel | `apps/web` → `vercel.json` com `buildCommand: npm run build`, `outputDirectory: dist` |
+| **Backend** | Railway / Render / Fly.io | Dockerfile multi-stage (builder → runner), `npm run build`, `npm run start:prod` |
 | **Banco** | Neon.tech | PostgreSQL 16+, connection pooling (PgBouncer) via `?pgbouncer=true` ou Prisma Accelerate |
 | **Secrets** | Platform secrets | `DATABASE_URL`, `JWT_SECRET`, `GITHUB_*`, `MERCADO_PAGO_*` e segredo de assinatura do webhook |
 | **Health Check** | `GET /health` | Retorna `{ status: "ok", timestamp, uptime }` — usado por load balancer |
@@ -563,7 +567,7 @@ jobs:
 
 | Tópico | Decisão |
 |--------|---------|
-| **Monorepo** | pnpm workspaces + Turborepo |
+| **Monorepo** | npm workspaces + Turborepo |
 | **API Style** | REST (OpenAPI 3.1), JSON, UTF-8 |
 | **Auth** | JWT (access + refresh), GitHub OAuth para onboarding |
 | **RBAC** | `Developer` \| `Admin` via `RolesGuard` + `@Roles()` |
@@ -574,6 +578,8 @@ jobs:
 | **Secrets** | ConfigModule + Joi validation, zero secrets no repo |
 | **CI** | GitHub Actions + Turbo pipeline paralelo |
 | **Deploy** | Vercel (web) + Railway (api) + Neon (db) |
+| **Lint (scaffold)** | oxlint (gerador oficial NestJS v12 / Vite) — divergencia da declaracao de ESLint na secao 7, a ser ratificada |
+| **Test runner (scaffold)** | Vitest 4 nos dois apps; web requer vitest.config.ts + setupTests.ts + dep. de teste (@testing-library/*, jsdom) instaladas manualmente (create-vite nao inclui por padrão), a ser ratificada |
 
 ---
 
