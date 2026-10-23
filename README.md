@@ -31,7 +31,7 @@ Carlos Eduardo Goulart — @CarlosEGoulart
 - PostgreSQL (desenvolvimento via Docker; produção no Neon.tech com PgBouncer)
 
 **Ferramentas & Ecossistema**
-- pnpm (workspaces)
+- npm (workspaces)
 - Turborepo (pipeline paralelo: lint, typecheck, test, build)
 
 **Testes & Qualidade**
@@ -42,7 +42,7 @@ Carlos Eduardo Goulart — @CarlosEGoulart
 
 **CI/CD**
 - GitHub Actions (pipeline paralelo via Turborepo)
-- pnpm workspaces
+- npm workspaces
 
 **Deploy**
 - Frontend: Vercel
