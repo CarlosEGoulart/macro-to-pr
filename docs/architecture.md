@@ -574,6 +574,8 @@ jobs:
 | **Secrets** | ConfigModule + Joi validation, zero secrets no repo |
 | **CI** | GitHub Actions + Turbo pipeline paralelo |
 | **Deploy** | Vercel (web) + Railway (api) + Neon (db) |
+| **Lint (scaffold)** | oxlint (gerador oficial NestJS v12 / Vite) — divergencia da declaracao de ESLint na secao 7, a ser ratificada |
+| **Test runner (scaffold)** | Vitest 4 nos dois apps; web requer vitest.config.ts + setupTests.ts + dep. de teste (@testing-library/*, jsdom) instaladas manualmente (create-vite nao inclui por padrão), a ser ratificada |
 
 ---
 
