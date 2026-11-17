@@ -5,9 +5,35 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "../generated/prisma"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+enum Role {
+  Developer
+  Admin
+}
+
+model Developer {
+  id                String   @id @default(uuid())
+  email             String   @unique
+  name              String
+  avatarUrl         String?
+  role              Role     @default(Developer)
+  githubAccountId   String?  @unique
+  createdAt         DateTime @default(now())
+}
+
+model Repository {
+  id                String   @id @default(uuid())
+  githubAccountId   String
+  name              String
+  fullName          String
+  url               String
+  owner             String
+  private           Boolean  @default(false)
+  createdAt         DateTime @default(now())
 }

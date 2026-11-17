@@ -12,14 +12,20 @@ import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { AllExceptionsFilter } from './all-exceptions/all-exceptions.filter.js';
 import { TransformInterceptor } from './transform/transform.interceptor.js';
+import { PrismaModule } from './prisma/prisma.module.js';
+import { JwtStrategy } from './modules/auth/jwt.strategy.js';
+import { JwtAuthGuard } from './modules/auth/jwt-auth.guard.js';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    PrismaModule,
   ],
   controllers: [AppController],
   providers: [
     AppService,
+    JwtStrategy,
+    JwtAuthGuard,
     {
       provide: APP_INTERCEPTOR,
       useClass: TransformInterceptor,
