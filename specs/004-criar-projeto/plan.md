@@ -12,6 +12,11 @@
 
 ## Tarefas
 
+- [ ] **Tarefa 0 — Infraestrutura base: PrismaService, modelos Developer/Repository, JWT guard**
+  - Cobre: passo técnico que destrava toda a Issue #4 (infraestrutura ausente)
+  - Teste primeiro: não existe PrismaService, PrismaModule, JwtAuthGuard, modelos Developer/Repository; qualquer teste de criação falha porque a infraestrutura não existe
+  - Arquivos previstos: `apps/api/src/prisma/prisma.service.ts`, `prisma.module.ts`, `src/modules/auth/jwt.strategy.ts`, `jwt-auth.guard.ts`, `prisma/schema.prisma` (modelos Developer, Repository), `apps/api/.env` (DATABASE_URL), `docker-compose.yml` (Postgres se necessário)
+
 - [ ] **Tarefa 1 — Scaffold do módulo projects + entidade Prisma Project**
   - Cobre: passo técnico que destrava CA1, CA2, CA3
   - Teste primeiro: não existe módulo projects nem entidade Project; o teste de criação falha porque a rota e a entidade não existem
