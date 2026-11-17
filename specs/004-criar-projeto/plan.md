@@ -12,7 +12,7 @@
 
 ## Tarefas
 
-- [ ] **Tarefa 0 — Infraestrutura base: PrismaService, modelos Developer/Repository, JWT guard**
+- [x] **Tarefa 0 — Infraestrutura base: PrismaService, modelos Developer/Repository, JWT guard**
   - Cobre: passo técnico que destrava toda a Issue #4 (infraestrutura ausente)
   - Teste primeiro: não existe PrismaService, PrismaModule, JwtAuthGuard, modelos Developer/Repository; qualquer teste de criação falha porque a infraestrutura não existe
   - Arquivos previstos: `apps/api/src/prisma/prisma.service.ts`, `prisma.module.ts`, `src/modules/auth/jwt.strategy.ts`, `jwt-auth.guard.ts`, `prisma/schema.prisma` (modelos Developer, Repository), `apps/api/.env` (DATABASE_URL), `docker-compose.yml` (Postgres se necessário)
