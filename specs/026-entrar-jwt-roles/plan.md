@@ -13,7 +13,7 @@
 
 ## Tarefas
 
-- [ ] **Tarefa 1 — Guard global + decorator `@Public()`**
+- [x] **Tarefa 1 — Guard global + decorator `@Public()`**
   - Cobre: CA3
   - Teste primeiro: rota protegida sem marca `@Public()` e sem token responde 401; rota pública com `@Public()` passa sem token
   - Arquivos previstos: `apps/api/src/common/decorators/public.decorator.ts`, `apps/api/src/common/guards/auth.guard.ts`, `apps/api/src/app.module.ts` (`APP_GUARD`), rotas existentes marcadas com `@Public()`
