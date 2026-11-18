@@ -7,6 +7,7 @@ import {
   ApiOperation,
   ApiResponse,
 } from '@nestjs/swagger';
+import { Public } from './common/decorators/public.decorator.js';
 import { AppService } from './app.service.js';
 
 @ApiTags('saúde')
@@ -15,6 +16,7 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
+  @Public()
   @ApiOperation({ summary: 'Verifica se a API está no ar' })
   @ApiResponse({ status: 200, description: 'API responde com saudação' })
   getHello(): string {

@@ -1,5 +1,4 @@
-import { Controller, Post, Body, UseGuards, Req } from '@nestjs/common';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard.js';
+import { Controller, Post, Body, Req } from '@nestjs/common';
 import { ProjectsService } from './projects.service.js';
 import { CreateProjectDto } from './dto/create-project.dto.js';
 
@@ -8,7 +7,6 @@ export class ProjectsController {
   constructor(private readonly projectsService: ProjectsService) {}
 
   @Post()
-  @UseGuards(JwtAuthGuard)
   async create(
     @Body() createProjectDto: CreateProjectDto,
     @Req() req: { user: { userId: string } },

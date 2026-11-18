@@ -1,5 +1,6 @@
 import {
   APP_FILTER,
+  APP_GUARD,
   APP_INTERCEPTOR,
   APP_PIPE,
 } from '@nestjs/core';
@@ -7,7 +8,8 @@ import {
   Module,
   ValidationPipe,
 } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { AllExceptionsFilter } from './all-exceptions/all-exceptions.filter.js';
@@ -15,12 +17,19 @@ import { TransformInterceptor } from './transform/transform.interceptor.js';
 import { PrismaModule } from './prisma/prisma.module.js';
 import { JwtStrategy } from './modules/auth/jwt.strategy.js';
 import { JwtAuthGuard } from './modules/auth/jwt-auth.guard.js';
+import { AuthGuard } from './common/guards/auth.guard.js';
 import { ProjectsModule } from './modules/projects/projects.module.js';
 import { NotionModule } from './modules/notion/notion.module.js';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    JwtModule.registerAsync({
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET'),
+      }),
+      inject: [ConfigService],
+    }),
     PrismaModule,
     ProjectsModule,
     NotionModule,
@@ -30,6 +39,10 @@ import { NotionModule } from './modules/notion/notion.module.js';
     AppService,
     JwtStrategy,
     JwtAuthGuard,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
     {
       provide: APP_INTERCEPTOR,
       useClass: TransformInterceptor,

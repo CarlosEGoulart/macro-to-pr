@@ -2,7 +2,6 @@ import {
   Controller,
   Get,
   Query,
-  UseGuards,
   Req,
   Res,
   HttpCode,
@@ -10,7 +9,6 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import type { Response } from 'express';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard.js';
 import { NotionService } from './notion.service.js';
 
 interface AuthenticatedRequest extends Request {
@@ -26,7 +24,6 @@ export class NotionController {
    * Redireciona o navegador do usuário para a URL de autorização do Notion.
    */
   @Get('authorize')
-  @UseGuards(JwtAuthGuard)
   async authorize(@Req() req: AuthenticatedRequest, @Res() res: Response) {
     const userId = req.user.userId;
     const authorizationUrl = await this.notionService.startAuthFlow(userId);
@@ -40,7 +37,6 @@ export class NotionController {
    * Troca o código por tokens de acesso.
    */
   @Get('callback')
-  @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
   async callback(
     @Req() req: AuthenticatedRequest,
