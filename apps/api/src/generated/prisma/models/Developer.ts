@@ -191,13 +191,14 @@ export type DeveloperWhereInput = {
   AND?: Prisma.DeveloperWhereInput | Prisma.DeveloperWhereInput[]
   OR?: Prisma.DeveloperWhereInput[]
   NOT?: Prisma.DeveloperWhereInput | Prisma.DeveloperWhereInput[]
-  id?: Prisma.StringFilter<"Developer"> | string
+  id?: Prisma.UuidFilter<"Developer"> | string
   email?: Prisma.StringFilter<"Developer"> | string
   name?: Prisma.StringFilter<"Developer"> | string
   avatarUrl?: Prisma.StringNullableFilter<"Developer"> | string | null
   role?: Prisma.EnumRoleFilter<"Developer"> | $Enums.Role
   githubAccountId?: Prisma.StringNullableFilter<"Developer"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Developer"> | Date | string
+  projects?: Prisma.ProjectListRelationFilter
 }
 
 export type DeveloperOrderByWithRelationInput = {
@@ -208,6 +209,7 @@ export type DeveloperOrderByWithRelationInput = {
   role?: Prisma.SortOrder
   githubAccountId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  projects?: Prisma.ProjectOrderByRelationAggregateInput
 }
 
 export type DeveloperWhereUniqueInput = Prisma.AtLeast<{
@@ -221,6 +223,7 @@ export type DeveloperWhereUniqueInput = Prisma.AtLeast<{
   avatarUrl?: Prisma.StringNullableFilter<"Developer"> | string | null
   role?: Prisma.EnumRoleFilter<"Developer"> | $Enums.Role
   createdAt?: Prisma.DateTimeFilter<"Developer"> | Date | string
+  projects?: Prisma.ProjectListRelationFilter
 }, "id" | "email" | "githubAccountId">
 
 export type DeveloperOrderByWithAggregationInput = {
@@ -240,7 +243,7 @@ export type DeveloperScalarWhereWithAggregatesInput = {
   AND?: Prisma.DeveloperScalarWhereWithAggregatesInput | Prisma.DeveloperScalarWhereWithAggregatesInput[]
   OR?: Prisma.DeveloperScalarWhereWithAggregatesInput[]
   NOT?: Prisma.DeveloperScalarWhereWithAggregatesInput | Prisma.DeveloperScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"Developer"> | string
+  id?: Prisma.UuidWithAggregatesFilter<"Developer"> | string
   email?: Prisma.StringWithAggregatesFilter<"Developer"> | string
   name?: Prisma.StringWithAggregatesFilter<"Developer"> | string
   avatarUrl?: Prisma.StringNullableWithAggregatesFilter<"Developer"> | string | null
@@ -257,6 +260,7 @@ export type DeveloperCreateInput = {
   role?: $Enums.Role
   githubAccountId?: string | null
   createdAt?: Date | string
+  projects?: Prisma.ProjectCreateNestedManyWithoutDeveloperInput
 }
 
 export type DeveloperUncheckedCreateInput = {
@@ -267,6 +271,7 @@ export type DeveloperUncheckedCreateInput = {
   role?: $Enums.Role
   githubAccountId?: string | null
   createdAt?: Date | string
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutDeveloperInput
 }
 
 export type DeveloperUpdateInput = {
@@ -277,6 +282,7 @@ export type DeveloperUpdateInput = {
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   githubAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  projects?: Prisma.ProjectUpdateManyWithoutDeveloperNestedInput
 }
 
 export type DeveloperUncheckedUpdateInput = {
@@ -287,6 +293,7 @@ export type DeveloperUncheckedUpdateInput = {
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
   githubAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutDeveloperNestedInput
 }
 
 export type DeveloperCreateManyInput = {
@@ -349,6 +356,11 @@ export type DeveloperMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
 }
 
+export type DeveloperScalarRelationFilter = {
+  is?: Prisma.DeveloperWhereInput
+  isNot?: Prisma.DeveloperWhereInput
+}
+
 export type StringFieldUpdateOperationsInput = {
   set?: string
 }
@@ -365,6 +377,105 @@ export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
 }
 
+export type DeveloperCreateNestedOneWithoutProjectsInput = {
+  create?: Prisma.XOR<Prisma.DeveloperCreateWithoutProjectsInput, Prisma.DeveloperUncheckedCreateWithoutProjectsInput>
+  connectOrCreate?: Prisma.DeveloperCreateOrConnectWithoutProjectsInput
+  connect?: Prisma.DeveloperWhereUniqueInput
+}
+
+export type DeveloperUpdateOneRequiredWithoutProjectsNestedInput = {
+  create?: Prisma.XOR<Prisma.DeveloperCreateWithoutProjectsInput, Prisma.DeveloperUncheckedCreateWithoutProjectsInput>
+  connectOrCreate?: Prisma.DeveloperCreateOrConnectWithoutProjectsInput
+  upsert?: Prisma.DeveloperUpsertWithoutProjectsInput
+  connect?: Prisma.DeveloperWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.DeveloperUpdateToOneWithWhereWithoutProjectsInput, Prisma.DeveloperUpdateWithoutProjectsInput>, Prisma.DeveloperUncheckedUpdateWithoutProjectsInput>
+}
+
+export type DeveloperCreateWithoutProjectsInput = {
+  id?: string
+  email: string
+  name: string
+  avatarUrl?: string | null
+  role?: $Enums.Role
+  githubAccountId?: string | null
+  createdAt?: Date | string
+}
+
+export type DeveloperUncheckedCreateWithoutProjectsInput = {
+  id?: string
+  email: string
+  name: string
+  avatarUrl?: string | null
+  role?: $Enums.Role
+  githubAccountId?: string | null
+  createdAt?: Date | string
+}
+
+export type DeveloperCreateOrConnectWithoutProjectsInput = {
+  where: Prisma.DeveloperWhereUniqueInput
+  create: Prisma.XOR<Prisma.DeveloperCreateWithoutProjectsInput, Prisma.DeveloperUncheckedCreateWithoutProjectsInput>
+}
+
+export type DeveloperUpsertWithoutProjectsInput = {
+  update: Prisma.XOR<Prisma.DeveloperUpdateWithoutProjectsInput, Prisma.DeveloperUncheckedUpdateWithoutProjectsInput>
+  create: Prisma.XOR<Prisma.DeveloperCreateWithoutProjectsInput, Prisma.DeveloperUncheckedCreateWithoutProjectsInput>
+  where?: Prisma.DeveloperWhereInput
+}
+
+export type DeveloperUpdateToOneWithWhereWithoutProjectsInput = {
+  where?: Prisma.DeveloperWhereInput
+  data: Prisma.XOR<Prisma.DeveloperUpdateWithoutProjectsInput, Prisma.DeveloperUncheckedUpdateWithoutProjectsInput>
+}
+
+export type DeveloperUpdateWithoutProjectsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  githubAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type DeveloperUncheckedUpdateWithoutProjectsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
+  githubAccountId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+
+/**
+ * Count Type DeveloperCountOutputType
+ */
+
+export type DeveloperCountOutputType = {
+  projects: number
+}
+
+export type DeveloperCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  projects?: boolean | DeveloperCountOutputTypeCountProjectsArgs
+}
+
+/**
+ * DeveloperCountOutputType without action
+ */
+export type DeveloperCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DeveloperCountOutputType
+   */
+  select?: Prisma.DeveloperCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * DeveloperCountOutputType without action
+ */
+export type DeveloperCountOutputTypeCountProjectsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProjectWhereInput
+}
 
 
 export type DeveloperSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -375,6 +486,8 @@ export type DeveloperSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   role?: boolean
   githubAccountId?: boolean
   createdAt?: boolean
+  projects?: boolean | Prisma.Developer$projectsArgs<ExtArgs>
+  _count?: boolean | Prisma.DeveloperCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["developer"]>
 
 export type DeveloperSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -408,10 +521,18 @@ export type DeveloperSelectScalar = {
 }
 
 export type DeveloperOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "name" | "avatarUrl" | "role" | "githubAccountId" | "createdAt", ExtArgs["result"]["developer"]>
+export type DeveloperInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  projects?: boolean | Prisma.Developer$projectsArgs<ExtArgs>
+  _count?: boolean | Prisma.DeveloperCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type DeveloperIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type DeveloperIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $DeveloperPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Developer"
-  objects: {}
+  objects: {
+    projects: Prisma.$ProjectPayload<ExtArgs>[]
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     email: string
@@ -814,6 +935,7 @@ readonly fields: DeveloperFieldRefs;
  */
 export interface Prisma__DeveloperClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  projects<T extends Prisma.Developer$projectsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Developer$projectsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -867,6 +989,10 @@ export type DeveloperFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.Int
    */
   omit?: Prisma.DeveloperOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DeveloperInclude<ExtArgs> | null
+  /**
    * Filter, which Developer to fetch.
    */
   where: Prisma.DeveloperWhereUniqueInput
@@ -885,6 +1011,10 @@ export type DeveloperFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensi
    */
   omit?: Prisma.DeveloperOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DeveloperInclude<ExtArgs> | null
+  /**
    * Filter, which Developer to fetch.
    */
   where: Prisma.DeveloperWhereUniqueInput
@@ -902,6 +1032,10 @@ export type DeveloperFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Omit specific fields from the Developer
    */
   omit?: Prisma.DeveloperOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DeveloperInclude<ExtArgs> | null
   /**
    * Filter, which Developer to fetch.
    */
@@ -951,6 +1085,10 @@ export type DeveloperFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensio
    */
   omit?: Prisma.DeveloperOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DeveloperInclude<ExtArgs> | null
+  /**
    * Filter, which Developer to fetch.
    */
   where?: Prisma.DeveloperWhereInput
@@ -998,6 +1136,10 @@ export type DeveloperFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Omit specific fields from the Developer
    */
   omit?: Prisma.DeveloperOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DeveloperInclude<ExtArgs> | null
   /**
    * Filter, which Developers to fetch.
    */
@@ -1047,6 +1189,10 @@ export type DeveloperCreateArgs<ExtArgs extends runtime.Types.Extensions.Interna
    */
   omit?: Prisma.DeveloperOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DeveloperInclude<ExtArgs> | null
+  /**
    * The data needed to create a Developer.
    */
   data: Prisma.XOR<Prisma.DeveloperCreateInput, Prisma.DeveloperUncheckedCreateInput>
@@ -1094,6 +1240,10 @@ export type DeveloperUpdateArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Omit specific fields from the Developer
    */
   omit?: Prisma.DeveloperOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DeveloperInclude<ExtArgs> | null
   /**
    * The data needed to update a Developer.
    */
@@ -1161,6 +1311,10 @@ export type DeveloperUpsertArgs<ExtArgs extends runtime.Types.Extensions.Interna
    */
   omit?: Prisma.DeveloperOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DeveloperInclude<ExtArgs> | null
+  /**
    * The filter to search for the Developer to update in case it exists.
    */
   where: Prisma.DeveloperWhereUniqueInput
@@ -1187,6 +1341,10 @@ export type DeveloperDeleteArgs<ExtArgs extends runtime.Types.Extensions.Interna
    */
   omit?: Prisma.DeveloperOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DeveloperInclude<ExtArgs> | null
+  /**
    * Filter which Developer to delete.
    */
   where: Prisma.DeveloperWhereUniqueInput
@@ -1207,6 +1365,30 @@ export type DeveloperDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Int
 }
 
 /**
+ * Developer.projects
+ */
+export type Developer$projectsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Project
+   */
+  select?: Prisma.ProjectSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Project
+   */
+  omit?: Prisma.ProjectOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProjectInclude<ExtArgs> | null
+  where?: Prisma.ProjectWhereInput
+  orderBy?: Prisma.ProjectOrderByWithRelationInput | Prisma.ProjectOrderByWithRelationInput[]
+  cursor?: Prisma.ProjectWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProjectScalarFieldEnum | Prisma.ProjectScalarFieldEnum[]
+}
+
+/**
  * Developer without action
  */
 export type DeveloperDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1218,4 +1400,8 @@ export type DeveloperDefaultArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Omit specific fields from the Developer
    */
   omit?: Prisma.DeveloperOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DeveloperInclude<ExtArgs> | null
 }

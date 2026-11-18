@@ -10,4 +10,5 @@
  */
 export type * from './models/Developer.js'
 export type * from './models/Repository.js'
+export type * from './models/Project.js'
 export type * from './commonInputTypes.js'

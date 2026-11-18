@@ -198,7 +198,7 @@ export type RepositoryWhereInput = {
   AND?: Prisma.RepositoryWhereInput | Prisma.RepositoryWhereInput[]
   OR?: Prisma.RepositoryWhereInput[]
   NOT?: Prisma.RepositoryWhereInput | Prisma.RepositoryWhereInput[]
-  id?: Prisma.StringFilter<"Repository"> | string
+  id?: Prisma.UuidFilter<"Repository"> | string
   githubAccountId?: Prisma.StringFilter<"Repository"> | string
   name?: Prisma.StringFilter<"Repository"> | string
   fullName?: Prisma.StringFilter<"Repository"> | string
@@ -206,6 +206,7 @@ export type RepositoryWhereInput = {
   owner?: Prisma.StringFilter<"Repository"> | string
   private?: Prisma.BoolFilter<"Repository"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Repository"> | Date | string
+  projects?: Prisma.ProjectListRelationFilter
 }
 
 export type RepositoryOrderByWithRelationInput = {
@@ -217,6 +218,7 @@ export type RepositoryOrderByWithRelationInput = {
   owner?: Prisma.SortOrder
   private?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  projects?: Prisma.ProjectOrderByRelationAggregateInput
 }
 
 export type RepositoryWhereUniqueInput = Prisma.AtLeast<{
@@ -231,6 +233,7 @@ export type RepositoryWhereUniqueInput = Prisma.AtLeast<{
   owner?: Prisma.StringFilter<"Repository"> | string
   private?: Prisma.BoolFilter<"Repository"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Repository"> | Date | string
+  projects?: Prisma.ProjectListRelationFilter
 }, "id">
 
 export type RepositoryOrderByWithAggregationInput = {
@@ -251,7 +254,7 @@ export type RepositoryScalarWhereWithAggregatesInput = {
   AND?: Prisma.RepositoryScalarWhereWithAggregatesInput | Prisma.RepositoryScalarWhereWithAggregatesInput[]
   OR?: Prisma.RepositoryScalarWhereWithAggregatesInput[]
   NOT?: Prisma.RepositoryScalarWhereWithAggregatesInput | Prisma.RepositoryScalarWhereWithAggregatesInput[]
-  id?: Prisma.StringWithAggregatesFilter<"Repository"> | string
+  id?: Prisma.UuidWithAggregatesFilter<"Repository"> | string
   githubAccountId?: Prisma.StringWithAggregatesFilter<"Repository"> | string
   name?: Prisma.StringWithAggregatesFilter<"Repository"> | string
   fullName?: Prisma.StringWithAggregatesFilter<"Repository"> | string
@@ -270,6 +273,7 @@ export type RepositoryCreateInput = {
   owner: string
   private?: boolean
   createdAt?: Date | string
+  projects?: Prisma.ProjectCreateNestedManyWithoutRepositoryInput
 }
 
 export type RepositoryUncheckedCreateInput = {
@@ -281,6 +285,7 @@ export type RepositoryUncheckedCreateInput = {
   owner: string
   private?: boolean
   createdAt?: Date | string
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutRepositoryInput
 }
 
 export type RepositoryUpdateInput = {
@@ -292,6 +297,7 @@ export type RepositoryUpdateInput = {
   owner?: Prisma.StringFieldUpdateOperationsInput | string
   private?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  projects?: Prisma.ProjectUpdateManyWithoutRepositoryNestedInput
 }
 
 export type RepositoryUncheckedUpdateInput = {
@@ -303,6 +309,7 @@ export type RepositoryUncheckedUpdateInput = {
   owner?: Prisma.StringFieldUpdateOperationsInput | string
   private?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutRepositoryNestedInput
 }
 
 export type RepositoryCreateManyInput = {
@@ -371,10 +378,118 @@ export type RepositoryMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
 }
 
+export type RepositoryScalarRelationFilter = {
+  is?: Prisma.RepositoryWhereInput
+  isNot?: Prisma.RepositoryWhereInput
+}
+
 export type BoolFieldUpdateOperationsInput = {
   set?: boolean
 }
 
+export type RepositoryCreateNestedOneWithoutProjectsInput = {
+  create?: Prisma.XOR<Prisma.RepositoryCreateWithoutProjectsInput, Prisma.RepositoryUncheckedCreateWithoutProjectsInput>
+  connectOrCreate?: Prisma.RepositoryCreateOrConnectWithoutProjectsInput
+  connect?: Prisma.RepositoryWhereUniqueInput
+}
+
+export type RepositoryUpdateOneRequiredWithoutProjectsNestedInput = {
+  create?: Prisma.XOR<Prisma.RepositoryCreateWithoutProjectsInput, Prisma.RepositoryUncheckedCreateWithoutProjectsInput>
+  connectOrCreate?: Prisma.RepositoryCreateOrConnectWithoutProjectsInput
+  upsert?: Prisma.RepositoryUpsertWithoutProjectsInput
+  connect?: Prisma.RepositoryWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.RepositoryUpdateToOneWithWhereWithoutProjectsInput, Prisma.RepositoryUpdateWithoutProjectsInput>, Prisma.RepositoryUncheckedUpdateWithoutProjectsInput>
+}
+
+export type RepositoryCreateWithoutProjectsInput = {
+  id?: string
+  githubAccountId: string
+  name: string
+  fullName: string
+  url: string
+  owner: string
+  private?: boolean
+  createdAt?: Date | string
+}
+
+export type RepositoryUncheckedCreateWithoutProjectsInput = {
+  id?: string
+  githubAccountId: string
+  name: string
+  fullName: string
+  url: string
+  owner: string
+  private?: boolean
+  createdAt?: Date | string
+}
+
+export type RepositoryCreateOrConnectWithoutProjectsInput = {
+  where: Prisma.RepositoryWhereUniqueInput
+  create: Prisma.XOR<Prisma.RepositoryCreateWithoutProjectsInput, Prisma.RepositoryUncheckedCreateWithoutProjectsInput>
+}
+
+export type RepositoryUpsertWithoutProjectsInput = {
+  update: Prisma.XOR<Prisma.RepositoryUpdateWithoutProjectsInput, Prisma.RepositoryUncheckedUpdateWithoutProjectsInput>
+  create: Prisma.XOR<Prisma.RepositoryCreateWithoutProjectsInput, Prisma.RepositoryUncheckedCreateWithoutProjectsInput>
+  where?: Prisma.RepositoryWhereInput
+}
+
+export type RepositoryUpdateToOneWithWhereWithoutProjectsInput = {
+  where?: Prisma.RepositoryWhereInput
+  data: Prisma.XOR<Prisma.RepositoryUpdateWithoutProjectsInput, Prisma.RepositoryUncheckedUpdateWithoutProjectsInput>
+}
+
+export type RepositoryUpdateWithoutProjectsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  githubAccountId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  owner?: Prisma.StringFieldUpdateOperationsInput | string
+  private?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type RepositoryUncheckedUpdateWithoutProjectsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  githubAccountId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  owner?: Prisma.StringFieldUpdateOperationsInput | string
+  private?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+
+/**
+ * Count Type RepositoryCountOutputType
+ */
+
+export type RepositoryCountOutputType = {
+  projects: number
+}
+
+export type RepositoryCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  projects?: boolean | RepositoryCountOutputTypeCountProjectsArgs
+}
+
+/**
+ * RepositoryCountOutputType without action
+ */
+export type RepositoryCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the RepositoryCountOutputType
+   */
+  select?: Prisma.RepositoryCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * RepositoryCountOutputType without action
+ */
+export type RepositoryCountOutputTypeCountProjectsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProjectWhereInput
+}
 
 
 export type RepositorySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -386,6 +501,8 @@ export type RepositorySelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   owner?: boolean
   private?: boolean
   createdAt?: boolean
+  projects?: boolean | Prisma.Repository$projectsArgs<ExtArgs>
+  _count?: boolean | Prisma.RepositoryCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["repository"]>
 
 export type RepositorySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -422,10 +539,18 @@ export type RepositorySelectScalar = {
 }
 
 export type RepositoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "githubAccountId" | "name" | "fullName" | "url" | "owner" | "private" | "createdAt", ExtArgs["result"]["repository"]>
+export type RepositoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  projects?: boolean | Prisma.Repository$projectsArgs<ExtArgs>
+  _count?: boolean | Prisma.RepositoryCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type RepositoryIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type RepositoryIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $RepositoryPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Repository"
-  objects: {}
+  objects: {
+    projects: Prisma.$ProjectPayload<ExtArgs>[]
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     githubAccountId: string
@@ -829,6 +954,7 @@ readonly fields: RepositoryFieldRefs;
  */
 export interface Prisma__RepositoryClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  projects<T extends Prisma.Repository$projectsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Repository$projectsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -883,6 +1009,10 @@ export type RepositoryFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.In
    */
   omit?: Prisma.RepositoryOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RepositoryInclude<ExtArgs> | null
+  /**
    * Filter, which Repository to fetch.
    */
   where: Prisma.RepositoryWhereUniqueInput
@@ -901,6 +1031,10 @@ export type RepositoryFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extens
    */
   omit?: Prisma.RepositoryOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RepositoryInclude<ExtArgs> | null
+  /**
    * Filter, which Repository to fetch.
    */
   where: Prisma.RepositoryWhereUniqueInput
@@ -918,6 +1052,10 @@ export type RepositoryFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Omit specific fields from the Repository
    */
   omit?: Prisma.RepositoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RepositoryInclude<ExtArgs> | null
   /**
    * Filter, which Repository to fetch.
    */
@@ -967,6 +1105,10 @@ export type RepositoryFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensi
    */
   omit?: Prisma.RepositoryOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RepositoryInclude<ExtArgs> | null
+  /**
    * Filter, which Repository to fetch.
    */
   where?: Prisma.RepositoryWhereInput
@@ -1014,6 +1156,10 @@ export type RepositoryFindManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Omit specific fields from the Repository
    */
   omit?: Prisma.RepositoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RepositoryInclude<ExtArgs> | null
   /**
    * Filter, which Repositories to fetch.
    */
@@ -1063,6 +1209,10 @@ export type RepositoryCreateArgs<ExtArgs extends runtime.Types.Extensions.Intern
    */
   omit?: Prisma.RepositoryOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RepositoryInclude<ExtArgs> | null
+  /**
    * The data needed to create a Repository.
    */
   data: Prisma.XOR<Prisma.RepositoryCreateInput, Prisma.RepositoryUncheckedCreateInput>
@@ -1110,6 +1260,10 @@ export type RepositoryUpdateArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * Omit specific fields from the Repository
    */
   omit?: Prisma.RepositoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RepositoryInclude<ExtArgs> | null
   /**
    * The data needed to update a Repository.
    */
@@ -1177,6 +1331,10 @@ export type RepositoryUpsertArgs<ExtArgs extends runtime.Types.Extensions.Intern
    */
   omit?: Prisma.RepositoryOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RepositoryInclude<ExtArgs> | null
+  /**
    * The filter to search for the Repository to update in case it exists.
    */
   where: Prisma.RepositoryWhereUniqueInput
@@ -1203,6 +1361,10 @@ export type RepositoryDeleteArgs<ExtArgs extends runtime.Types.Extensions.Intern
    */
   omit?: Prisma.RepositoryOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RepositoryInclude<ExtArgs> | null
+  /**
    * Filter which Repository to delete.
    */
   where: Prisma.RepositoryWhereUniqueInput
@@ -1223,6 +1385,30 @@ export type RepositoryDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.In
 }
 
 /**
+ * Repository.projects
+ */
+export type Repository$projectsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Project
+   */
+  select?: Prisma.ProjectSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Project
+   */
+  omit?: Prisma.ProjectOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProjectInclude<ExtArgs> | null
+  where?: Prisma.ProjectWhereInput
+  orderBy?: Prisma.ProjectOrderByWithRelationInput | Prisma.ProjectOrderByWithRelationInput[]
+  cursor?: Prisma.ProjectWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProjectScalarFieldEnum | Prisma.ProjectScalarFieldEnum[]
+}
+
+/**
  * Repository without action
  */
 export type RepositoryDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1234,4 +1420,8 @@ export type RepositoryDefaultArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Omit specific fields from the Repository
    */
   omit?: Prisma.RepositoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RepositoryInclude<ExtArgs> | null
 }

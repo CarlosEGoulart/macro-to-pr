@@ -51,3 +51,8 @@ export type Developer = Prisma.DeveloperModel
  * 
  */
 export type Repository = Prisma.RepositoryModel
+/**
+ * Model Project
+ * 
+ */
+export type Project = Prisma.ProjectModel

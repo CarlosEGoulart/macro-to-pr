@@ -15,11 +15,15 @@ import { TransformInterceptor } from './transform/transform.interceptor.js';
 import { PrismaModule } from './prisma/prisma.module.js';
 import { JwtStrategy } from './modules/auth/jwt.strategy.js';
 import { JwtAuthGuard } from './modules/auth/jwt-auth.guard.js';
+import { ProjectsModule } from './modules/projects/projects.module.js';
+import { NotionModule } from './modules/notion/notion.module.js';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     PrismaModule,
+    ProjectsModule,
+    NotionModule,
   ],
   controllers: [AppController],
   providers: [
