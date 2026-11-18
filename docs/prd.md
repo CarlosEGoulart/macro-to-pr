@@ -71,7 +71,7 @@
 
 ---
 
-### US02 — Criar Projeto · `Must Have` · `S` · Status: `🟡 Ready`
+### US02 — Criar Projeto · `Must Have` · `S` · Status: `🟢 Live`
 
 **Como** Desenvolvedor, **quero** criar um Projeto associando um Repositório ao qual tenho acesso, **para que** eu possa organizar e executar demandas de desenvolvimento relacionadas a esse código.
 
