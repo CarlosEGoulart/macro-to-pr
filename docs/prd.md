@@ -251,6 +251,29 @@
 
 ---
 
+### US17 — Entrar no sistema com JWT e controle de papéis · `Must Have` · `M` · Status: `🟡 Ready`
+
+**Como** Desenvolvedor ou Admin, **quero** que o sistema proteja as rotas com JWT global, controle de papéis com 403 e o front envie o token em toda chamada, **para que** o acesso autenticado e a autorização sejam válidos em toda a plataforma.
+
+**Critérios de aceite:**
+- [ ] **CA1 — Dado** que chamo uma rota protegida sem token, **quando** faço a requisição, **então** a API responde **401**.
+- [ ] **CA2 — Dado** que sou Desenvolvedor e chamo uma rota de Admin, **quando** uso meu token, **então** a API responde **403** (não 500, não 200).
+- [ ] **CA3 — Dado** que o Guard de autenticação está global, **quando** uma rota não está marcada como pública, **então** ela fecha automaticamente.
+- [ ] **CA4 — Dado** que acesso o Swagger, **quando** vejo uma rota protegida, **então** ela exibe o botão **Authorize** (Bearer).
+- [ ] **CA5 — Dado** que estou logado, **quando** o front faz qualquer chamada à API, **então** o cabeçalho `Authorization: Bearer <token>` é enviado **em um lugar só** (camada de serviço).
+- [ ] **CA6 — Dado** que o token expira no meio do uso, **quando** a API responde 401, **então** o front limpa o token e me leva de volta ao login, em um lugar só.
+- [ ] **CA7 — Dado** que chamo uma rota protegida com token adulterado, **quando** faço a requisição, **então** a API responde **401** (assinatura conferida de verdade).
+
+**Fora de escopo desta story:**
+- Cadastro e login por e-mail + senha (o acesso é só OAuth GitHub, US01).
+- Campo `passwordHash` no banco.
+
+**Regras relacionadas:** RN10
+
+**Depende de:** US01 (Acessar o Macro2PR com conta GitHub).
+
+---
+
 ## 🛡️ 5. Regras de Negócio (Constraints)
 
 | ID | Regra |
@@ -264,6 +287,7 @@
 | **RN07** | Uma mesma confirmação de pagamento não pode adicionar créditos ao Saldo mais de uma vez. |
 | **RN08** | Um Projeto só pode ser associado a um Repositório que esteja disponível por meio da conta GitHub autorizada do Desenvolvedor. |
 | **RN09** | Se a sessão do Desenvolvedor expirar ao retornar da etapa externa de pagamento, ele deve se autenticar novamente antes de retomar a consulta do Pedido original. O retorno não repete o pagamento nem libera créditos sem confirmação confiável do meio de pagamento. |
+| **RN10** | **Proteção de rotas e controle de acesso:**<br>• Todas as rotas da API são protegidas por JWT global, exceto as explicitamente marcadas como públicas.<br>• A rota protegida acessada sem token, ou com token inválido/adulterado, responde 401.<br>• Uma rota de Admin acessada por Desenvolvedor responde 403 (nunca 500 nem 200).<br>• Rotas protegidas expõem o botão Authorize (Bearer) no Swagger.<br>• O front envia o cabeçalho `Authorization: Bearer <token>` em toda chamada à API, por meio de uma única camada de serviço.<br>• Ao receber 401 (token expirado), o front limpa o token e redireciona para o login, por meio de uma única camada de tratamento.
 
 ### Estados da **Demanda**
 
