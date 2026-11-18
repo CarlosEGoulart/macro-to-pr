@@ -27,17 +27,17 @@
   - Teste primeiro: callback com `code` válido cria `GitHubAccount`+`Developer`, autentica e retorna JWT; falha antes do código pois o callback não existe
   - Arquivos previstos: `apps/api/src/modules/projects/projects.controller.ts` (rota POST /projects), `dto/create-project.dto.ts`, `projects.service.ts`, `projects.repository.ts`
 
-- [ ] **Tarefa 3 — Validação: repositório não pertence à Conta GitHub vinculada (CA2)**
+- [x] **Tarefa 3 — Validação: repositório não pertence à Conta GitHub vinculada (CA2)**
   - Cobre: CA2 (nego ou não tenho acesso ao repositório → não cria)
   - Teste primeiro: callback com `code` válido cria `GitHubAccount`+`Developer`, autentica e retorna JWT; falha antes do código pois o callback não existe
   - Arquivos previstos: `projects.service.ts`, `projects.repository.ts`
 
-- [ ] **Tarefa 4 — Validação: já existe Projeto para este Repositório (CA3)**
+- [x] **Tarefa 4 — Validação: já existe Projeto para este Repositório (CA3)**
   - Cobre: CA3 (já existe Projeto meu para este Repositório → não cria)
   - Teste primeiro: callback com `code` válido cria `GitHubAccount`+`Developer`, autentica e retorna JWT; falha antes do código pois o callback não existe
   - Arquivos previstos: `projects.service.ts`, `projects.repository.ts`
 
-- [ ] **Tarefa 5 — Testes e2e integrados (CA1 + CA2 + CA3)**
+- [x] **Tarefa 5 — Testes e2e integrados (CA1 + CA2 + CA3)**
   - Cobre: CA1, CA2, CA3
   - Teste primeiro: não existe teste e2e de criação de Projeto
   - Arquivos previstos: `apps/api/test/projects.e2e-spec.ts`
