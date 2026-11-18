@@ -12,4 +12,28 @@ export class ProjectsRepository {
   }) {
     return this.prisma.project.create({ data });
   }
+
+  async findDeveloperById(id: string) {
+    return this.prisma.developer.findUnique({
+      where: { id },
+      select: { id: true, githubAccountId: true },
+    });
+  }
+
+  async findRepositoryById(id: string) {
+    return this.prisma.repository.findUnique({
+      where: { id },
+      select: { id: true, githubAccountId: true },
+    });
+  }
+
+  async findProjectByDeveloperAndRepository(
+    developerId: string,
+    repositoryId: string,
+  ) {
+    return this.prisma.project.findFirst({
+      where: { developerId, repositoryId },
+      select: { id: true },
+    });
+  }
 }
