@@ -5,9 +5,49 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "../generated/prisma"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+enum Role {
+  Developer
+  Admin
+}
+
+model Developer {
+  id                String   @id @default(uuid()) @db.Uuid
+  email             String   @unique
+  name              String
+  avatarUrl         String?
+  role              Role     @default(Developer)
+  githubAccountId   String?  @unique
+  createdAt         DateTime @default(now())
+  projects          Project[]
+}
+
+model Repository {
+  id                String   @id @default(uuid()) @db.Uuid
+  githubAccountId   String
+  name              String
+  fullName          String
+  url               String
+  owner             String
+  private           Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  projects          Project[]
+}
+
+model Project {
+  id                String   @id @default(uuid()) @db.Uuid
+  name              String
+  developerId       String   @db.Uuid
+  repositoryId      String   @db.Uuid
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  developer         Developer @relation(fields: [developerId], references: [id])
+  repository        Repository @relation(fields: [repositoryId], references: [id])
 }
