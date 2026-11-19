@@ -67,5 +67,6 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - run: psql -U app -c 'CREATE DATABASE appdb;' || true
       - run: npx prisma migrate deploy
       - run: npm run test:e2e -w apps/api
