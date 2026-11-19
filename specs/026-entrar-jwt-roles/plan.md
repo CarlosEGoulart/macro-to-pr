@@ -63,10 +63,10 @@
   - Teste primeiro: verificar que `npm run typecheck` passa sem erro TS2769
   - Arquivos previstos: `apps/api/vitest.config.ts`, `apps/api/vitest.config.e2e.ts`
 
-- [ ] **Tarefa 11 — Definir JWT_SECRET nos testes de unidade do guard**
+- [x] **Tarefa 11 — Definir JWT_SECRET nos testes de unidade do guard**
   - Cobre: CA1, CA2 — testes de unidade falham sem JWT_SECRET
   - Teste primeiro: verificar que `npm run test` passa sem erro "JWT_SECRET não configurada"
-  - Arquivos previstos: `apps/api/src/common/guards/roles.guard.spec.ts`, `apps/api/src/swagger-bearer.spec.ts`
+  - Arquivos previstos: `apps/api/test/roles.guard.spec.ts`, `apps/api/src/swagger-bearer.spec.ts`
 
 - [ ] **Tarefa 12 — Verificar build e testes completos no CI**
   - Cobre: ID18 — todos os comandos do CI passam
