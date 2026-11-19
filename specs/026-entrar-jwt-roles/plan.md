@@ -38,7 +38,7 @@
   - Teste primeiro: resposta 401 da camada de serviço limpa `localStorage` e redireciona para login; menu esconde botões de Admin para Desenvolvedor
   - Arquivos previstos: camada de serviço (mesma da Tarefa 4), `apps/web/src/features/auth/` ou layout do menu
 
-- [ ] **Tarefa 6 — Testes negativos (401 sem token, 403 papel errado) no CI**
+- [x] **Tarefa 6 — Testes negativos (401 sem token, 403 papel errado) no CI**
   - Cobre: CA1, CA2
   - Teste primeiro: e2e rota protegida sem token → 401; e2e papel errado → 403; ambos rodam no GitHub Actions (`ci.yml`)
   - Arquivos previstos: `apps/api/test/auth-guard.e2e-spec.ts` (ou similar), `.github/workflows/ci.yml` (já existe, garantir execução)
