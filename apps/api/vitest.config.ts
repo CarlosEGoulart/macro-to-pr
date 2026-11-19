@@ -9,7 +9,7 @@ export default defineConfig({
     root: './',
     include: ['**/*.spec.ts'],
     coverage: {
-      threshold: {
+      thresholds: {
         lines: 80,
         functions: 80,
         branches: 80,

@@ -58,6 +58,21 @@
   - Teste primeiro: verificar que `App.tsx`/`main.tsx` consomem `apiService`, `Login` e `Menu`
   - Arquivos previstos: `apps/web/src/App.tsx`, `apps/web/src/main.tsx`, `apps/web/src/features/auth/`
 
+- [x] **Tarefa 10 — Corrigir coverage threshold (threshold → thresholds)**
+  - Cobre: ID18 (architecture.md) — cobertura mínima de 80%
+  - Teste primeiro: verificar que `npm run typecheck` passa sem erro TS2769
+  - Arquivos previstos: `apps/api/vitest.config.ts`, `apps/api/vitest.config.e2e.ts`
+
+- [ ] **Tarefa 11 — Definir JWT_SECRET nos testes de unidade do guard**
+  - Cobre: CA1, CA2 — testes de unidade falham sem JWT_SECRET
+  - Teste primeiro: verificar que `npm run test` passa sem erro "JWT_SECRET não configurada"
+  - Arquivos previstos: `apps/api/src/common/guards/roles.guard.spec.ts`, `apps/api/src/swagger-bearer.spec.ts`
+
+- [ ] **Tarefa 12 — Verificar build e testes completos no CI**
+  - Cobre: ID18 — todos os comandos do CI passam
+  - Teste primeiro: rodar `npm run typecheck`, `npm run test`, `npm run test:e2e` em apps/api e `npm run test` em apps/web
+  - Arquivos previstos: nenhum (verificação apenas)
+
 ## Critérios sem tarefa
 
 -
