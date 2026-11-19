@@ -1,3 +1,5 @@
+process.env.JWT_SECRET = 'test-secret-123456';
+
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { SwaggerModule } from '@nestjs/swagger';
