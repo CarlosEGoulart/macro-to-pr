@@ -41,6 +41,7 @@ export class AuthGuard {
       request.user = {
         userId: (payload.userId as string) ?? (payload.sub as string),
         email: payload.email as string,
+        role: payload.role as string,
       };
       return true;
     } catch {

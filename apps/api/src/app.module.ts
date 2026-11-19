@@ -18,6 +18,7 @@ import { PrismaModule } from './prisma/prisma.module.js';
 import { JwtStrategy } from './modules/auth/jwt.strategy.js';
 import { JwtAuthGuard } from './modules/auth/jwt-auth.guard.js';
 import { AuthGuard } from './common/guards/auth.guard.js';
+import { RolesGuard } from './common/guards/roles.guard.js';
 import { ProjectsModule } from './modules/projects/projects.module.js';
 import { NotionModule } from './modules/notion/notion.module.js';
 
@@ -42,6 +43,10 @@ import { NotionModule } from './modules/notion/notion.module.js';
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
     },
     {
       provide: APP_INTERCEPTOR,

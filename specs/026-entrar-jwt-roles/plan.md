@@ -18,7 +18,7 @@
   - Teste primeiro: rota protegida sem marca `@Public()` e sem token responde 401; rota pública com `@Public()` passa sem token
   - Arquivos previstos: `apps/api/src/common/decorators/public.decorator.ts`, `apps/api/src/common/guards/auth.guard.ts`, `apps/api/src/app.module.ts` (`APP_GUARD`), rotas existentes marcadas com `@Public()`
 
-- [ ] **Tarefa 2 — `RolesGuard` + decorator `@Roles()` (403)**
+- [x] **Tarefa 2 — `RolesGuard` + decorator `@Roles()` (403)**
   - Cobre: CA2
   - Teste primeiro: token de Desenvolvedor em rota com `@Roles(Role.Admin)` responde 403 (não 500, não 200); rota sem `@Roles` liberada para qualquer autenticado
   - Arquivos previstos: `apps/api/src/common/decorators/roles.decorator.ts`, `apps/api/src/common/guards/roles.guard.ts`, `apps/api/src/app.module.ts` (`APP_GUARD` ordem), rota admin existente com `@Roles(Role.Admin)`
