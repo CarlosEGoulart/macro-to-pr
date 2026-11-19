@@ -6,6 +6,7 @@ import {
   ApiTags,
   ApiOperation,
   ApiResponse,
+  ApiBearerAuth,
 } from '@nestjs/swagger';
 import { Public } from './common/decorators/public.decorator.js';
 import { Roles } from './common/decorators/roles.decorator.js';
@@ -27,6 +28,7 @@ export class AppController {
 
   @Get('admin/ping')
   @Roles(Role.Admin)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Endpoint de admin (apenas administradores)' })
   @ApiResponse({ status: 200, description: 'Pong' })
   @ApiResponse({ status: 403, description: 'Acesso proibido para não-administradores' })

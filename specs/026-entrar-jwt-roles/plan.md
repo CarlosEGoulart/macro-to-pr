@@ -23,7 +23,7 @@
   - Teste primeiro: token de Desenvolvedor em rota com `@Roles(Role.Admin)` responde 403 (não 500, não 200); rota sem `@Roles` liberada para qualquer autenticado
   - Arquivos previstos: `apps/api/src/common/decorators/roles.decorator.ts`, `apps/api/src/common/guards/roles.guard.ts`, `apps/api/src/app.module.ts` (`APP_GUARD` ordem), rota admin existente com `@Roles(Role.Admin)`
 
-- [ ] **Tarefa 3 — Swagger Bearer Auth**
+- [x] **Tarefa 3 — Swagger Bearer Auth**
   - Cobre: CA4
   - Teste primeiro: página `/docs` exibe botão Authorize (Bearer); controllers protegidos decorados com `@ApiBearerAuth()`
   - Arquivos previstos: `apps/api/src/main.ts` (`.addBearerAuth()`), controllers protegidos com `@ApiBearerAuth()`

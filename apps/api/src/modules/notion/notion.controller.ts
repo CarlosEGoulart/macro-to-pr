@@ -7,6 +7,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { ApiBearerAuth } from '@nestjs/swagger';
 import { Request } from 'express';
 import type { Response } from 'express';
 import { NotionService } from './notion.service.js';
@@ -15,6 +16,7 @@ interface AuthenticatedRequest extends Request {
   user: { userId: string };
 }
 
+@ApiBearerAuth()
 @Controller('auth/notion')
 export class NotionController {
   constructor(private readonly notionService: NotionService) {}

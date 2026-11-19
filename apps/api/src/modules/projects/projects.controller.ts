@@ -1,7 +1,9 @@
 import { Controller, Post, Body, Req } from '@nestjs/common';
+import { ApiBearerAuth } from '@nestjs/swagger';
 import { ProjectsService } from './projects.service.js';
 import { CreateProjectDto } from './dto/create-project.dto.js';
 
+@ApiBearerAuth()
 @Controller('projects')
 export class ProjectsController {
   constructor(private readonly projectsService: ProjectsService) {}
