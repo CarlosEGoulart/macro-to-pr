@@ -68,7 +68,7 @@
   - Teste primeiro: verificar que `npm run test` passa sem erro "JWT_SECRET não configurada"
   - Arquivos previstos: `apps/api/test/roles.guard.spec.ts`, `apps/api/src/swagger-bearer.spec.ts`
 
-- [ ] **Tarefa 12 — Verificar build e testes completos no CI**
+- [x] **Tarefa 12 — Verificar build e testes completos no CI**
   - Cobre: ID18 — todos os comandos do CI passam
   - Teste primeiro: rodar `npm run typecheck`, `npm run test`, `npm run test:e2e` em apps/api e `npm run test` em apps/web
   - Arquivos previstos: nenhum (verificação apenas)
