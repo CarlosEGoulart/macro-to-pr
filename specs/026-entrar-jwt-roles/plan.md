@@ -48,6 +48,16 @@
   - Teste primeiro: não aplica (documentação)
   - Arquivos previstos: `docs/architecture.md` (validade do token, localStorage, ordem dos Guards), `docs/prd.md` (US17 → Live), `specs/README.md` (spec 026 → implementada)
 
+- [x] **Tarefa 8 — CI/CD GitHub Actions**
+  - Cobre: ID18 (architecture.md) — CI executa lint, typecheck, test, test:e2e
+  - Teste primeiro: verificar que `.github/workflows/ci.yml` existe e executa `npm run test:e2e -w apps/api` com serviço Postgres
+  - Arquivos previstos: `.github/workflows/ci.yml`
+
+- [ ] **Tarefa 9 — Frontend integrado (apiService + Login + Menu)**
+  - Cobre: CA5, CA6 — apiService, Login e Menu conectados à aplicação real
+  - Teste primeiro: verificar que `App.tsx`/`main.tsx` consomem `apiService`, `Login` e `Menu`
+  - Arquivos previstos: `apps/web/src/App.tsx`, `apps/web/src/main.tsx`, `apps/web/src/features/auth/`
+
 ## Critérios sem tarefa
 
 -
