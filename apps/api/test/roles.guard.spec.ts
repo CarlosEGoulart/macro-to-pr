@@ -1,3 +1,5 @@
+process.env.JWT_SECRET = 'test-secret-123456';
+
 import { ForbiddenException } from '@nestjs/common';
 import { ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
