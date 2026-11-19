@@ -1,14 +1,49 @@
 name: CI
 
-on:
-  pull_request:
-  push:
-    branches: [main]
+on: [push, pull_request]
 
 jobs:
-  testes:
+  lint:
     runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgresql://app:app@localhost:5432/appdb?schema=public
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint -w apps/api
 
+  typecheck:
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgresql://app:app@localhost:5432/appdb?schema=public
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck -w apps/api
+
+  test:
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgresql://app:app@localhost:5432/appdb?schema=public
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run test:cov -w apps/api
+
+  test-e2e:
+    runs-on: ubuntu-latest
     services:
       postgres:
         image: postgres:16
@@ -23,37 +58,14 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-
     env:
       DATABASE_URL: postgresql://app:app@localhost:5432/appdb?schema=public
-
     steps:
-      - uses: actions/checkout@v7
-
-      - uses: actions/setup-node@v7
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: 22
           cache: npm
-
-      - name: Instalar o projeto inteiro
-        run: npm ci
-
-      - name: Gerar o client do Prisma
-        working-directory: apps/api
-        run: npx prisma generate
-
-      - name: Compilar (confere os tipos)
-        run: npm run build -w apps/api
-
-      - name: Aplicar as migrations
-        working-directory: apps/api
-        run: npx prisma migrate deploy
-
-      - name: Testes
-        run: npm run test -w apps/api
-
-      - name: Testes de ponta a ponta
-        run: npm run test:e2e -w apps/api
-
-      - name: Lint
-        run: npm run lint -w apps/api
+      - run: npm ci
+      - run: npx prisma migrate deploy
+      - run: npm run test:e2e -w apps/api
