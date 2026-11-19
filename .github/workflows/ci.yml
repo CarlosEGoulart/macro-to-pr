@@ -70,6 +70,7 @@ jobs:
       - run: npm ci
       - run: psql -U app -c 'CREATE DATABASE appdb;' || true
       - run: echo "DATABASE_URL=postgresql://app:app@localhost:5432/appdb?schema=public" > apps/api/.env
+      - run: cat apps/api/.env
       - run: npx prisma migrate deploy --schema apps/api/prisma/schema.prisma
         env:
           DATABASE_URL: postgresql://app:app@localhost:5432/appdb?schema=public
