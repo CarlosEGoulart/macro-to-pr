@@ -28,7 +28,7 @@
   - Teste primeiro: página `/docs` exibe botão Authorize (Bearer); controllers protegidos decorados com `@ApiBearerAuth()`
   - Arquivos previstos: `apps/api/src/main.ts` (`.addBearerAuth()`), controllers protegidos com `@ApiBearerAuth()`
 
-- [ ] **Tarefa 4 — Frontend: token na camada de serviço**
+- [x] **Tarefa 4 — Frontend: token na camada de serviço**
   - Cobre: CA5
   - Teste primeiro: toda chamada à API feita pela camada de serviço inclui `Authorization: Bearer <token>`; token lido de `localStorage`
   - Arquivos previstos: `apps/web/src/features/auth/` (camada de serviço única), `apps/web/src/main.tsx` ou layout (injeção da camada)
