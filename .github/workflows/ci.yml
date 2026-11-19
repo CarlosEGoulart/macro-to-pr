@@ -71,3 +71,9 @@ jobs:
       - run: psql -U app -c 'CREATE DATABASE appdb;' || true
       - run: cd apps/api && DATABASE_URL=postgresql://app:app@localhost:5432/appdb?schema=public npx prisma migrate deploy
       - run: npm run test:e2e -w apps/api
+
+  testes:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - run: echo "Todos os testes passaram com sucesso."
