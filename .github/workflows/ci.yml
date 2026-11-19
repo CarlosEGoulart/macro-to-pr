@@ -72,4 +72,6 @@ jobs:
       - run: npx prisma migrate deploy --schema apps/api/prisma/schema.prisma
         env:
           DATABASE_URL: postgresql://app:app@localhost:5432/appdb?schema=public
+        env:
+          DATABASE_URL: postgresql://app:app@localhost:5432/appdb?schema=public
       - run: npm run test:e2e -w apps/api
