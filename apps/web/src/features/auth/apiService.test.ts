@@ -52,3 +52,31 @@ describe('apiService — CA5: token Bearer em toda chamada', () => {
     expect(authorizationDe(fetchMock.mock.calls[0][1])).toBeNull();
   });
 });
+
+describe('apiService — CA6: 401 limpa token e redireciona para login', () => {
+  const originalLocation = window.location;
+  const locationMock = { href: originalLocation.href };
+
+  beforeEach(() => {
+    vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response(null, { status: 401 }));
+    localStorage.setItem('token', 'token-expirado');
+    locationMock.href = originalLocation.href;
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      get: () => locationMock,
+    });
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+    localStorage.clear();
+    Object.defineProperty(window, 'location', { value: originalLocation, configurable: true });
+  });
+
+  it('remove o token do localStorage e redireciona para /login quando a API responde 401', async () => {
+    await apiService.request(`${API_URL}/x`);
+
+    expect(localStorage.getItem('token')).toBeNull();
+    expect(locationMock.href).toContain('/login');
+  });
+});

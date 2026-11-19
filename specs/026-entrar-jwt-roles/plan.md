@@ -33,7 +33,7 @@
   - Teste primeiro: toda chamada à API feita pela camada de serviço inclui `Authorization: Bearer <token>`; token lido de `localStorage`
   - Arquivos previstos: `apps/web/src/features/auth/` (camada de serviço única), `apps/web/src/main.tsx` ou layout (injeção da camada)
 
-- [ ] **Tarefa 5 — Frontend: 401 → login e menu por papel**
+- [x] **Tarefa 5 — Frontend: 401 → login e menu por papel**
   - Cobre: CA6
   - Teste primeiro: resposta 401 da camada de serviço limpa `localStorage` e redireciona para login; menu esconde botões de Admin para Desenvolvedor
   - Arquivos previstos: camada de serviço (mesma da Tarefa 4), `apps/web/src/features/auth/` ou layout do menu

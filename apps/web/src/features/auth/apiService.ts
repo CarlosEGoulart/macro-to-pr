@@ -13,6 +13,12 @@ export const apiService = {
     if (token) {
       headers.set('Authorization', `Bearer ${token}`);
     }
-    return fetch(input, { ...init, headers });
+    const response = await fetch(input, { ...init, headers });
+    if (response.status === 401) {
+      // CA6: token expirado/revogado — limpa o token e leva de volta ao login, em um lugar só.
+      localStorage.removeItem('token');
+      window.location.href = '/login';
+    }
+    return response;
   },
 };
