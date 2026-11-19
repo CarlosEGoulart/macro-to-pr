@@ -571,6 +571,10 @@ jobs:
 | **API Style** | REST (OpenAPI 3.1), JSON, UTF-8 |
 | **Auth** | JWT (access + refresh), GitHub OAuth para onboarding |
 | **RBAC** | `Developer` \| `Admin` via `RolesGuard` + `@Roles()` |
+| **Validade do token JWT** | `JWT_EXPIRES_IN` consta no `.env` (seção 8) como `15m`, mas **não é aplicado** no `JwtModule.registerAsync` (falta `signOptions: { expiresIn }`); expiração real ainda não implementada no código |
+| **Verificação de assinatura JWT** | `JwtStrategy` confere a assinatura com `JWT_SECRET`; token adulterado ou inválido → **401** (CA7) — o payload só é aceito se a assinatura bater |
+| **Armazenamento do token no front** | `localStorage` (único lugar); risco de XSS aceitável para esta disciplina, escolha escrita e justificada |
+| **Ordem dos Guards** | `AuthGuard` antes de `RolesGuard`; evita **500** por `user.role` indefinido quando a requisição não está autenticada |
 | **Validação** | `class-validator` + `ValidationPipe` global (whitelist) |
 | **Erro Global** | `AllExceptionsFilter` + `ResponseInterceptor` |
 | **Docs API** | Swagger vivo (`/api/docs`), OpenAPI JSON (`/api/docs-json`) |

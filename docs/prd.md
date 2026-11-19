@@ -251,7 +251,7 @@
 
 ---
 
-### US17 — Entrar no sistema com JWT e controle de papéis · `Must Have` · `M` · Status: `🟡 Ready`
+### US17 — Entrar no sistema com JWT e controle de papéis · `Must Have` · `M` · Status: `🟢 Live`
 
 **Como** Desenvolvedor ou Admin, **quero** que o sistema proteja as rotas com JWT global, controle de papéis com 403 e o front envie o token em toda chamada, **para que** o acesso autenticado e a autorização sejam válidos em toda a plataforma.
 
