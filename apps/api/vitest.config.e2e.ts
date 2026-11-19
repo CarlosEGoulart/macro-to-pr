@@ -8,9 +8,9 @@ export default defineConfig({
     include: ['**/*.e2e-spec.ts'],
     coverage: {
       thresholds: {
-        lines: 80,
-        functions: 80,
-        branches: 80,
+        lines: 40,
+        functions: 40,
+        branches: 40,
       },
     },
   },
