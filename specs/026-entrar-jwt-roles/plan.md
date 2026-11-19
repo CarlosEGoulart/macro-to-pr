@@ -53,7 +53,7 @@
   - Teste primeiro: verificar que `.github/workflows/ci.yml` existe e executa `npm run test:e2e -w apps/api` com serviço Postgres
   - Arquivos previstos: `.github/workflows/ci.yml`
 
-- [ ] **Tarefa 9 — Frontend integrado (apiService + Login + Menu)**
+- [x] **Tarefa 9 — Frontend integrado (apiService + Login + Menu)**
   - Cobre: CA5, CA6 — apiService, Login e Menu conectados à aplicação real
   - Teste primeiro: verificar que `App.tsx`/`main.tsx` consomem `apiService`, `Login` e `Menu`
   - Arquivos previstos: `apps/web/src/App.tsx`, `apps/web/src/main.tsx`, `apps/web/src/features/auth/`
