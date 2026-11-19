@@ -43,7 +43,7 @@
   - Teste primeiro: e2e rota protegida sem token → 401; e2e papel errado → 403; ambos rodam no GitHub Actions (`ci.yml`)
   - Arquivos previstos: `apps/api/test/auth-guard.e2e-spec.ts` (ou similar), `.github/workflows/ci.yml` (já existe, garantir execução)
 
-- [ ] **Tarefa 7 — Documentação e fechamento**
+- [x] **Tarefa 7 — Documentação e fechamento**
   - Cobre: CA7
   - Teste primeiro: não aplica (documentação)
   - Arquivos previstos: `docs/architecture.md` (validade do token, localStorage, ordem dos Guards), `docs/prd.md` (US17 → Live), `specs/README.md` (spec 026 → implementada)
