@@ -33,6 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DATABASE_URL: postgresql://app:app@localhost:5432/appdb?schema=public
+      JWT_SECRET: test-secret-123456
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
