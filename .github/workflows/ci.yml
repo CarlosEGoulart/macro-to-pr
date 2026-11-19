@@ -69,5 +69,5 @@ jobs:
           cache: npm
       - run: npm ci
       - run: psql -U app -c 'CREATE DATABASE appdb;' || true
-      - run: DATABASE_URL=postgresql://app:app@localhost:5432/appdb?schema=public npx prisma migrate deploy --schema apps/api/prisma/schema.prisma
+      - run: cd apps/api && DATABASE_URL=postgresql://app:app@localhost:5432/appdb?schema=public npx prisma migrate deploy
       - run: npm run test:e2e -w apps/api
