@@ -68,4 +68,41 @@ O deploy público será entregue na Entrega 3 — até lá, a aplicação não e
 
 ## Quick Start
 
-O Quick Start (clonagem, instalação, banco e execução local) será preenchido junto com o scaffold da aplicação, na Entrega 2.
+Siga estes passos num computador que nunca viu o projeto:
+
+```bash
+# 1. Clone o repositório
+git clone https://github.com/seu-usuario/seu-repo.git
+cd seu-repo
+
+# 2. Instale as dependências (monorepo com npm workspaces)
+npm install
+
+# 3. Suba o banco de dados (PostgreSQL via Docker Compose, porta 5432)
+docker compose up -d
+
+# 4. Crie o arquivo de variáveis de ambiente da API a partir do exemplo
+cp apps/api/.env.example apps/api/.env
+# (ajuste o DATABASE_URL se usar outro banco/credenciais)
+
+# 5. Aplique as migrações no banco e gere o cliente Prisma
+cd apps/api
+npx prisma migrate deploy
+npx prisma generate
+
+# 6. Inicie a API (modo desenvolvimento, reinicia ao salvar)
+cd ../..
+npm run start -w apps/api
+# A API fica disponível em http://localhost:3000
+# Swagger: http://localhost:3000/docs
+```
+
+Em outro terminal, rode os testes e o lint:
+
+```bash
+npm run test -w apps/api
+npm run test:e2e -w apps/api
+npm run lint -w apps/api
+```
+
+> ✅ Deu certo quando: a página `http://localhost:3000/docs` abre com as rotas das histórias, uma chamada de login devolve um token, e os testes e o lint passam, sem instruções que não estejam neste README.
