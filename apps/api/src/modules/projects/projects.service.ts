@@ -52,4 +52,8 @@ export class ProjectsService {
       developerId,
     });
   }
+
+  async findProjectsByDeveloper(developerId: string) {
+    return this.projectsRepository.findProjectsByDeveloper(developerId);
+  }
 }

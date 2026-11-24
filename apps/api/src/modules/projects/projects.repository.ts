@@ -36,4 +36,11 @@ export class ProjectsRepository {
       select: { id: true },
     });
   }
+
+  async findProjectsByDeveloper(developerId: string) {
+    return this.prisma.project.findMany({
+      where: { developerId },
+      orderBy: { createdAt: 'desc' },
+    });
+  }
 }

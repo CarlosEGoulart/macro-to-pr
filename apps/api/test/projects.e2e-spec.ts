@@ -137,3 +137,116 @@ describe('Projects (e2e) - POST /projects', () => {
     expect(response.body.message).toContain('Já existe');
   });
 });
+
+describe('Projects (e2e) - GET /projects (CA4)', () => {
+  let app: INestApplication;
+  let prisma: PrismaService;
+  let accessToken: string;
+  let developerId: string;
+
+  beforeAll(async () => {
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+      imports: [AppModule, JwtModule.register({ secret: process.env.JWT_SECRET })],
+    }).compile();
+
+    app = moduleFixture.createNestApplication();
+    prisma = moduleFixture.get(PrismaService);
+    await app.init();
+
+    const jwtService = moduleFixture.get(JwtService);
+
+    // Desenvolvedor autenticado
+    await prisma.developer.deleteMany({ where: { email: 'dev-get@test.com' } });
+    const developer = await prisma.developer.create({
+      data: {
+        email: 'dev-get@test.com',
+        name: 'Dev Get Teste',
+        githubAccountId: 'gh-e2e-get',
+      },
+    });
+    developerId = developer.id;
+
+    // Outro desenvolvedor (seus projetos NÃO devem aparecer no seletor)
+    await prisma.developer.deleteMany({ where: { email: 'dev-outro@test.com' } });
+    const outroDeveloper = await prisma.developer.create({
+      data: {
+        email: 'dev-outro@test.com',
+        name: 'Dev Outro',
+        githubAccountId: 'gh-e2e-get-outro',
+      },
+    });
+
+    await prisma.repository.deleteMany({ where: { githubAccountId: 'gh-e2e-get' } });
+    const repository = await prisma.repository.create({
+      data: {
+        githubAccountId: 'gh-e2e-get',
+        name: 'repo-get',
+        fullName: 'owner/repo-get',
+        url: 'https://github.com/owner/repo-get',
+        owner: 'owner',
+        private: false,
+      },
+    });
+
+    // Dois projetos do desenvolvedor autenticado
+    await prisma.project.createMany({
+      data: [
+        { name: 'Projeto A', developerId, repositoryId: repository.id },
+        { name: 'Projeto B', developerId, repositoryId: repository.id },
+      ],
+    });
+
+    // Um projeto de OUTRO desenvolvedor (deve ser filtrado pelo repository)
+    await prisma.project.create({
+      data: {
+        name: 'Projeto Outro Dev',
+        developerId: outroDeveloper.id,
+        repositoryId: repository.id,
+      },
+    });
+
+    accessToken = await jwtService.signAsync({
+      userId: developerId,
+      email: developer.email,
+    });
+  });
+
+  afterAll(async () => {
+    try {
+      await prisma.project.deleteMany({ where: {} });
+    } catch (error) {
+      const isTableNotFound =
+        error instanceof PrismaClientKnownRequestError &&
+        (error.message.includes('does not exist') ||
+          error.message.includes('undefined_table'));
+      if (!isTableNotFound) {
+        throw error;
+      }
+    }
+    await prisma.repository.deleteMany({ where: { githubAccountId: 'gh-e2e-get' } });
+    await prisma.developer.deleteMany({ where: { email: 'dev-get@test.com' } });
+    await prisma.developer.deleteMany({ where: { email: 'dev-outro@test.com' } });
+    await app.close();
+  });
+
+  it('deve retornar 401 quando GET /projects é chamado sem token', async () => {
+    await request(app.getHttpServer()).get('/projects').expect(401);
+  });
+
+  it('deve retornar 200 com a lista de projetos do desenvolvedor autenticado (CA4)', async () => {
+    const response = await request(app.getHttpServer())
+      .get('/projects')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .expect(200);
+
+    const body = (response.body.data ?? response.body) as {
+      id: string;
+      name: string;
+      developerId: string;
+    }[];
+    expect(Array.isArray(body)).toBe(true);
+    expect(body.length).toBe(2);
+    expect(body.every((p) => p.developerId === developerId)).toBe(true);
+    expect(body.map((p) => p.name).sort()).toEqual(['Projeto A', 'Projeto B']);
+  });
+});
