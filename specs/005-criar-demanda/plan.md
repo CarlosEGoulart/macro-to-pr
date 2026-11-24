@@ -24,7 +24,7 @@
   - Teste primeiro: e2e `GET /projects` sem token → 401; com token → lista projetos do desenvolvedor (200)
   - Arquivos previstos: `apps/api/src/modules/projects/projects.controller.ts`, `apps/api/src/modules/projects/projects.service.ts`, `apps/api/src/modules/projects/projects.repository.ts`
 
-- [ ] **Tarefa 3 — DTO CreateDemandDto com validações (CA2)**
+- [x] **Tarefa 3 — DTO CreateDemandDto com validações (CA2)**
   - Cobre: CA2
   - Teste primeiro: unitário do DTO — campos obrigatórios ausentes → erros de validação (class-validator)
   - Arquivos previstos: `apps/api/src/modules/demands/dto/create-demand.dto.ts`
