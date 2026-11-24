@@ -19,7 +19,7 @@
   - Teste primeiro: não se aplica (mudança de schema; validada pelo teste e2e de POST /demandas na Tarefa 4)
   - Arquivos previstos: `apps/api/prisma/schema.prisma`, `apps/api/prisma/migrations/<timestamp>_create_demand/migration.sql`
 
-- [ ] **Tarefa 2 — GET /projects no controller, service e repository**
+- [x] **Tarefa 2 — GET /projects no controller, service e repository**
   - Cobre: CA4
   - Teste primeiro: e2e `GET /projects` sem token → 401; com token → lista projetos do desenvolvedor (200)
   - Arquivos previstos: `apps/api/src/modules/projects/projects.controller.ts`, `apps/api/src/modules/projects/projects.service.ts`, `apps/api/src/modules/projects/projects.repository.ts`
