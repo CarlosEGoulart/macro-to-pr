@@ -8,6 +8,7 @@
  *
  * 🟢 You can import this file directly.
  */
+export type * from './models/Demand.js'
 export type * from './models/Developer.js'
 export type * from './models/Repository.js'
 export type * from './models/Project.js'

@@ -51,6 +51,7 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
+  Demand: 'Demand',
   Developer: 'Developer',
   Repository: 'Repository',
   Project: 'Project'
@@ -70,6 +71,19 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 } as const)
 
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
+
+
+export const DemandScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  projectId: 'projectId',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DemandScalarFieldEnum = (typeof DemandScalarFieldEnum)[keyof typeof DemandScalarFieldEnum]
 
 
 export const DeveloperScalarFieldEnum = {

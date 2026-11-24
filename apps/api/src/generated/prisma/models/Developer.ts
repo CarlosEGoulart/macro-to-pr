@@ -361,20 +361,12 @@ export type DeveloperScalarRelationFilter = {
   isNot?: Prisma.DeveloperWhereInput
 }
 
-export type StringFieldUpdateOperationsInput = {
-  set?: string
-}
-
 export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
 }
 
 export type EnumRoleFieldUpdateOperationsInput = {
   set?: $Enums.Role
-}
-
-export type DateTimeFieldUpdateOperationsInput = {
-  set?: Date | string
 }
 
 export type DeveloperCreateNestedOneWithoutProjectsInput = {

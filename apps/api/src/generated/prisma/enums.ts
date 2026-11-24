@@ -15,3 +15,16 @@ export const Role = {
 } as const
 
 export type Role = (typeof Role)[keyof typeof Role]
+
+
+export const DemandStatus = {
+  Draft: 'Draft',
+  AwaitingPlanApproval: 'AwaitingPlanApproval',
+  AwaitingNewPlan: 'AwaitingNewPlan',
+  PlanApproved: 'PlanApproved',
+  InExecution: 'InExecution',
+  ReadyForPR: 'ReadyForPR',
+  Concluded: 'Concluded'
+} as const
+
+export type DemandStatus = (typeof DemandStatus)[keyof typeof DemandStatus]
