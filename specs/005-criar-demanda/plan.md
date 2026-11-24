@@ -14,7 +14,7 @@
 
 ## Tarefas
 
-- [ ] **Tarefa 1 — Entidade Demand no Prisma schema + migration**
+- [x] **Tarefa 1 — Entidade Demand no Prisma schema + migration**
   - Cobre: CA1
   - Teste primeiro: não se aplica (mudança de schema; validada pelo teste e2e de POST /demandas na Tarefa 4)
   - Arquivos previstos: `apps/api/prisma/schema.prisma`, `apps/api/prisma/migrations/<timestamp>_create_demand/migration.sql`
