@@ -34,7 +34,7 @@
   - Teste primeiro: e2e `POST /demandas` com dados válidos → 201, retorna objeto completo com `id`; sem token → 401
   - Arquivos previstos: `apps/api/src/modules/demands/demands.controller.ts`, `apps/api/src/modules/demands/demands.service.ts`, `apps/api/src/modules/demands/demands.repository.ts`, `apps/api/src/modules/demands/demands.module.ts`
 
-- [ ] **Tarefa 5 — Verificação de permissão: projeto pertence ao desenvolvedor (CA3)**
+- [x] **Tarefa 5 — Verificação de permissão: projeto pertence ao desenvolvedor (CA3)**
   - Cobre: CA3
   - Teste primeiro: e2e `POST /demandas` com `projectId` de outro desenvolvedor → 403
   - Arquivos previstos: `apps/api/src/modules/demands/demands.service.ts` (regra de permissão)
