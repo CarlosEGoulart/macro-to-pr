@@ -18,6 +18,10 @@ export enum PriorityDemand {
 export class CreateDemandDto {
   @ApiProperty()
   @IsString()
+  projectId: string;
+
+  @ApiProperty()
+  @IsString()
   title: string;
 
   @ApiProperty()

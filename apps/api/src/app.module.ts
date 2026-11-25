@@ -20,6 +20,7 @@ import { JwtAuthGuard } from './modules/auth/jwt-auth.guard.js';
 import { AuthGuard } from './common/guards/auth.guard.js';
 import { RolesGuard } from './common/guards/roles.guard.js';
 import { ProjectsModule } from './modules/projects/projects.module.js';
+import { DemandsModule } from './modules/demands/demands.module.js';
 import { NotionModule } from './modules/notion/notion.module.js';
 
 @Module({
@@ -33,6 +34,7 @@ import { NotionModule } from './modules/notion/notion.module.js';
     }),
     PrismaModule,
     ProjectsModule,
+    DemandsModule,
     NotionModule,
   ],
   controllers: [AppController],
@@ -43,6 +45,10 @@ import { NotionModule } from './modules/notion/notion.module.js';
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
     },
     {
       provide: APP_GUARD,
