@@ -1,6 +1,7 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Login } from './Login';
+import { apiService } from './apiService';
 
 describe('Login — tela de acesso com design tokens', () => {
   it('renderiza header com logo "M" e wordmark "Macro2PR"', () => {
@@ -70,5 +71,54 @@ describe('Login — tela de acesso com design tokens', () => {
 
     fireEvent.mouseLeave(button);
     expect(button).toHaveStyle('background-color: rgb(97, 100, 241)');
+  });
+
+  describe('clicar no botão "Autorizar com GitHub"', () => {
+    const originalLocation = window.location;
+    let redirectUrl = '';
+
+    beforeEach(() => {
+      redirectUrl = '';
+      Object.defineProperty(window, 'location', {
+        configurable: true,
+        get: () => ({
+          get href() {
+            return redirectUrl;
+          },
+          set href(value: string) {
+            redirectUrl = value;
+          },
+        }),
+      });
+      vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response(null, { status: 200 }));
+      vi.spyOn(apiService, 'authGitHub').mockResolvedValue(undefined);
+    });
+
+    afterEach(() => {
+      vi.restoreAllMocks();
+      Object.defineProperty(window, 'location', { value: originalLocation, configurable: true });
+    });
+
+    it('dispara o fluxo de autorização OAuth (chama apiService.authGitHub)', () => {
+      render(<Login />);
+
+      const button = screen.getByTestId('login-authorize-button');
+      fireEvent.click(button);
+
+      // O fluxo OAuth deve ser disparado (inicia requisição de autorização)
+      expect(apiService.authGitHub).toHaveBeenCalled();
+    });
+
+    it('exibe estado de carregamento no botão durante a ação', () => {
+      render(<Login />);
+
+      const button = screen.getByTestId('login-authorize-button');
+      expect(button).toBeInTheDocument();
+
+      fireEvent.click(button);
+
+      // Durante o loading, o botão exibe estado de carregamento (desativado e/ou com indicação visual)
+      expect(button).toBeDisabled();
+    });
   });
 });

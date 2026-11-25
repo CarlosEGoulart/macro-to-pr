@@ -2,6 +2,9 @@ export const API_BASE_URL = 'http://localhost:3000';
 
 export type ApiInit = RequestInit;
 
+// ID do cliente GitHub OAuth (configurado no backend). Usado para iniciar o fluxo de autorização.
+export const GITHUB_CLIENT_ID = import.meta.env.VITE_GITHUB_CLIENT_ID ?? '';
+
 export const apiService = {
   /**
    * Único ponto de entrada para todas as chamadas à API do front (CA5).
@@ -28,5 +31,35 @@ export const apiService = {
       window.location.href = '/login';
     }
     return response;
+  },
+
+  /**
+   * Inicia o fluxo de autorização OAuth com o GitHub.
+   * Chama o backend para obter a URL de autorização do GitHub e inicia o redirecionamento.
+   */
+  async authGitHub(): Promise<void> {
+    try {
+      await fetch(`${API_BASE_URL}/auth/github`, { method: 'GET' });
+    } catch (error) {
+      console.error('Erro ao iniciar autorização GitHub:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Trata o callback do GitHub OAuth: troca o código de autorização por um token
+   * JWT e grava o token no localStorage.
+   */
+  async handleGitHubCallback(code: string): Promise<void> {
+    const response = await fetch(`${API_BASE_URL}/auth/github/callback?code=${code}`, {
+      method: 'POST',
+    });
+    if (!response.ok) {
+      throw new Error('Falha ao trocar código por token');
+    }
+    const data = await response.json();
+    if (data.token) {
+      localStorage.setItem('token', data.token);
+    }
   },
 };

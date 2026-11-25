@@ -5,7 +5,8 @@
  * Cores e tipografia vêm de tokens nomeados (design tokens, modo claro).
  * Estilos aplicados via `style` (inline) para que funcionem no jsdom.
  */
-import { type ReactNode, type CSSProperties } from 'react';
+import { type ReactNode, type CSSProperties, useState } from 'react';
+import { apiService } from './apiService';
 
 // --- Design tokens (modo claro) ---------------------------------------------
 const tokens = {
@@ -16,6 +17,7 @@ const tokens = {
   superficieSidebar: '#F9FAFB',
   texto: '#111827',
   textoSuave: '#6B7280',
+  desabilitado: '#C7D2FE',
   border: '#6B7280',
 
   // Espaçamento (px)
@@ -209,22 +211,30 @@ function Divider() {
   );
 }
 
-function AuthorizeButton() {
+function AuthorizeButton({
+  onClick,
+  disabled,
+}: {
+  onClick?: () => void;
+  disabled?: boolean;
+}) {
   return (
     <button
       type="button"
       role="button"
       data-testid="login-authorize-button"
+      disabled={disabled}
       style={{
-        backgroundColor: tokens.primaria,
-        color: '#FFFFFF',
+        backgroundColor: disabled ? tokens.desabilitado : tokens.primaria,
+        color: disabled ? tokens.textoSuave : '#FFFFFF',
         border: 'none',
         borderRadius: 6,
         padding: '10px 16px',
         fontFamily: tokens.font,
         fontWeight: '600',
         fontSize: 16,
-        cursor: 'pointer',
+        cursor: disabled ? 'not-allowed' : 'pointer',
+        opacity: disabled ? 0.6 : 1,
         display: 'inline-flex',
         alignItems: 'center',
         gap: 8,
@@ -232,22 +242,35 @@ function AuthorizeButton() {
         marginBottom: tokens.md,
       } as CSSProperties}
       onMouseEnter={(e) => {
+        if (disabled) return;
         (e.currentTarget as HTMLButtonElement).style.backgroundColor =
           tokens.primariaHover;
       }}
       onMouseLeave={(e) => {
+        if (disabled) return;
         (e.currentTarget as HTMLButtonElement).style.backgroundColor =
           tokens.primaria;
       }}
+      onClick={onClick}
     >
-      <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none">
-  <path d="M8.33333 0C3.73083 0 0 3.73667 0 8.3475C0 12.035 2.3875 15.1642 5.69917 16.2675C6.11583 16.3442 6.2675 16.0867 6.2675 15.865C6.2675 15.6675 6.26083 15.1417 6.25667 14.4458C3.93833 14.95 3.44917 13.3267 3.44917 13.3267C3.07083 12.3617 2.52417 12.105 2.52417 12.105C1.7675 11.5883 2.58167 11.5983 2.58167 11.5983C3.4175 11.6567 3.85667 12.4583 3.85667 12.4583C4.6 13.7333 5.8075 13.365 6.28167 13.1517C6.35833 12.6125 6.57333 12.245 6.81167 12.0367C4.96167 11.8258 3.01583 11.1092 3.01583 7.91083C3.01583 7 3.34083 6.25417 3.87333 5.67083C3.7875 5.46 3.50167 4.61083 3.955 3.4625C3.955 3.4625 4.655 3.2375 6.24667 4.3175C6.92674 4.13202 7.62842 4.03759 8.33333 4.03667C9.04167 4.04 9.75417 4.1325 10.42 4.3175C12.0108 3.2375 12.7092 3.46167 12.7092 3.46167C13.1642 4.61083 12.8775 5.46 12.7925 5.67083C13.3258 6.25417 13.6492 7 13.6492 7.91083C13.6492 11.1175 11.7 11.8233 9.84417 12.03C10.1433 12.2875 10.4092 12.7967 10.4092 13.5758C10.4092 14.6908 10.3992 15.5917 10.3992 15.865C10.3992 16.0883 10.5492 16.3483 10.9725 16.2667C12.6319 15.7101 14.0744 14.6461 15.0962 13.225C16.118 11.804 16.6674 10.0978 16.6667 8.3475C16.6667 3.73667 12.935 0 8.33333 0Z" fill-rule="evenodd" clip-rule="evenodd" fill="white"/>
+      {disabled ? 'Autorizando...' : (
+        <>
+          <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none">
+  <path d="M8.33333 0C3.73083 0 0 3.73667 0 8.3475C0 12.035 2.3875 15.1642 5.69917 16.2675C6.11583 16.3442 6.2675 16.0867 6.2675 15.865C6.2675 15.6675 6.26083 15.1417 6.25667 14.4458C3.93833 14.95 3.44917 13.3267 3.44917 13.3267C3.07083 12.3617 2.52417 12.105 2.52417 12.105C1.7675 11.5883 2.58167 11.5983 2.58167 11.5983C3.4175 11.6567 3.85667 12.4583 3.85667 12.4583C4.6 13.7333 5.8075 13.365 6.28167 13.1517C6.35833 12.6125 6.57333 12.245 6.81167 12.0367C4.96167 11.8258 3.01583 11.1092 3.01583 7.91083C3.01583 7 3.34083 6.25417 3.87333 5.67083C3.7875 5.46 3.50167 4.61083 3.955 3.4625C3.955 3.4625 4.655 3.2375 6.24667 4.3175C6.92674 4.13202 7.62842 4.03759 8.33333 4.03667C9.04167 4.04 9.75417 4.1325 10.42 4.3175C12.0108 3.2375 12.7092 3.46167 12.7092 3.46167C13.1642 4.61083 12.8775 5.46 12.7925 5.67083C13.3258 6.25417 13.6492 7 13.6492 7.91083C13.6492 11.1175 11.7 11.8233 9.84417 12.03C10.1433 12.2875 10.4092 12.7967 10.4092 13.5758C10.4092 14.6908 10.3992 15.5917 10.3992 15.865C10.3992 16.0883 10.5492 16.3483 10.9725 16.2667C12.6319 15.7101 14.0744 14.6461 15.0962 13.225C16.118 11.804 16.6674 10.0978 16.6667 8.3475C16.6667 3.73667 12.935 0 8.33333 0Z" fillRule="evenodd" clipRule="evenodd" fill="white"/>
 </svg> Autorizar com GitHub
+        </>
+      )}
     </button>
   );
 }
 
-function CardRight() {
+function CardRight({
+  onAuthorizeClick,
+  authorizing,
+}: {
+  onAuthorizeClick?: () => void;
+  authorizing?: boolean;
+}) {
   return (
     <div
       style={{
@@ -271,7 +294,7 @@ function CardRight() {
       >
         Acesse com sua Conta GitHub
       </h3>
-      <AuthorizeButton />
+      <AuthorizeButton onClick={onAuthorizeClick} disabled={authorizing} />
       <p
         style={{
           fontFamily: tokens.font,
@@ -400,6 +423,19 @@ function NextSteps() {
 }
 
 export function Login() {
+  const [authorizing, setAuthorizing] = useState(false);
+
+  const handleAuthorizeClick = () => {
+    setAuthorizing(true);
+    apiService.authGitHub().then(() => {
+      window.location.href = '/auth/github';
+    }).catch((error) => {
+      console.error('Erro ao iniciar autorização GitHub:', error);
+    }).finally(() => {
+      setAuthorizing(false);
+    });
+  };
+
   return (
     <section
       id="login"
@@ -449,7 +485,7 @@ export function Login() {
             <Card>
               <CardLeft />
               <Divider />
-              <CardRight />
+              <CardRight onAuthorizeClick={handleAuthorizeClick} authorizing={authorizing} />
             </Card>
             <NextSteps />
           </div>
