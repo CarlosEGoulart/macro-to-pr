@@ -1,23 +1,22 @@
-import { useEffect } from 'react';
 import { Login } from './features/auth/Login.tsx';
+import { ProjectsSelect } from './features/projects/ProjectsSelect';
 
 /**
  * Landing page do Macro2PR.
  *
- * Redireciona uma única vez para /login quando não está naquela URL;
- * caso contrário, renderiza <Login />.
+ * Se o usuário não está autenticado (não há token em localStorage),
+ * renderiza a tela de login. Se já está autenticado, renderiza o
+ * seletor de Projetos (Workspace), que é o ponto de partida do fluxo
+ * do usuário logado.
+ *
  * Sem BrowserRouter, sem Menu, sem rotas, sem módulo extra.
  */
 export default function App() {
-  useEffect(() => {
-    if (window.location.pathname !== '/login') {
-      window.location.href = '/login';
-    }
-  }, []);
+  const token = localStorage.getItem('token');
 
-  if (window.location.pathname === '/login') {
+  if (!token) {
     return <Login />;
   }
 
-  return null;
+  return <ProjectsSelect />;
 }

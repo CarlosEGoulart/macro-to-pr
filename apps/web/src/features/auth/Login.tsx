@@ -5,7 +5,7 @@
  * Cores e tipografia vêm de tokens nomeados (design tokens, modo claro).
  * Estilos aplicados via `style` (inline) para que funcionem no jsdom.
  */
-import { type ReactNode, type CSSProperties, useState } from 'react';
+import { type ReactNode, type CSSProperties, useState, useEffect } from 'react';
 import { apiService } from './apiService';
 
 // --- Design tokens (modo claro) ---------------------------------------------
@@ -424,6 +424,13 @@ function NextSteps() {
 
 export function Login() {
   const [authorizing, setAuthorizing] = useState(false);
+
+  // Se já há token (após callback OAuth bem-sucedido), vai direto para Projetos.
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      window.location.href = '/projects';
+    }
+  }, []);
 
   const handleAuthorizeClick = () => {
     setAuthorizing(true);

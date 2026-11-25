@@ -127,7 +127,6 @@ function ProjectCard({
     fontFamily: tokens.font,
     fontWeight: '400',
     fontSize: 12,
-    color: tokens.textoSuave,
     cursor: 'pointer',
     lineHeight: '1',
     marginTop: 'auto',
