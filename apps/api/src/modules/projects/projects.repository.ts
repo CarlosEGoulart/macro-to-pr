@@ -27,6 +27,16 @@ export class ProjectsRepository {
     });
   }
 
+  async findProjectByIdAndDeveloper(
+    projectId: string,
+    developerId: string,
+  ) {
+    return this.prisma.project.findUnique({
+      where: { id: projectId },
+      select: { developerId: true },
+    });
+  }
+
   async findProjectByDeveloperAndRepository(
     developerId: string,
     repositoryId: string,

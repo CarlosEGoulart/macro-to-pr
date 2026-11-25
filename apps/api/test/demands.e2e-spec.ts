@@ -19,6 +19,8 @@ describe('Demands (e2e) - POST /demandas', () => {
   let developerId: string;
   let repositoryId: string;
   let projectId: string;
+  let otherDeveloperId: string;
+  let otherProjectId: string;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -66,6 +68,39 @@ describe('Demands (e2e) - POST /demandas', () => {
     });
     projectId = project.id;
 
+    // Outro desenvolvedor com seu próprio projeto (cenário de permissão CA3)
+    await prisma.developer.deleteMany({ where: { email: 'dev-other@test.com' } });
+    const otherDeveloper = await prisma.developer.create({
+      data: {
+        email: 'dev-other@test.com',
+        name: 'Dev Outro Teste',
+        githubAccountId: 'gh-e2e-other',
+      },
+    });
+    otherDeveloperId = otherDeveloper.id;
+
+    await prisma.repository.deleteMany({ where: { githubAccountId: 'gh-e2e-other' } });
+    const otherRepository = await prisma.repository.create({
+      data: {
+        githubAccountId: 'gh-e2e-other',
+        name: 'repo-other',
+        fullName: 'owner/repo-other',
+        url: 'https://github.com/owner/repo-other',
+        owner: 'owner',
+        private: false,
+      },
+    });
+
+    await prisma.project.deleteMany({ where: { developerId: otherDeveloperId } });
+    const otherProject = await prisma.project.create({
+      data: {
+        name: 'Projeto Outro',
+        developerId: otherDeveloperId,
+        repositoryId: otherRepository.id,
+      },
+    });
+    otherProjectId = otherProject.id;
+
     accessToken = await jwtService.signAsync({
       userId: developerId,
       email: developer.email,
@@ -100,6 +135,9 @@ describe('Demands (e2e) - POST /demandas', () => {
     }
     await prisma.repository.deleteMany({ where: { githubAccountId: 'gh-e2e-demand' } });
     await prisma.developer.deleteMany({ where: { email: 'dev-demand@test.com' } });
+    await prisma.project.deleteMany({ where: { developerId: otherDeveloperId } });
+    await prisma.repository.deleteMany({ where: { githubAccountId: 'gh-e2e-other' } });
+    await prisma.developer.deleteMany({ where: { email: 'dev-other@test.com' } });
     await app.close();
   });
 
@@ -128,6 +166,20 @@ describe('Demands (e2e) - POST /demandas', () => {
     expect(body.title).toBe('Nova demanda');
     expect(body.description).toBe('Descrição da demanda');
     expect(body.projectId).toBe(projectId);
+  });
+
+  it('deve retornar 403 quando o projeto não pertence ao desenvolvedor autenticado (CA3)', async () => {
+    await request(app.getHttpServer())
+      .post('/demandas')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send({
+        title: 'Demanda em projeto alheio',
+        description: 'Tentativa de criar demanda em projeto de outro desenvolvedor',
+        type: 'feature',
+        priority: 'high',
+        projectId: otherProjectId,
+      })
+      .expect(403);
   });
 
   it('deve retornar 401 quando POST /demandas é chamado sem token', async () => {
