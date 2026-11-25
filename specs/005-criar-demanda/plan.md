@@ -54,22 +54,27 @@
   - Teste primeiro: teste de componente — clicar no botão "Autorizar com GitHub" dispara o fluxo de autorização OAuth (redireciona para callback ou inicia requisição de autorização); botão exibe estado de carregamento durante a ação
   - Arquivos previstos: `apps/web/src/features/auth/Login.tsx` (onClick do botão), `apps/web/src/features/auth/apiService.ts` (integração com callback/token), `apps/web/src/features/auth/Login.test.tsx` (teste de clique no botão)
 
-- [ ] **Tarefa 9 — Tela de seletor de Projeto (frontend) consumindo GET /projects**
+- [ ] **Tarefa 9 — Corrigir build do backend (NestJS compilação com nodenext)**
+  - Cobre: US01 (backend precisa rodar para o fluxo OAuth de login funcionar)
+  - Teste primeiro: `npm run build` e `npm run start` em `apps/api` concluem sem erro TS2307; `nest start` sobe a API na porta 3000 e o endpoint `GET /auth/github` responde
+  - Arquivos previstos: `apps/api/tsconfig.json`, `apps/api/tsconfig.build.json`, `apps/api/src/modules/demands/demands.controller.ts`, `apps/api/src/modules/demands/demands.service.ts` (ajuste de extensões de importação para `.ts` ou configuração de `moduleResolution`/`allowImportingTsExtensions`)
+
+- [ ] **Tarefa 10 — Tela de seletor de Projeto (frontend) consumindo GET /projects**
   - Cobre: CA4
   - Teste primeiro: teste de componente — seletor exibe lista de projetos retornada pelo mock do `GET /projects`
   - Arquivos previstos: `apps/web/src/features/projects/`, `apps/web/src/features/projects/ProjectsSelect.tsx`
 
-- [ ] **Tarefa 10 — Tela de criar Demanda (frontend) com formulário e validação**
+- [ ] **Tarefa 11 — Tela de criar Demanda (frontend) com formulário e validação**
   - Cobre: CA1, CA2
   - Teste primeiro: teste de componente — envio de formulário com campo obrigatório vazio → exibe erro de validação; envio válido → chama `POST /demandas`
   - Arquivos previstos: `apps/web/src/features/demands/CreateDemand.tsx`
 
-- [ ] **Tarefa 11 — Tratamento de erros no frontend (401, 403, 400, rede)**
+- [ ] **Tarefa 12 — Tratamento de erros no frontend (401, 403, 400, rede)**
   - Cobre: CA2, CA3
   - Teste primeiro: teste de componente — resposta 403 → exibe "sem permissão"; resposta 400 → exibe campo inválido; resposta 401 → limpa token e redireciona para login; erro de rede → exibe mensagem de conexão
   - Arquivos previstos: `apps/web/src/features/auth/apiService.ts`, `apps/web/src/features/demands/CreateDemand.tsx`
 
-- [ ] **Tarefa 12 — Testes e2e completos (sucesso e erro) no backend**
+- [ ] **Tarefa 13 — Testes e2e completos (sucesso e erro) no backend**
   - Cobre: CA1, CA2, CA3, CA4
   - Teste primeiro: e2e `POST /demandas` — sucesso (201), dados vazios (400), projeto não pertence (403), sem token (401); `GET /projects` — sucesso (200), sem token (401)
   - Arquivos previstos: `apps/api/test/demands.e2e-spec.ts`, `apps/api/test/projects.e2e-spec.ts` (adicionar GET)
