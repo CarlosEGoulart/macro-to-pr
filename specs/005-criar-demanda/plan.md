@@ -44,10 +44,10 @@
   - Teste primeiro: unitário `apiService` — base URL aponta para `http://localhost:3000` e cabeçalho `Authorization: Bearer <token>` é anexado
   - Arquivos previstos: `apps/web/src/features/auth/apiService.ts`
 
-- [ ] **Tarefa 7 — Refatorar Login e Menu com Design Tokens (incluindo App.tsx)**
+- [ ] **Tarefa 7 — Refatorar Login com Design Tokens (incluindo App.tsx)**
   - Cobre: US01, US02, US03 (telas de acesso e workspace seguindo design tokens do Figma)
   - Teste primeiro: testes de componente — tela de login renderiza com tokens de cor/tipografia, menu renderiza com cores de superfície e botões com estados; seletor de projeto exibe lista com tokens aplicados
-  - Arquivos previstos: `apps/web/src/features/auth/Login.tsx`, `apps/web/src/features/auth/Menu.tsx`, `apps/web/src/App.tsx`, `apps/web/src/features/auth/Login.test.tsx`, `apps/web/src/features/auth/Menu.test.tsx`
+  - Arquivos previstos: `apps/web/src/features/auth/Login.tsx`, `apps/web/src/App.tsx`, `apps/web/src/features/auth/Login.test.tsx`
 
 - [ ] **Tarefa 8 — Tela de seletor de Projeto (frontend) consumindo GET /projects**
   - Cobre: CA4
