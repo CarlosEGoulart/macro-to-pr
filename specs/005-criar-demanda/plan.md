@@ -39,7 +39,7 @@
   - Teste primeiro: e2e `POST /demandas` com `projectId` de outro desenvolvedor → 403
   - Arquivos previstos: `apps/api/src/modules/demands/demands.service.ts` (regra de permissão)
 
-- [ ] **Tarefa 6 — Conectar apiService ao backend real (frontend)**
+- [x] **Tarefa 6 — Conectar apiService ao backend real (frontend)**
   - Cobre: CA4, CA1
   - Teste primeiro: unitário `apiService` — base URL aponta para `http://localhost:3000` e cabeçalho `Authorization: Bearer <token>` é anexado
   - Arquivos previstos: `apps/web/src/features/auth/apiService.ts`
