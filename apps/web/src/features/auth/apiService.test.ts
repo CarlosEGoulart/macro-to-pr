@@ -7,6 +7,38 @@ function authorizationDe(init: RequestInit | undefined): string | null {
   return (init?.headers as Headers | undefined)?.get('authorization') ?? null;
 }
 
+describe('apiService — conectar ao backend real (base URL)', () => {
+  beforeEach(() => {
+    vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response(null, { status: 200 }));
+    localStorage.clear();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+    localStorage.clear();
+  });
+
+  it('prefixa caminhos relativos com API_BASE_URL (http://localhost:3000)', async () => {
+    const fetchMock = vi.mocked(globalThis.fetch);
+    localStorage.setItem('token', 'meu-token-123');
+
+    await apiService.request('/projects');
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(fetchMock.mock.calls[0][0]).toBe('http://localhost:3000/projects');
+  });
+
+  it('não duplica o prefixo quando já recebe uma URL absoluta', async () => {
+    const fetchMock = vi.mocked(globalThis.fetch);
+    localStorage.setItem('token', 'meu-token-123');
+
+    await apiService.request(`${API_URL}/projects`);
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(fetchMock.mock.calls[0][0]).toBe(`${API_URL}/projects`);
+  });
+});
+
 describe('apiService — CA5: token Bearer em toda chamada', () => {
   beforeEach(() => {
     vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response(null, { status: 200 }));
