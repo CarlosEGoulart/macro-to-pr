@@ -54,12 +54,12 @@
   - Teste primeiro: teste de componente — clicar no botão "Autorizar com GitHub" dispara o fluxo de autorização OAuth (redireciona para callback ou inicia requisição de autorização); botão exibe estado de carregamento durante a ação
   - Arquivos previstos: `apps/web/src/features/auth/Login.tsx` (onClick do botão), `apps/web/src/features/auth/apiService.ts` (integração com callback/token), `apps/web/src/features/auth/Login.test.tsx` (teste de clique no botão)
 
-- [ ] **Tarefa 9 — Corrigir build do backend (NestJS compilação com nodenext)**
+- [x] **Tarefa 9 — Corrigir build do backend (NestJS compilação com nodenext)**
   - Cobre: US01 (backend precisa rodar para o fluxo OAuth de login funcionar)
   - Teste primeiro: `npm run build` e `npm run start` em `apps/api` concluem sem erro TS2307; `nest start` sobe a API na porta 3000 e o endpoint `GET /auth/github` responde
   - Arquivos previstos: `apps/api/tsconfig.json`, `apps/api/tsconfig.build.json`, `apps/api/src/modules/demands/demands.controller.ts`, `apps/api/src/modules/demands/demands.service.ts` (ajuste de extensões de importação para `.ts` ou configuração de `moduleResolution`/`allowImportingTsExtensions`)
 
-- [ ] **Tarefa 10 — Corrigir DI do ProjectsRepository no DemandsModule (backend rodando)**
+- [x] **Tarefa 10 — Corrigir DI do ProjectsRepository no DemandsModule (backend rodando)**
   - Cobre: US01 (backend precisa subir para o fluxo OAuth de login funcionar)
   - Teste primeiro: `npm run start` em `apps/api` sobe a API na porta 3000 sem UnknownDependenciesException; o endpoint `GET /auth/github` responde
   - Arquivos previstos: `apps/api/src/modules/demands/demands.module.ts` (importar o módulo que exporta ProjectsRepository ou fornecer o provider no DemandsModule)
