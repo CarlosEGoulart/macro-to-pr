@@ -2,7 +2,8 @@ import { StrictMode, useCallback, useState, createContext, useContext, type Reac
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
-import type { Role } from './features/auth/Menu'
+
+type Role = 'Developer' | 'Admin'
 
 interface AuthContextType {
   role: Role | null
