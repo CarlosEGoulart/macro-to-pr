@@ -45,6 +45,41 @@ Issue #4 (US02 — Criar Projeto) — o Desenvolvedor precisa ter um Projeto exi
 
 Issue #3 (US01 — Acessar o Macro2PR com conta GitHub) — o Desenvolvedor precisa estar autenticado para que a criação de Demanda seja atribuída a ele.
 
+## Decisões de design (UI/UX)
+
+A interface segue o `docs/design-tokens.md` e o protótipo do Figma (tela 1 — Início/Acesso GitHub, tela 2 — Workspace). A paleta segue o modo **claro** do design tokens, não o dark mode:
+
+| Token | Valor (claro) | Uso |
+|---|---|---|
+| `superficie-card` | `#FFFFFF` | fundo do card principal de login |
+| `texto` | `#111827` | títulos e corpo principal |
+| `texto-suave` | `#6B7280` | legendas, texto secundário |
+| `primaria` | `#6164F1` | botão "Autorizar com GitHub" |
+| `superficie-sidebar` | `#F9FAFB` | fundo da aplicação |
+
+### Telas do protótipo Figma (seguidas nesta tarefa)
+
+| Tela | Nome | Descrição |
+|---|---|---|
+| Tela 1 | Início / Acesso GitHub | Cabeçalho "Macro2PR", "Acesso ao Macro2PR", texto descritivo, card branco com "Transforme demandas em trabalho estruturado e revisável", botão "Autorizar com GitHub" roxo, texto de rodapé |
+| Tela 2 | Workspace | "Depois da autorização": 3 cards numerados — 1. Escolha um Repositório, 2. Crie um Projeto, 3. Organize Demandas |
+
+### Botões
+
+| Estado | Cor de fundo | Cor do texto |
+|---|---|---|
+| normal | `#6164F1` (primária) | `#030712` |
+| hover | `#4F46E5` | `#030712` |
+
+### Fontes
+
+| Token | Família · tamanho · peso |
+|---|---|
+| `display` | Inter · 32px · 700 |
+| `heading` | Inter · 24px · 600 |
+| `body` | Inter · 16px · 400 |
+| `caption` | Inter · 14px · 400 |
+
 ## Dúvidas em aberto
 
 | # | Dúvida | Quem responde |

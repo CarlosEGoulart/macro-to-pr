@@ -44,22 +44,27 @@
   - Teste primeiro: unitário `apiService` — base URL aponta para `http://localhost:3000` e cabeçalho `Authorization: Bearer <token>` é anexado
   - Arquivos previstos: `apps/web/src/features/auth/apiService.ts`
 
-- [ ] **Tarefa 7 — Tela de seletor de Projeto (frontend) consumindo GET /projects**
+- [ ] **Tarefa 7 — Refatorar Login e Menu com Design Tokens (incluindo App.tsx)**
+  - Cobre: US01, US02, US03 (telas de acesso e workspace seguindo design tokens do Figma)
+  - Teste primeiro: testes de componente — tela de login renderiza com tokens de cor/tipografia, menu renderiza com cores de superfície e botões com estados; seletor de projeto exibe lista com tokens aplicados
+  - Arquivos previstos: `apps/web/src/features/auth/Login.tsx`, `apps/web/src/features/auth/Menu.tsx`, `apps/web/src/App.tsx`, `apps/web/src/features/auth/Login.test.tsx`, `apps/web/src/features/auth/Menu.test.tsx`
+
+- [ ] **Tarefa 8 — Tela de seletor de Projeto (frontend) consumindo GET /projects**
   - Cobre: CA4
   - Teste primeiro: teste de componente — seletor exibe lista de projetos retornada pelo mock do `GET /projects`
   - Arquivos previstos: `apps/web/src/features/projects/`, `apps/web/src/features/projects/ProjectsSelect.tsx`
 
-- [ ] **Tarefa 8 — Tela de criar Demanda (frontend) com formulário e validação**
+- [ ] **Tarefa 9 — Tela de criar Demanda (frontend) com formulário e validação**
   - Cobre: CA1, CA2
   - Teste primeiro: teste de componente — envio de formulário com campo obrigatório vazio → exibe erro de validação; envio válido → chama `POST /demandas`
   - Arquivos previstos: `apps/web/src/features/demands/CreateDemand.tsx`
 
-- [ ] **Tarefa 9 — Tratamento de erros no frontend (401, 403, 400, rede)**
+- [ ] **Tarefa 10 — Tratamento de erros no frontend (401, 403, 400, rede)**
   - Cobre: CA2, CA3
   - Teste primeiro: teste de componente — resposta 403 → exibe "sem permissão"; resposta 400 → exibe campo inválido; resposta 401 → limpa token e redireciona para login; erro de rede → exibe mensagem de conexão
   - Arquivos previstos: `apps/web/src/features/auth/apiService.ts`, `apps/web/src/features/demands/CreateDemand.tsx`
 
-- [ ] **Tarefa 10 — Testes e2e completos (sucesso e erro) no backend**
+- [ ] **Tarefa 11 — Testes e2e completos (sucesso e erro) no backend**
   - Cobre: CA1, CA2, CA3, CA4
   - Teste primeiro: e2e `POST /demandas` — sucesso (201), dados vazios (400), projeto não pertence (403), sem token (401); `GET /projects` — sucesso (200), sem token (401)
   - Arquivos previstos: `apps/api/test/demands.e2e-spec.ts`, `apps/api/test/projects.e2e-spec.ts` (adicionar GET)
