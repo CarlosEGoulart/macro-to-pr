@@ -29,7 +29,7 @@
   - Teste primeiro: unitário do DTO — campos obrigatórios ausentes → erros de validação (class-validator)
   - Arquivos previstos: `apps/api/src/modules/demands/dto/create-demand.dto.ts`
 
-- [ ] **Tarefa 4 — POST /demandas no controller, service e repository**
+- [x] **Tarefa 4 — POST /demandas no controller, service e repository**
   - Cobre: CA1
   - Teste primeiro: e2e `POST /demandas` com dados válidos → 201, retorna objeto completo com `id`; sem token → 401
   - Arquivos previstos: `apps/api/src/modules/demands/demands.controller.ts`, `apps/api/src/modules/demands/demands.service.ts`, `apps/api/src/modules/demands/demands.repository.ts`, `apps/api/src/modules/demands/demands.module.ts`
