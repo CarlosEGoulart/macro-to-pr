@@ -1,6 +1,6 @@
 import { Controller, Post, Body } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { CurrentUser } from '../common/decorators/current-user.decorator.js';
+import { CurrentUser } from '../../common/decorators/current-user.decorator.js';
 import { DemandsService } from './demands.service.js';
 import { CreateDemandDto } from './dto/create-demand.dto.js';
 

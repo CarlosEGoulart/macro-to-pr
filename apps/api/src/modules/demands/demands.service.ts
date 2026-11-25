@@ -1,7 +1,7 @@
 import { Injectable, ForbiddenException } from '@nestjs/common';
 import { CreateDemandDto } from './dto/create-demand.dto.js';
 import { DemandsRepository } from './demands.repository.js';
-import { ProjectsRepository } from '../../projects/projects.repository.js';
+import { ProjectsRepository } from '../projects/projects.repository.js';
 
 @Injectable()
 export class DemandsService {
