@@ -5,6 +5,10 @@ import { PrismaService } from '../../prisma/prisma.service.js';
 export class DeveloperRepository {
   constructor(private readonly prisma: PrismaService) {}
 
+  async findById(id: string) {
+    return this.prisma.developer.findUnique({ where: { id } });
+  }
+
   async findByEmail(email: string) {
     return this.prisma.developer.findUnique({ where: { email } });
   }

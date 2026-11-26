@@ -79,10 +79,69 @@ function BoltIcon() {
 }
 
 function HeaderUser() {
+  const [developer, setDeveloper] = useState<{
+    name: string;
+    avatarUrl: string | null;
+  } | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadDeveloper() {
+      try {
+        const profile = await apiService.developerProfile();
+        if (!cancelled) {
+          setDeveloper(profile);
+        }
+      } catch {
+        if (!cancelled) {
+          setDeveloper(null);
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    }
+
+    loadDeveloper();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (loading) {
+    return (
+      <div style={headerUserStyle}>
+        <div style={headerUserBadgeStyle}>Desenvolvedor</div>
+        <div style={avatarStyle}>D</div>
+      </div>
+    );
+  }
+
+  const displayName = developer?.name ?? 'Desenvolvedor';
+  const initial = displayName.charAt(0).toUpperCase();
+  const avatarUrl = developer?.avatarUrl ?? null;
+
   return (
     <div style={headerUserStyle}>
-      <div style={headerUserBadgeStyle}>Desenvolvedor</div>
-      <div style={avatarStyle}>D</div>
+      <div style={headerUserBadgeStyle}>{displayName}</div>
+      {avatarUrl ? (
+        <img
+          src={avatarUrl}
+          alt={displayName}
+          style={{
+            ...avatarStyle,
+            backgroundColor: 'transparent',
+            border: `2px solid ${tokens.primaria}`,
+            color: 'transparent',
+            fontSize: 0,
+          } as CSSProperties}
+        />
+      ) : (
+        <div style={avatarStyle}>{initial}</div>
+      )}
     </div>
   );
 }

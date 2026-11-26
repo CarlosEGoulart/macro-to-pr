@@ -16,6 +16,14 @@ export class ProjectsController {
     return this.projectsService.findProjectsByDeveloper(developerId);
   }
 
+  @Get('repositories')
+  async findRepositories(
+    @Req() req: { user: { userId: string } },
+  ) {
+    const developerId = req.user.userId;
+    return this.projectsService.findRepositoriesByDeveloper(developerId);
+  }
+
   @Post()
   async create(
     @Body() createProjectDto: CreateProjectDto,

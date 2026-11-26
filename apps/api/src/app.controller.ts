@@ -1,6 +1,7 @@
 import {
   Controller,
   Get,
+  Req,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -34,5 +35,13 @@ export class AppController {
   @ApiResponse({ status: 403, description: 'Acesso proibido para não-administradores' })
   adminPing(): string {
     return 'pong';
+  }
+
+  @Get('developer/me')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Retorna o perfil do desenvolvedor autenticado' })
+  @ApiResponse({ status: 200, description: 'Dados do desenvolvedor' })
+  async getDeveloperMe(@Req() req: { user: { userId: string } }) {
+    return this.appService.getDeveloperMe(req.user.userId);
   }
 }

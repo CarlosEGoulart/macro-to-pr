@@ -61,4 +61,22 @@ export const apiService = {
       localStorage.setItem('token', data.token);
     }
   },
+
+  /**
+   * Busca o perfil do desenvolvedor autenticado (GET /developer/me).
+   * Envia o token de localStorage no cabeçalho Authorization: Bearer.
+   */
+  async developerProfile(): Promise<{
+    id: string;
+    name: string;
+    email: string;
+    avatarUrl: string | null;
+  }> {
+    const response = await this.request('/developer/me');
+    if (!response.ok) {
+      throw new Error(`Falha ao buscar perfil do desenvolvedor: ${response.status}`);
+    }
+    const { data } = await response.json();
+    return data;
+  },
 };

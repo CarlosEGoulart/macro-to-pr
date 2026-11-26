@@ -100,6 +100,25 @@
     - `apps/web/src/features/auth/Login.tsx` (modificado — captura ?token=)
     - Teste primeiro: não se aplica (código já implementado e validado manualmente; complementar com testes e2e se necessário)
 
+- [x] **Tarefa 16 — Sincronizar repositórios do GitHub após OAuth + exibir perfil do usuário no header (pré-requisito de Projeto e Demanda)**
+  - Cobre: CA1 da issue #3 (repositórios da conta vinculada ficam disponíveis), CA4 da issue #5 (seletor de Projeto exibe lista do desenvolvedor autenticado) e dependência técnica da issue #5 (sem repositórios não há projetos; sem projetos não há demandas).
+  - Justificativa: o fluxo OAuth da issue #3 foi entregue, mas sua Tarefa 4 (sincronizar repositórios) nunca foi implementada. A issue #5 depende disso: criar uma Demanda exige um `projectId` válido, que só existe se houver um `Repository` cadastrado para o desenvolvedor autenticado. Além disso, o header do Workspace (`HeaderUser` em `ProjectsSelect.tsx`) está hardcoded ("Desenvolvedor" / avatar "D") e não exibe dados reais do perfil do usuário autenticado, o que confunde o desenvolvedor após o login.
+  - Teste primeiro:
+    - Backend: e2e `GET /repositories` com token válido → 200 com repositórios da `GitHubAccount` do desenvolvedor; sem token → 401. `POST /projects` só passa se houver repositório sincronizado prévio.
+    - Backend: e2e `GET /developer/me` com token válido → 200 com `{ id, name, email, avatarUrl }` do desenvolvedor; sem token → 401.
+    - Frontend: teste de componente — `HeaderUser` renderiza nome e avatar do desenvolvedor carregados da API (não hardcoded).
+  - Arquivos envolvidos:
+    - `apps/api/src/modules/auth/auth.service.ts` (modificado — após criar/vincular a `GitHubAccount`, buscar `GET /user/repos` com o `accessToken` e gravar na tabela `Repository`, com paginação)
+    - `apps/api/src/modules/projects/projects.controller.ts` (novo endpoint `GET /repositories`)
+    - `apps/api/src/modules/projects/projects.service.ts` (novo `findRepositoriesByDeveloper`)
+    - `apps/api/src/modules/projects/projects.repository.ts` (novo `prisma.repository.findMany({ where: { githubAccountId } })`)
+    - `apps/api/src/modules/projects/projects.module.ts` (garantir exports/providers)
+    - `apps/api/test/projects.e2e-spec.ts` (adicionar suíte `GET /repositories` e `GET /developer/me`)
+    - `.env` / `.env.example` (garantir `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`, `GITHUB_CALLBACK_URL`)
+    - `apps/web/src/features/projects/ProjectsSelect.tsx` (modificado — `HeaderUser` busca e exibe nome e avatar do desenvolvedor autenticado; remove hardcode)
+    - `apps/web/src/features/auth/apiService.ts` (modificado — adicionar método para buscar perfil do desenvolvedor, ex.: `GET /developer/me`, com token no header)
+    - Novo endpoint backend `GET /developer/me` (controller/service/repository ou reuso de módulo existente) que retorna dados do desenvolvedor a partir do token JWT.
+
 ## Critérios sem tarefa
 
 -

@@ -53,4 +53,51 @@ export class ProjectsRepository {
       orderBy: { createdAt: 'desc' },
     });
   }
+
+  async findRepositoriesByDeveloper(githubAccountId: string) {
+    return this.prisma.repository.findMany({
+      where: { githubAccountId },
+      orderBy: { name: 'asc' },
+    });
+  }
+
+  async upsertRepositoryByFullName(
+    githubAccountId: string,
+    fullName: string,
+    data: {
+      name: string;
+      fullName: string;
+      url: string;
+      owner: string;
+      private: boolean;
+    },
+  ) {
+    return this.prisma.$transaction(async (prisma) => {
+      const existing = await prisma.repository.findFirst({
+        where: { githubAccountId, fullName },
+      });
+      if (existing) {
+        return prisma.repository.update({
+          where: { id: existing.id },
+          data: {
+            name: data.name,
+            fullName: data.fullName,
+            url: data.url,
+            owner: data.owner,
+            private: data.private,
+          },
+        });
+      }
+      return prisma.repository.create({
+        data: {
+          githubAccountId,
+          name: data.name,
+          fullName: data.fullName,
+          url: data.url,
+          owner: data.owner,
+          private: data.private,
+        },
+      });
+    });
+  }
 }

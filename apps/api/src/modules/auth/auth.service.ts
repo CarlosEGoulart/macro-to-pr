@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { GitHubAccountRepository } from './github-account.repository.js';
 import { DeveloperRepository } from './developer.repository.js';
+import { ProjectsService } from '../projects/projects.service.js';
 
 export interface GitHubUser {
   id: number;
@@ -33,6 +34,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly githubAccountRepository: GitHubAccountRepository,
     private readonly developerRepository: DeveloperRepository,
+    private readonly projectsService: ProjectsService,
   ) {}
 
   /**
@@ -140,6 +142,17 @@ export class AuthService {
       );
     }
 
+    // 5.5. Sincroniza repositórios da Conta GitHub com o banco local.
+    // Falha no sync não impede a emissão do JWT: apenas loga o erro.
+    try {
+      await this.projectsService.syncRepositories(account.id, accessToken);
+    } catch (err) {
+      this.logger.error(
+        'Falha ao sincronizar repositórios do GitHub (ignorado — JWT será emitido)',
+        err instanceof Error ? err.stack : String(err),
+      );
+    }
+
     // 6. Emite JWT
     const payload = {
       sub: String(developer.id),
@@ -151,4 +164,5 @@ export class AuthService {
 
     return { token, developer };
   }
+
 }
