@@ -19,6 +19,7 @@ const tokens = {
   textoSuave: '#6B7280',
   desabilitado: '#C7D2FE',
   border: '#6B7280',
+  perigo: '#DC2626',
 
   // Espaçamento (px)
   xs: 4,
@@ -424,12 +425,23 @@ function NextSteps() {
 
 export function Login() {
   const [authorizing, setAuthorizing] = useState(false);
+  const [loginError, setLoginError] = useState<string | null>(null);
 
   // Se há token na URL (callback do OAuth via backend), armazena e entra.
   // Se já há token em localStorage, vai direto para Projetos.
+  // Se o backend respondeu 401 (credenciais inválidas) no callback do OAuth,
+  // redireciona de volta com ?error=invalid_credentials — exibe a mensagem de
+  // login inválido sem criar fluxo de e-mail/senha (não existe nesta tela).
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const tokenFromUrl = params.get('token');
+    const errorFromUrl = params.get('error');
+
+    if (errorFromUrl === 'invalid_credentials') {
+      // 401 do backend ao trocar o código OAuth: credenciais inválidas.
+      setLoginError('e-mail ou senha inválidos');
+      return;
+    }
 
     if (tokenFromUrl) {
       localStorage.setItem('token', tokenFromUrl);
@@ -444,8 +456,10 @@ export function Login() {
 
   const handleAuthorizeClick = () => {
     setAuthorizing(true);
+    setLoginError(null);
     apiService.authGitHub().catch((error) => {
       console.error('Erro ao iniciar autorização GitHub:', error);
+      setLoginError('Erro de conexão com o servidor. Verifique sua internet e tente novamente.');
     }).finally(() => {
       setAuthorizing(false);
     });
@@ -502,6 +516,21 @@ export function Login() {
               <Divider />
               <CardRight onAuthorizeClick={handleAuthorizeClick} authorizing={authorizing} />
             </Card>
+            {loginError && (
+              <span
+                data-testid="login-error"
+                style={{
+                  fontFamily: tokens.font,
+                  fontWeight: '400',
+                  fontSize: 12,
+                  color: tokens.perigo,
+                  marginTop: tokens.sm,
+                  lineHeight: '1.4',
+                }}
+              >
+                {loginError}
+              </span>
+            )}
             <NextSteps />
           </div>
         </div>

@@ -305,3 +305,203 @@ describe('CreateDemandModal — CA4', () => {
     expect(screen.getByText(/Campo inválido|Falha ao criar Demanda: 400/)).toBeInTheDocument();
   });
 });
+
+describe('CreateDemandModal — CA2/CA3: tratamento de erros (400, 403, 401, rede)', () => {
+  const originalLocation = window.location;
+  let locationHref = originalLocation.href;
+
+  beforeEach(() => {
+    localStorage.setItem('token', 'token-teste');
+    locationHref = originalLocation.href;
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      get: () => ({
+        get href(): string {
+          return locationHref;
+        },
+        set href(v: string) {
+          locationHref = v;
+        },
+      }),
+    });
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+    localStorage.clear();
+    Object.defineProperty(window, 'location', { value: originalLocation, configurable: true });
+  });
+
+  function preencherFormulario() {
+    const titleInput = screen.getByTestId('create-demand-input-title');
+    const descInput = screen.getByTestId('create-demand-input-description');
+    const typeSelect = screen.getByTestId('create-demand-select-type');
+    const prioritySelect = screen.getByTestId('create-demand-select-priority');
+    const submitButton = screen.getByRole('button', { name: /Criar Demanda/ });
+
+    fireEvent.change(titleInput, { target: { value: DEMAND_DATA.title } });
+    fireEvent.change(descInput, { target: { value: DEMAND_DATA.description } });
+    fireEvent.change(typeSelect, { target: { value: DEMAND_DATA.type } });
+    fireEvent.change(prioritySelect, { target: { value: DEMAND_DATA.priority } });
+
+    return submitButton;
+  }
+
+  async function selecionarProjeto() {
+    await waitFor(() => {
+      expect(screen.getByTestId('create-demand-select-project')).toBeInTheDocument();
+    });
+    await waitFor(() => {
+      expect(screen.getByText('Projeto Alpha')).toBeInTheDocument();
+    });
+    const projectSelect = screen.getByTestId('create-demand-select-project');
+    fireEvent.change(projectSelect, { target: { value: 'proj-1' } });
+  }
+
+  it('400: exibe mensagem de campo inválido e não fecha o modal', async () => {
+    const onClose = vi.fn();
+    vi.spyOn(globalThis, 'fetch').mockImplementation((input: RequestInfo | URL) => {
+      const url = String(input);
+      if (url.includes('/projects')) {
+        return Promise.resolve(
+          new Response(JSON.stringify({ data: PROJECTS }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+          })
+        );
+      }
+      return Promise.resolve(
+        new Response(JSON.stringify({ message: 'Campo inválido' }), {
+          status: 400,
+          headers: { 'Content-Type': 'application/json' },
+        })
+      );
+    });
+
+    render(<CreateDemandModal onClose={onClose} />);
+
+    preencherFormulario();
+    await selecionarProjeto();
+    fireEvent.click(screen.getByRole('button', { name: /Criar Demanda/ }));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('create-demand-error')).toBeInTheDocument();
+    });
+
+    expect(screen.getByText(/Campo inválido/)).toBeInTheDocument();
+    // NC-01: o modal não fecha em erro HTTP
+    expect(screen.queryByTestId('create-demand-created-id')).not.toBeInTheDocument();
+    expect(onClose).not.toHaveBeenCalled();
+    expect(localStorage.getItem('token')).toBe('token-teste');
+  });
+
+  it('403: exibe mensagem de sem permissão e não fecha o modal', async () => {
+    const onClose = vi.fn();
+    vi.spyOn(globalThis, 'fetch').mockImplementation((input: RequestInfo | URL) => {
+      const url = String(input);
+      if (url.includes('/projects')) {
+        return Promise.resolve(
+          new Response(JSON.stringify({ data: PROJECTS }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+          })
+        );
+      }
+      return Promise.resolve(
+        new Response(JSON.stringify({ message: 'Sem permissão para este projeto' }), {
+          status: 403,
+          headers: { 'Content-Type': 'application/json' },
+        })
+      );
+    });
+
+    render(<CreateDemandModal onClose={onClose} />);
+
+    preencherFormulario();
+    await selecionarProjeto();
+    fireEvent.click(screen.getByRole('button', { name: /Criar Demanda/ }));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('create-demand-error')).toBeInTheDocument();
+    });
+
+    expect(screen.getByText(/Sem permissão/)).toBeInTheDocument();
+    // NC-01: o modal não fecha em erro HTTP
+    expect(screen.queryByTestId('create-demand-created-id')).not.toBeInTheDocument();
+    expect(onClose).not.toHaveBeenCalled();
+    expect(localStorage.getItem('token')).toBe('token-teste');
+  });
+
+  it('401: remove o token, redireciona para /login e não fecha o modal', async () => {
+    const onClose = vi.fn();
+    vi.spyOn(globalThis, 'fetch').mockImplementation((input: RequestInfo | URL) => {
+      const url = String(input);
+      if (url.includes('/projects')) {
+        return Promise.resolve(
+          new Response(JSON.stringify({ data: PROJECTS }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+          })
+        );
+      }
+      return Promise.resolve(
+        new Response(JSON.stringify({ message: 'Sessão expirada' }), {
+          status: 401,
+          headers: { 'Content-Type': 'application/json' },
+        })
+      );
+    });
+
+    render(<CreateDemandModal onClose={onClose} />);
+
+    preencherFormulario();
+    await selecionarProjeto();
+    fireEvent.click(screen.getByRole('button', { name: /Criar Demanda/ }));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('create-demand-error')).toBeInTheDocument();
+    });
+
+    // A mensagem vem do corpo da resposta (não do status).
+    expect(screen.getByText(/Sessão expirada/)).toBeInTheDocument();
+
+    expect(localStorage.getItem('token')).toBeNull();
+    expect(locationHref).toContain('/login');
+    // NC-01: o modal não fecha em erro HTTP
+    expect(screen.queryByTestId('create-demand-created-id')).not.toBeInTheDocument();
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
+  it('erro de rede: exibe mensagem de conexão e não fecha o modal', async () => {
+    const onClose = vi.fn();
+    vi.spyOn(globalThis, 'fetch').mockImplementation((input: RequestInfo | URL) => {
+      const url = String(input);
+      if (url.includes('/projects')) {
+        return Promise.resolve(
+          new Response(JSON.stringify({ data: PROJECTS }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+          })
+        );
+      }
+      // Falha de rede: a requisição não obtém resposta do servidor.
+      return Promise.reject(new TypeError('Failed to fetch'));
+    });
+
+    render(<CreateDemandModal onClose={onClose} />);
+
+    preencherFormulario();
+    await selecionarProjeto();
+    fireEvent.click(screen.getByRole('button', { name: /Criar Demanda/ }));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('create-demand-error')).toBeInTheDocument();
+    });
+
+    expect(screen.getByText(/conexão/i)).toBeInTheDocument();
+    // NC-01: o modal não fecha em erro de rede
+    expect(screen.queryByTestId('create-demand-created-id')).not.toBeInTheDocument();
+    expect(onClose).not.toHaveBeenCalled();
+    expect(localStorage.getItem('token')).toBe('token-teste');
+  });
+});

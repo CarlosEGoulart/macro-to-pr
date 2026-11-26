@@ -5,6 +5,21 @@ export type ApiInit = RequestInit;
 // ID do cliente GitHub OAuth (configurado no backend). Usado para iniciar o fluxo de autorização.
 export const GITHUB_CLIENT_ID = import.meta.env.VITE_GITHUB_CLIENT_ID ?? '';
 
+/**
+ * Erro de API com o status HTTP da resposta. Permite distinguir falhas de
+ * negócio (400, 401, 403, etc.) de erros de rede (sem resposta do servidor,
+ * `status` igual a `null`).
+ */
+export class ApiError extends Error {
+  readonly status: number | null;
+
+  constructor(message: string, status: number | null = null) {
+    super(message);
+    this.name = 'ApiError';
+    this.status = status;
+  }
+}
+
 export const apiService = {
   /**
    * Único ponto de entrada para todas as chamadas à API do front (CA5).
@@ -101,13 +116,30 @@ export const apiService = {
     priority: string;
     projectId: string;
   }> {
-    const response = await this.request('/demandas', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
+    let response: Response;
+    try {
+      response = await this.request('/demandas', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+    } catch {
+      // Rede: a requisição falhou antes de obter resposta do servidor.
+      throw new ApiError(
+        'Erro de conexão com o servidor. Verifique sua internet e tente novamente.',
+        null
+      );
+    }
     if (!response.ok) {
-      throw new Error(`Falha ao criar Demanda: ${response.status}`);
+      // CA2/CA3: lança com a mensagem do corpo (400, 401, 403, etc. distinguidos pelo status).
+      let message: string;
+      try {
+        const body = await response.json();
+        message = typeof body?.message === 'string' ? body.message : `Falha ao criar Demanda: ${response.status}`;
+      } catch {
+        message = `Falha ao criar Demanda: ${response.status}`;
+      }
+      throw new ApiError(message, response.status);
     }
     return response.json();
   },

@@ -11,7 +11,7 @@
  * Estilos inline (style) para funcionar no jsdom. Design tokens do modo claro.
  */
 import { type CSSProperties, useEffect, useState } from 'react';
-import { apiService } from '../auth/apiService';
+import { apiService, ApiError } from '../auth/apiService';
 
 // --- Design tokens (modo claro) ---------------------------------------------
 const tokens = {
@@ -59,6 +59,29 @@ interface CreateDemandModalProps {
   onClose: () => void;
 }
 
+/**
+ * Converte o erro lançado por `apiService.createDemand` em uma mensagem
+ * amigável para o usuário, de acordo com o status HTTP. Nunca fecha o modal:
+ * NC-01 — o modal permanece aberto em caso de erro HTTP (400, 403, 401, etc.)
+ * e de erro de rede.
+ */
+function mensagemDeErroParaUsuario(err: unknown): string {
+  if (err instanceof ApiError) {
+    switch (err.status) {
+      case 400:
+        return 'Campo inválido. Verifique os dados preenchidos.';
+      case 403:
+        return 'Sem permissão para criar uma Demanda neste Projeto.';
+      default:
+        // 401 (já tratado por `request()`: remove token e redireciona) e outros
+        // status exibem a mensagem recebida do corpo da resposta.
+        return err.message || 'Não foi possível criar a Demanda.';
+    }
+  }
+  // Sem resposta do servidor: erro de rede (a requisição falhou antes da resposta).
+  return 'Erro de conexão com o servidor. Verifique sua internet e tente novamente.';
+}
+
 // --- Componentes internos ---------------------------------------------------
 function ModalOverlay({ onClose, children }: { onClose: () => void; children: JSX.Element }) {
   const overlayStyle: CSSProperties = {
@@ -91,12 +114,7 @@ function ModalOverlay({ onClose, children }: { onClose: () => void; children: JS
       <button type="button" aria-label="Fechar modal" style={closeStyle} onClick={onClose}>
         ✕
       </button>
-      <section
-        style={{
-          ...modalCardStyle,
-          onClick: (e: React.MouseEvent) => e.stopPropagation(),
-        } as CSSProperties}
-      >
+      <section style={modalCardStyle} onClick={(e: React.MouseEvent) => e.stopPropagation()}>
         {children}
       </section>
     </section>
@@ -304,10 +322,9 @@ export function CreateDemandModal({ onClose }: CreateDemandModalProps) {
       setCreatedDemandId(demand.id);
       onClose();
     } catch (err) {
-      // NC-01: não fecha o modal em caso de erro HTTP (400, 403, 500, etc.)
+      // NC-01: não fecha o modal em caso de erro HTTP (400, 403, 401, etc.) nem de rede.
       setSubmitting(false);
-      const message = err instanceof Error ? err.message : 'Não foi possível criar a Demanda.';
-      setError(message);
+      setError(mensagemDeErroParaUsuario(err));
     }
   };
 

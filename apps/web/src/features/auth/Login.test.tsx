@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Login } from './Login';
 import { apiService } from './apiService';
 
@@ -119,6 +119,71 @@ describe('Login — tela de acesso com design tokens', () => {
 
       // Durante o loading, o botão exibe estado de carregamento (desativado e/ou com indicação visual)
       expect(button).toBeDisabled();
+    });
+  });
+
+  describe('tratamento de erros', () => {
+    const originalLocation = window.location;
+    let redirectUrl = '';
+
+    beforeEach(() => {
+      redirectUrl = '';
+      Object.defineProperty(window, 'location', {
+        configurable: true,
+        get: () => ({
+          get href() {
+            return redirectUrl;
+          },
+          set href(value: string) {
+            redirectUrl = value;
+          },
+        }),
+      });
+    });
+
+    afterEach(() => {
+      vi.restoreAllMocks();
+      Object.defineProperty(window, 'location', { value: originalLocation, configurable: true });
+    });
+
+    it('erro de rede ao iniciar a autorização exibe mensagem de conexão', async () => {
+      vi.spyOn(apiService, 'authGitHub').mockRejectedValue(new TypeError('Failed to fetch'));
+
+      render(<Login />);
+
+      const button = screen.getByTestId('login-authorize-button');
+      fireEvent.click(button);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('login-error')).toBeInTheDocument();
+      });
+
+      expect(screen.getByText(/conexão/i)).toBeInTheDocument();
+    });
+
+    it('callback do OAuth com credenciais inválidas (401) exibe "e-mail ou senha inválidos"', () => {
+      // Simula o backend redirecionando de volta ao /login com ?error=invalid_credentials
+      // após falhar a troca do código por token (resposta 401 do backend).
+      const searchValue = '?error=invalid_credentials';
+      Object.defineProperty(window, 'location', {
+        configurable: true,
+        get: () => ({
+          get href() {
+            return redirectUrl;
+          },
+          set href(value: string) {
+            redirectUrl = value;
+          },
+          get search() {
+            return searchValue;
+          },
+        }),
+      });
+
+      render(<Login />);
+
+      expect(screen.getByTestId('login-error')).toBeInTheDocument();
+      expect(screen.getByText('e-mail ou senha inválidos')).toBeInTheDocument();
     });
   });
 });

@@ -457,7 +457,14 @@ export function ProjectsSelect({ onProjectSelect }: ProjectsSelectProps = {}) {
         }
       } catch (err) {
         if (!cancelled) {
-          setError(err instanceof Error ? err.message : 'Erro ao carregar projetos');
+          // Erro de rede: a requisição falhou antes de obter resposta do servidor
+          // (ex: TypeError: Failed to fetch). Não é um status HTTP.
+          // O 401 já é tratado globalmente por `apiService.request()` (remove token
+          // e redireciona para /login), portanto não é duplicado aqui.
+          const isNetworkError = err instanceof TypeError && /failed to fetch/i.test(err.message);
+          setError(isNetworkError
+            ? 'Erro de conexão com o servidor. Verifique sua internet e tente novamente.'
+            : err instanceof Error ? err.message : 'Erro ao carregar projetos');
         }
       } finally {
         if (!cancelled) {

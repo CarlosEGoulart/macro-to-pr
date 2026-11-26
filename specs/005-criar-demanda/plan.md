@@ -82,7 +82,7 @@
     - `apps/web/src/features/projects/ProjectsSelect.tsx` (modificado — integrar botões "Novo Projeto" e "Nova Demanda", exibir seção de Demandas do projeto selecionado `2-8451` / `2-8461`, usar Header e Sidebar reutilizáveis, passar `projectId` para o modal de criar Demanda)
     - `apps/web/src/features/auth/apiService.ts` (modificado — adicionar `createDemand(data)` → `POST /demandas` e `createProject(data)` → `POST /projects`, reutilizando `request()`)
 
-- [ ] **Tarefa 13 — Tratamento de erros no frontend (401, 403, 400, rede)**
+- [x] **Tarefa 13 — Tratamento de erros no frontend (401, 403, 400, rede)**
   - Cobre: CA2, CA3
   - Teste primeiro: teste de componente — resposta 403 → exibe "sem permissão"; resposta 400 → exibe campo inválido; resposta 401 → limpa token e redireciona para login; erro de rede → exibe mensagem de conexão
   - Arquivos previstos: `apps/web/src/features/auth/apiService.ts`, `apps/web/src/features/demands/CreateDemand.tsx`

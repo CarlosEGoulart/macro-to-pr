@@ -91,6 +91,56 @@ describe('ProjectsSelect — tela de seletor de Projeto (CA4)', () => {
   });
 });
 
+describe('ProjectsSelect — tratamento de erros (401, rede)', () => {
+  const originalLocation = window.location;
+  let locationHref = originalLocation.href;
+
+  beforeEach(() => {
+    localStorage.setItem('token', 'token-teste');
+    locationHref = originalLocation.href;
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      get: () => ({
+        get href(): string {
+          return locationHref;
+        },
+        set href(v: string) {
+          locationHref = v;
+        },
+      }),
+    });
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+    localStorage.clear();
+    Object.defineProperty(window, 'location', { value: originalLocation, configurable: true });
+  });
+
+  it('401: limpa o token do localStorage e redireciona para /login quando GET /projects responde 401', async () => {
+    vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response(null, { status: 401 }));
+
+    render(<ProjectsSelect />);
+
+    await waitFor(() => {
+      expect(localStorage.getItem('token')).toBeNull();
+    });
+    expect(locationHref).toContain('/login');
+  });
+
+  it('erro de rede: exibe mensagem de conexão quando GET /projects falha', async () => {
+    vi.spyOn(globalThis, 'fetch').mockRejectedValue(new TypeError('Failed to fetch'));
+
+    render(<ProjectsSelect />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('projects-select-error')).toBeInTheDocument();
+    });
+    expect(screen.getByText(/conexão/i)).toBeInTheDocument();
+    expect(screen.queryByTestId('projects-select-loading')).not.toBeInTheDocument();
+  });
+});
+
 describe('HeaderUser — perfil do desenvolvedor no header', () => {
   beforeEach(() => {
     localStorage.setItem('token', 'token-teste');
