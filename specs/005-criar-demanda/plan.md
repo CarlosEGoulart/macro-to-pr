@@ -84,7 +84,7 @@
   - Teste primeiro: e2e `POST /demandas` — sucesso (201), dados vazios (400), projeto não pertence (403), sem token (401); `GET /projects` — sucesso (200), sem token (401)
   - Arquivos previstos: `apps/api/test/demands.e2e-spec.ts`, `apps/api/test/projects.e2e-spec.ts` (adicionar GET)
 
-- [ ] **Tarefa 15 — Dependência técnica: fluxo de OAuth GitHub (pré-requisito da issue #3)**
+- [x] **Tarefa 15 — Dependência técnica: fluxo de OAuth GitHub (pré-requisito da issue #3)**
   - Cobre: US01 (autenticação necessária para criar demanda)
   - Justificativa: a issue #3 está fechada no GitHub, mas seu código de auth nunca foi entregue na main. Para a #5 funcionar (tela de criar demanda exigindo token JWT), o fluxo de autorização precisou ser implementado como dependência desta branch.
   - Arquivos envolvidos:
