@@ -64,54 +64,11 @@ interface ProjectsSelectProps {
 }
 
 // --- Componentes internos ---------------------------------------------------
-function ProjectIcon() {
-  return (
-    <svg
-      width="16"
-      height="12"
-      viewBox="0 0 16 12"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-    >
-      <rect width="16" height="12" fill="#E5E7EB" stroke="#6B7280" strokeWidth="1" rx="2" />
-      <path
-        d="M4 4h2v2H4zM8 4h2v2H8zM12 4h2v2h-2zM4 8h2v2H4zM8 8h2v2H8zM12 8h2v2h-2z"
-        fill="#6B7280"
-      />
-    </svg>
-  );
-}
-
-function Avatar() {
-  return (
-    <div style={avatarStyle}>
-      D
-    </div>
-  );
-}
-
-const avatarStyle: CSSProperties = {
-  width: 32,
-  height: 32,
-  backgroundColor: tokens.primaria,
-  borderRadius: '50%',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  color: '#FFFFFF',
-  fontFamily: tokens.font,
-  fontWeight: '700',
-  fontSize: 14,
-  lineHeight: 1,
-  flexShrink: 0,
-};
-
 function HeaderUser() {
   return (
     <div style={headerUserStyle}>
       <div style={headerUserBadgeStyle}>Desenvolvedor</div>
-      <div style={avatarStyle}>D</div>
+      <div style={{ width: 32, height: 32, backgroundColor: tokens.primaria, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FFFFFF', fontFamily: tokens.font, fontWeight: '700', fontSize: 14, lineHeight: 1, flexShrink: 0 }}>D</div>
     </div>
   );
 }
@@ -168,21 +125,98 @@ const creditsTextStyle: CSSProperties = {
 };
 
 // --- Componentes internos ---------------------------------------------------
-function ProjectIconOnly() {
+function FolderIcon() {
   return (
     <svg
       width="16"
-      height="12"
-      viewBox="0 0 16 12"
+      height="16"
+      viewBox="0 0 16 16"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
     >
-      <rect width="16" height="12" fill="#E5E7EB" stroke="#6B7280" strokeWidth="1" rx="2" />
       <path
-        d="M4 4h2v2H4zM8 4h2v2H8zM12 4h2v2h-2zM4 8h2v2H4zM8 8h2v2H8zM12 8h2v2h-2z"
+        d="M10 4H4c-0.53 0-1 0.47-1 1v1H2v8c0 0.55 0.45 1 1 1h12c0.55 0 1-0.45 1-1V5c0-0.55-0.45-1-1-1h-6V4z"
         fill="#6B7280"
       />
+      <path
+        d="M4 4h6v1H4V4z"
+        fill="#E5E7EB"
+        stroke="#6B7280"
+        strokeWidth="1"
+      />
+    </svg>
+  );
+}
+
+// Ícones lineares do sidebar (substituem emojis — Figma usa stroke 1.5, #6B7280)
+function IconInicio() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M6.5 3H3v10h3.5M8 5.5l3 2.5-3 2.5M11 8H5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function IconWorkspace() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M2 4.5h4l1.2 1.5H14v6.5a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4.5z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function IconDemanda() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <rect x="3" y="2.5" width="10" height="11" rx="1.5" stroke="currentColor" strokeWidth="1.3" />
+      <path d="M5.5 6h5M5.5 8.5h5M5.5 11h3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function IconRevisao() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <rect x="2.5" y="2.5" width="11" height="11" rx="2" stroke="currentColor" strokeWidth="1.3" />
+      <path d="M5 8l2 2 4-4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function IconCreditos() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <rect x="1.75" y="3.5" width="12.5" height="9" rx="1.5" stroke="currentColor" strokeWidth="1.3" />
+      <path d="M1.75 6.5h12.5M4.5 10h2.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function IconContas() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <circle cx="6" cy="5" r="2" stroke="currentColor" strokeWidth="1.3" />
+      <path d="M2.5 13c0-2 1.6-3.5 3.5-3.5s3.5 1.5 3.5 3.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+      <path d="M10.5 3.5a2 2 0 0 1 0 4M11 9.7c1.7.4 2.8 1.6 2.8 3.3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function IconList() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+      <path d="M5 3.5h7M5 7h7M5 10.5h7" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+      <path d="M1.8 3.5h.01M1.8 7h.01M1.8 10.5h.01" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function IconCheckCircle() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+      <circle cx="7" cy="7" r="5.3" stroke="currentColor" strokeWidth="1.2" />
+      <path d="M4.5 7l1.7 1.7L9.5 5.4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -199,11 +233,11 @@ function ProjectCard({
   const cardStyle: CSSProperties = {
     backgroundColor: selected ? tokens.primariaRgba004 : tokens.superficieCard,
     border: selected ? `2px solid ${tokens.primaria}` : `1px solid ${tokens.border}`,
-    borderRadius: 12,
-    padding: 16,
+    borderRadius: 10,
+    padding: '14px 16px',
     display: 'flex',
     flexDirection: 'column',
-    gap: 12,
+    gap: 10,
     width: '100%',
     boxSizing: 'border-box',
     cursor: 'pointer',
@@ -211,12 +245,12 @@ function ProjectCard({
   };
 
   const badgeStyle: CSSProperties = {
-    backgroundColor: tokens.primaria,
-    color: '#030712',
+    backgroundColor: tokens.primariaRgba004,
+    color: tokens.primaria,
     borderRadius: 9999,
     padding: '4px 8px',
     fontFamily: tokens.font,
-    fontWeight: '400',
+    fontWeight: '500',
     fontSize: 12,
     lineHeight: '1',
     alignSelf: 'flex-start',
@@ -243,19 +277,19 @@ function ProjectCard({
     gap: 6,
   };
 
-  const selectButtonStyle: CSSProperties = {
+  const selectLinkStyle: CSSProperties = {
     backgroundColor: 'transparent',
     color: tokens.primaria,
-    border: `1px solid ${tokens.primaria}`,
-    borderRadius: 6,
-    padding: '6px 12px',
+    border: 'none',
+    borderRadius: 0,
+    padding: 0,
     fontFamily: tokens.font,
-    fontWeight: '600',
+    fontWeight: '500',
     fontSize: 12,
     cursor: 'pointer',
     lineHeight: '1',
-    marginTop: 'auto',
-    alignSelf: 'flex-start',
+    whiteSpace: 'nowrap',
+    textDecoration: 'none',
   };
 
   return (
@@ -263,36 +297,32 @@ function ProjectCard({
       data-testid={`project-card-${project.id}`}
       style={cardStyle as CSSProperties}
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        <ProjectIconOnly />
-        <p style={nameStyle}>{project.name}</p>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
+          <FolderIcon />
+          <p style={nameStyle}>{project.name}</p>
+        </div>
+        {selected ? (
+          <span role="status" aria-label="Selecionado" style={badgeStyle as CSSProperties}>
+            Selecionado
+          </span>
+        ) : (
+          <button
+            type="button"
+            role="button"
+            aria-label={`Selecionar ${project.name}`}
+            style={selectLinkStyle as CSSProperties}
+            onClick={onSelect}
+          >
+            Selecionar
+          </button>
+        )}
       </div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-        <span style={{ opacity: 0.6 }} aria-hidden="true">
-          ●
-        </span>
-        <p style={statsStyle}>
-          {project.repositoryName} · {project.demandCount} demanda{project.demandCount !== 1 ? 's' : ''}
-        </p>
-      </div>
-      <button
-        type="button"
-        role="button"
-        aria-label={`Selecionar ${project.name}`}
-        style={selectButtonStyle as CSSProperties}
-        onClick={onSelect}
-      >
-        Selecionar
-      </button>
-      {selected && (
-        <span
-          role="status"
-          aria-label="Selecionado"
-          style={badgeStyle as CSSProperties}
-        >
-          Selecionado
-        </span>
-      )}
+      <div style={{ height: 1, backgroundColor: '#E5E7EB', width: '100%' }} />
+      <p style={statsStyle}>
+        <IconList />
+        {project.demandCount} demanda{project.demandCount !== 1 ? 's' : ''}
+      </p>
     </article>
   );
 }
@@ -304,24 +334,24 @@ function DemandCard({
   demand: Demand;
   onOpen: () => void;
 }) {
-  const statusColors: Record<string, string> = {
-    Draft: tokens.textoSuave,
-    AwaitingPlanApproval: tokens.primaria,
-    AwaitingNewPlan: tokens.primaria,
-    PlanApproved: tokens.sucesso,
-    InExecution: tokens.primaria,
-    ReadyForPR: tokens.primaria,
-    Concluded: tokens.sucesso,
+  const statusColors: Record<string, { bg: string; fg: string }> = {
+    Draft: { bg: '#F3F4F6', fg: tokens.textoSuave },
+    AwaitingPlanApproval: { bg: 'rgba(97, 100, 241, 0.12)', fg: tokens.primaria },
+    AwaitingNewPlan: { bg: 'rgba(97, 100, 241, 0.12)', fg: tokens.primaria },
+    PlanApproved: { bg: 'rgba(22, 163, 74, 0.12)', fg: tokens.sucesso },
+    InExecution: { bg: 'rgba(97, 100, 241, 0.12)', fg: tokens.primaria },
+    ReadyForPR: { bg: 'rgba(97, 100, 241, 0.12)', fg: tokens.primaria },
+    Concluded: { bg: 'rgba(22, 163, 74, 0.12)', fg: tokens.sucesso },
   };
 
   const cardStyle: CSSProperties = {
     backgroundColor: tokens.superficieCard,
     border: `1px solid ${tokens.border}`,
-    borderRadius: 12,
-    padding: 16,
+    borderRadius: 10,
+    padding: '14px 16px',
     display: 'flex',
     flexDirection: 'column',
-    gap: 12,
+    gap: 10,
     width: '100%',
     boxSizing: 'border-box',
   };
@@ -342,16 +372,19 @@ function DemandCard({
     lineHeight: '1.4',
   };
 
+  const statusColor = statusColors[demand.status] || { bg: '#F3F4F6', fg: tokens.textoSuave };
+
   const badgeStyle: CSSProperties = {
-    backgroundColor: statusColors[demand.status] || tokens.textoSuave,
-    color: '#FFFFFF',
+    backgroundColor: statusColor.bg,
+    color: statusColor.fg,
     borderRadius: 9999,
-    padding: '2px 8px',
+    padding: '4px 8px',
     fontFamily: tokens.font,
-    fontWeight: '600',
-    fontSize: 10,
+    fontWeight: '500',
+    fontSize: 11,
     lineHeight: '1',
     alignSelf: 'flex-start',
+    whiteSpace: 'nowrap',
   };
 
   const metaStyle: CSSProperties = {
@@ -370,15 +403,14 @@ function DemandCard({
     backgroundColor: 'transparent',
     color: tokens.primaria,
     border: 'none',
-    borderRadius: 6,
+    borderRadius: 0,
     padding: 0,
     fontFamily: tokens.font,
     fontWeight: '500',
     fontSize: 12,
     cursor: 'pointer',
     lineHeight: '1',
-    alignSelf: 'flex-start',
-    marginTop: 4,
+    whiteSpace: 'nowrap',
     textDecoration: 'none',
   };
 
@@ -388,21 +420,22 @@ function DemandCard({
         <p style={titleStyle}>{demand.title}</p>
         <span style={badgeStyle}>{demand.status}</span>
       </div>
-      <p style={metaStyle}>
-        <span role="img" aria-label="task" aria-hidden="true">
-          ✓
-        </span>
-        {demand.taskCount} tarefa{demand.taskCount !== 1 ? 's' : ''}
-      </p>
-      <button
-        type="button"
-        role="button"
-        aria-label={`Abrir ${demand.title}`}
-        style={openLinkStyle as CSSProperties}
-        onClick={onOpen}
-      >
-        Abrir Demanda →
-      </button>
+      <div style={{ height: 1, backgroundColor: '#E5E7EB', width: '100%' }} />
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: tokens.md }}>
+        <p style={metaStyle}>
+          <IconCheckCircle />
+          {demand.taskCount} tarefa{demand.taskCount !== 1 ? 's' : ''}
+        </p>
+        <button
+          type="button"
+          role="button"
+          aria-label={`Abrir ${demand.title}`}
+          style={openLinkStyle as CSSProperties}
+          onClick={onOpen}
+        >
+          Abrir Demanda →
+        </button>
+      </div>
     </article>
   );
 }
@@ -424,8 +457,11 @@ function WarningMessage() {
         lineHeight: '1.4',
       } as CSSProperties}
     >
-      <span role="img" aria-label="info">
-        ℹ️
+      <span style={{ color: tokens.primaria, display: 'inline-flex' }} aria-hidden="true">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <circle cx="7" cy="7" r="5.5" stroke="currentColor" strokeWidth="1.2" />
+          <path d="M7 6.3v3.4M7 4.3h.01" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+        </svg>
       </span>
       <p style={{ margin: 0 }}>
         Cada Repositório só pode estar associado a um único Projeto para sua
@@ -512,7 +548,7 @@ export function ProjectsSelect({ onProjectSelect }: ProjectsSelectProps = {}) {
   }
 
   const selectedProject = projects.find((p) => p.id === selectedId);
-  const columnGap = tokens.lg;
+  const columnGap = tokens.xl;
 
   // 1. header (node-id=44-336) — cabeçalho da aplicação
   const headerStyle: CSSProperties = {
@@ -554,8 +590,12 @@ export function ProjectsSelect({ onProjectSelect }: ProjectsSelectProps = {}) {
   // 4. cabeçalho (node-id=2-8379) — cabeçalho da página
   const pageHeaderStyle: CSSProperties = {
     display: 'flex',
-    flexDirection: 'column',
-    gap: tokens.sm,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    gap: tokens.lg,
+    padding: `${tokens.xl}px ${tokens.xl}px ${tokens.lg}px`,
+    borderBottom: '1px solid #E5E7EB',
     marginBottom: tokens.lg,
   } as CSSProperties;
 
@@ -580,7 +620,8 @@ export function ProjectsSelect({ onProjectSelect }: ProjectsSelectProps = {}) {
   const pageHeaderActionsStyle: CSSProperties = {
     display: 'flex',
     gap: tokens.sm,
-    marginTop: tokens.xs,
+    flexShrink: 0,
+    marginTop: 2,
   } as CSSProperties;
 
   const actionButtonStyle: CSSProperties = {
@@ -599,14 +640,14 @@ export function ProjectsSelect({ onProjectSelect }: ProjectsSelectProps = {}) {
     gap: 6,
   } as CSSProperties;
 
-  const actionButtonHoverStyle: CSSProperties = {
-    backgroundColor: tokens.primariaHover,
-    color: '#FFFFFF',
-    border: 'none',
+  const actionButtonOutlineStyle: CSSProperties = {
+    backgroundColor: '#FFFFFF',
+    color: tokens.texto,
+    border: `1px solid ${tokens.border}`,
     borderRadius: 6,
     padding: '8px 14px',
     fontFamily: tokens.font,
-    fontWeight: '600',
+    fontWeight: '500',
     fontSize: 14,
     cursor: 'pointer',
     lineHeight: '1',
@@ -636,8 +677,21 @@ export function ProjectsSelect({ onProjectSelect }: ProjectsSelectProps = {}) {
     fontWeight: '600',
     fontSize: 18,
     color: tokens.texto,
-    margin: '0 0 8px 0',
-    lineHeight: '1.2',
+    margin: 0,
+    lineHeight: '22px',
+  } as CSSProperties;
+
+  const projectsBadgeStyle: CSSProperties = {
+    fontFamily: tokens.font,
+    fontWeight: '500',
+    fontSize: 12,
+    color: tokens.textoSuave,
+    backgroundColor: '#FFFFFF',
+    border: `1px solid ${tokens.border}`,
+    borderRadius: 9999,
+    padding: '4px 10px',
+    lineHeight: '1',
+    whiteSpace: 'nowrap',
   } as CSSProperties;
 
   const listStyle: CSSProperties = {
@@ -649,35 +703,25 @@ export function ProjectsSelect({ onProjectSelect }: ProjectsSelectProps = {}) {
 
   const emptyStateStyle: CSSProperties = {
     fontFamily: tokens.font,
-    fontSize: 14,
+    fontSize: 13,
     color: tokens.textoSuave,
-    padding: tokens.lg,
+    padding: tokens.xl,
     borderRadius: 8,
     backgroundColor: tokens.superficieCard,
     border: `1px solid ${tokens.border}`,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 200,
+    minHeight: 120,
   } as CSSProperties;
 
-  const selectedRepoBannerStyle: CSSProperties = {
-    display: 'flex',
-    alignItems: 'center',
-    gap: tokens.xs,
-    padding: `${tokens.xs}px ${tokens.md}px`,
-    backgroundColor: tokens.primariaRgba004,
-    border: `1px solid ${tokens.primaria}`,
-    borderRadius: 8,
-    marginBottom: tokens.sm,
-  } as CSSProperties;
-
-  const selectedRepoTextStyle: CSSProperties = {
+  const selectedRepoBannerInlineStyle: CSSProperties = {
     fontFamily: tokens.font,
-    fontWeight: '500',
-    fontSize: 13,
-    color: tokens.texto,
+    fontWeight: '400',
+    fontSize: 12,
+    color: tokens.textoSuave,
     lineHeight: '1.4',
+    marginTop: -4,
   } as CSSProperties;
 
   // Sidebar styles (node-id=27-263)
@@ -755,7 +799,6 @@ export function ProjectsSelect({ onProjectSelect }: ProjectsSelectProps = {}) {
         <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: tokens.md }}>
           <CreditsBadge />
           <HeaderUser />
-          <Avatar />
         </div>
       </header>
 
@@ -765,41 +808,41 @@ export function ProjectsSelect({ onProjectSelect }: ProjectsSelectProps = {}) {
         <aside data-testid="projects-select-sidebar" style={sidebarStyle}>
           <div style={sidebarSectionStyle}>
             <p style={sidebarSectionTitleStyle}>PRINCIPAL</p>
-            <a href="#" style={sidebarItemActiveStyle}>
-              <span style={sidebarItemIconStyle}>🏠</span>
+            <a href="#" style={sidebarItemStyle}>
+              <span style={sidebarItemIconStyle}><IconInicio /></span>
               Início / Acesso
             </a>
-            <a href="#" style={sidebarItemStyle}>
-              <span style={sidebarItemIconStyle}>📁</span>
+            <a href="#" style={sidebarItemActiveStyle}>
+              <span style={sidebarItemIconStyle}><IconWorkspace /></span>
               Workspace
             </a>
             <a href="#" style={sidebarItemStyle}>
-              <span style={sidebarItemIconStyle}>📋</span>
+              <span style={sidebarItemIconStyle}><IconDemanda /></span>
               Detalhe da Demanda
             </a>
             <a href="#" style={sidebarItemStyle}>
-              <span style={sidebarItemIconStyle}>🔍</span>
+              <span style={sidebarItemIconStyle}><IconRevisao /></span>
               Revisão de Resultados
             </a>
           </div>
           <div style={sidebarSectionStyle}>
             <p style={sidebarSectionTitleStyle}>FINANCEIRO</p>
             <a href="#" style={sidebarItemStyle}>
-              <span style={sidebarItemIconStyle}>💳</span>
+              <span style={sidebarItemIconStyle}><IconCreditos /></span>
               Créditos & Faturamento
             </a>
           </div>
           <div style={sidebarSectionStyle}>
             <p style={sidebarSectionTitleStyle}>GESTÃO</p>
             <a href="#" style={sidebarItemStyle}>
-              <span style={sidebarItemIconStyle}>👥</span>
+              <span style={sidebarItemIconStyle}><IconContas /></span>
               Contas de Desenvolvedores
             </a>
           </div>
         </aside>
 
         {/* 3. main — node-id=2-8377 */}
-        <main data-testid="projects-select-main" style={{ flex: 1, width: '100%', minHeight: 0 }}>
+        <main data-testid="projects-select-main" style={{ flex: 1, width: '100%', minHeight: 0, padding: `0 ${tokens.xl}px ${tokens.xl}px` }}>
           {/* 4. cabeçalho — node-id=2-8379 */}
           <header data-testid="projects-select-cabecalho" style={pageHeaderStyle}>
             <div>
@@ -815,12 +858,12 @@ export function ProjectsSelect({ onProjectSelect }: ProjectsSelectProps = {}) {
               <button
                 type="button"
                 role="button"
-                style={actionButtonStyle}
+                style={actionButtonOutlineStyle}
                 onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLButtonElement).style.backgroundColor = tokens.primariaHover;
+                  (e.currentTarget as HTMLButtonElement).style.backgroundColor = tokens.primariaRgba004;
                 }}
                 onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLButtonElement).style.backgroundColor = tokens.primaria;
+                  (e.currentTarget as HTMLButtonElement).style.backgroundColor = '#FFFFFF';
                 }}
               >
                 + Novo Projeto
@@ -841,17 +884,6 @@ export function ProjectsSelect({ onProjectSelect }: ProjectsSelectProps = {}) {
             </div>
           </header>
 
-          {selectedProject && (
-            <div style={selectedRepoBannerStyle}>
-              <span style={{ fontWeight: '600', color: tokens.primaria, fontSize: 12 }}>
-                Repositório selecionado:
-              </span>
-              <span style={selectedRepoTextStyle}>
-                {selectedProject.repositoryName}
-              </span>
-            </div>
-          )}
-
           {/* 5. layout — node-id=2-8394 */}
           <div data-testid="projects-select-layout" style={columnsStyle}>
             {/* 6. seção projetos — node-id=2-8395 */}
@@ -859,9 +891,14 @@ export function ProjectsSelect({ onProjectSelect }: ProjectsSelectProps = {}) {
               data-testid="projects-select-projetos"
               style={columnStyle}
             >
-              <h2 role="heading" style={columnTitleStyle}>
-                Projetos
-              </h2>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: tokens.md, minHeight: 22 }}>
+                <h2 role="heading" style={columnTitleStyle}>
+                  Projetos
+                </h2>
+                <div style={projectsBadgeStyle}>
+                  {projects.length} Projetos
+                </div>
+              </div>
               <div data-testid="projects-select-list" style={listStyle}>
                 {projects.map((project) => (
                   <ProjectCard
@@ -872,6 +909,7 @@ export function ProjectsSelect({ onProjectSelect }: ProjectsSelectProps = {}) {
                   />
                 ))}
               </div>
+              {projects.length > 0 && <WarningMessage />}
             </section>
 
             {/* 7. seção demandas — node-id=2-8451 */}
@@ -879,9 +917,19 @@ export function ProjectsSelect({ onProjectSelect }: ProjectsSelectProps = {}) {
               data-testid="projects-select-demandas"
               style={columnStyle}
             >
-              <h2 role="heading" style={columnTitleStyle}>
-                Demandas
-              </h2>
+              <div style={{ display: 'flex', alignItems: 'center', minHeight: 22 }}>
+                <h2 role="heading" style={{ ...columnTitleStyle, margin: 0 }}>
+                  Demandas
+                </h2>
+              </div>
+              {selectedProject && (
+                <div style={selectedRepoBannerInlineStyle}>
+                  Repositório selecionado:{' '}
+                  <span style={{ fontWeight: '600', color: tokens.texto }}>
+                    {selectedProject.repositoryName}
+                  </span>
+                </div>
+              )}
               {selectedProject ? (
                 demands.length > 0 ? (
                   <div style={listStyle}>
@@ -908,11 +956,6 @@ export function ProjectsSelect({ onProjectSelect }: ProjectsSelectProps = {}) {
             </section>
           </div>
         </main>
-      </div>
-
-      {/* Warning message at bottom */}
-      <div style={{ padding: `${tokens.sm}px ${tokens.xl}px` }}>
-        <WarningMessage />
       </div>
     </section>
   );
