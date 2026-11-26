@@ -64,11 +64,25 @@ interface ProjectsSelectProps {
 }
 
 // --- Componentes internos ---------------------------------------------------
+function BoltIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+      <path
+        d="M8 1L3 8h3.2L5.5 13 11 6H7.8L8 1z"
+        fill="#F59E0B"
+        stroke="#D97706"
+        strokeWidth="0.6"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 function HeaderUser() {
   return (
     <div style={headerUserStyle}>
       <div style={headerUserBadgeStyle}>Desenvolvedor</div>
-      <div style={{ width: 32, height: 32, backgroundColor: tokens.primaria, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FFFFFF', fontFamily: tokens.font, fontWeight: '700', fontSize: 14, lineHeight: 1, flexShrink: 0 }}>D</div>
+      <div style={avatarStyle}>D</div>
     </div>
   );
 }
@@ -80,21 +94,41 @@ const headerUserStyle: CSSProperties = {
 };
 
 const headerUserBadgeStyle: CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  height: 28,
   fontFamily: tokens.font,
   fontWeight: '500',
-  fontSize: 14,
+  fontSize: 13,
   color: tokens.texto,
-  lineHeight: '1.4',
-  padding: '0 8px',
+  lineHeight: 1,
+  padding: '0 10px',
   backgroundColor: tokens.superficieCard,
-  border: `1px solid ${tokens.border}`,
+  border: '1px solid #D1D5DB',
   borderRadius: 20,
+};
+
+const avatarStyle: CSSProperties = {
+  width: 28,
+  height: 28,
+  backgroundColor: tokens.superficieCard,
+  border: `2px solid ${tokens.primaria}`,
+  borderRadius: '50%',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  color: tokens.primaria,
+  fontFamily: tokens.font,
+  fontWeight: '700',
+  fontSize: 13,
+  lineHeight: 1,
+  flexShrink: 0,
 };
 
 function CreditsBadge() {
   return (
     <div style={creditsBadgeStyle}>
-      <span style={creditsIconStyle}>⚡</span>
+      <BoltIcon />
       <span style={creditsTextStyle}>24 Créditos</span>
     </div>
   );
@@ -104,20 +138,16 @@ const creditsBadgeStyle: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   gap: tokens.xs,
+  height: 28,
   fontFamily: tokens.font,
   fontWeight: '500',
-  fontSize: 14,
+  fontSize: 13,
   color: tokens.texto,
-  lineHeight: '1.4',
+  lineHeight: 1,
   padding: '0 10px',
   backgroundColor: tokens.superficieCard,
-  border: `1px solid ${tokens.border}`,
+  border: '1px solid #D1D5DB',
   borderRadius: 20,
-};
-
-const creditsIconStyle: CSSProperties = {
-  fontSize: 14,
-  lineHeight: 1,
 };
 
 const creditsTextStyle: CSSProperties = {
