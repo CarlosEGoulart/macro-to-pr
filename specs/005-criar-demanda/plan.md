@@ -64,7 +64,7 @@
   - Teste primeiro: `npm run start` em `apps/api` sobe a API na porta 3000 sem UnknownDependenciesException; o endpoint `GET /auth/github` responde
   - Arquivos previstos: `apps/api/src/modules/demands/demands.module.ts` (importar o módulo que exporta ProjectsRepository ou fornecer o provider no DemandsModule)
 
-- [ ] **Tarefa 11 — Tela de seletor de Projeto (frontend) consumindo GET /projects**
+- [x] **Tarefa 11 — Tela de seletor de Projeto (frontend) consumindo GET /projects**
   - Cobre: CA4
   - Teste primeiro: teste de componente — seletor exibe lista de projetos retornada pelo mock do `GET /projects`
   - Arquivos previstos: `apps/web/src/features/projects/`, `apps/web/src/features/projects/ProjectsSelect.tsx`
