@@ -96,7 +96,7 @@ export const apiService = {
   },
 
   /**
-   * Cria uma Demanda (POST /demandas).
+   * Cria uma Demanda (POST /demands).
    * Envia o token de localStorage no cabeçalho Authorization: Bearer via request().
    * CA1: com dados válidos retorna o objeto completo (incluindo o `id` gerado).
    * CA2: com dados obrigatórios ausentes, o backend responde 400 e o front exibe o campo.
@@ -118,7 +118,7 @@ export const apiService = {
   }> {
     let response: Response;
     try {
-      response = await this.request('/demandas', {
+      response = await this.request('/demands', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),

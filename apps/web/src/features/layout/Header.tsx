@@ -1,7 +1,7 @@
 /**
  * Header reutilizável — cabeçalho da aplicação (Figma node-id=44-336).
  *
- * Usado em /projects e /demandas. Renderiza logo "M", wordmark "Macro2PR",
+ * Usado em /projects e /demands. Renderiza logo "M", wordmark "Macro2PR",
  * badge de créditos e perfil do desenvolvedor (HeaderUser).
  *
  * data-testid="projects-select-header" (mantido do ProjectsSelect original).

@@ -146,7 +146,7 @@ describe('CreateDemandModal — CA1 e CA2', () => {
           })
         );
       }
-      if (url.includes('/demandas')) {
+      if (url.includes('/demands')) {
         const h = init?.headers;
         demandAuthHeader = h instanceof Headers ? h.get('Authorization') : String(h?.['Authorization'] ?? null);
       }
@@ -251,7 +251,7 @@ describe('CreateDemandModal — CA4', () => {
   it('NC-01: não fecha o modal quando createDemand retorna erro HTTP (ex: 400)', async () => {
     const onClose = vi.fn();
 
-    // Limpa mocks anteriores e configura fetch para retornar projetos em /projects e 400 em /demandas
+    // Limpa mocks anteriores e configura fetch para retornar projetos em /projects e 400 em /demands
     vi.restoreAllMocks();
     vi.spyOn(globalThis, 'fetch').mockImplementation((input: RequestInfo | URL) => {
       const url = String(input);

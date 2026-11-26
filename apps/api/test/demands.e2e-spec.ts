@@ -12,7 +12,7 @@ process.env.JWT_SECRET = 'test-secret-123456';
 process.env.DATABASE_URL =
   'postgresql://app:app@localhost:5432/appdb?schema=public';
 
-describe('Demands (e2e) - POST /demandas', () => {
+describe('Demands (e2e) - POST /demands', () => {
   let app: INestApplication;
   let prisma: PrismaService;
   let accessToken: string;
@@ -143,7 +143,7 @@ describe('Demands (e2e) - POST /demandas', () => {
 
   it('deve criar uma demanda associada ao projeto e retornar o objeto completo com id (CA1)', async () => {
     const response = await request(app.getHttpServer())
-      .post('/demandas')
+      .post('/demands')
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
         title: 'Nova demanda',
@@ -170,7 +170,7 @@ describe('Demands (e2e) - POST /demandas', () => {
 
   it('deve retornar 403 quando o projeto não pertence ao desenvolvedor autenticado (CA3)', async () => {
     await request(app.getHttpServer())
-      .post('/demandas')
+      .post('/demands')
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
         title: 'Demanda em projeto alheio',
@@ -182,9 +182,9 @@ describe('Demands (e2e) - POST /demandas', () => {
       .expect(403);
   });
 
-  it('deve retornar 401 quando POST /demandas é chamado sem token', async () => {
+  it('deve retornar 401 quando POST /demands é chamado sem token', async () => {
     await request(app.getHttpServer())
-      .post('/demandas')
+      .post('/demands')
       .send({
         title: 'Nova demanda',
         description: 'Descrição da demanda',

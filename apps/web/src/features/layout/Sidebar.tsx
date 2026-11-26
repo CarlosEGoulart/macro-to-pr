@@ -1,7 +1,7 @@
 /**
  * Sidebar reutilizável — barra lateral de navegação (Figma node-id=27-263).
  *
- * Usado em /projects e /demandas. Renderiza seções PRINCIPAL, FINANCEIRO e
+ * Usado em /projects e /demands. Renderiza seções PRINCIPAL, FINANCEIRO e
  * GESTÃO com itens de navegação e ícones inline (SVG).
  *
  * data-testid="projects-select-sidebar" (mantido do ProjectsSelect original).

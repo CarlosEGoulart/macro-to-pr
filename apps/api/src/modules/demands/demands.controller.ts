@@ -5,7 +5,7 @@ import { DemandsService } from './demands.service.js';
 import { CreateDemandDto } from './dto/create-demand.dto.js';
 
 @ApiBearerAuth()
-@Controller('demandas')
+@Controller('demands')
 export class DemandsController {
   constructor(private readonly demandsService: DemandsService) {}
 

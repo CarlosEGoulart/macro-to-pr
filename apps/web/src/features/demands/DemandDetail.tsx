@@ -1,5 +1,5 @@
 /**
- * Tela de detalhe de Demanda — /demandas.
+ * Tela de detalhe de Demanda — /demands.
  *
  * Reproduz fielmente o protótipo do Figma (node-id=2-8107):
  * - Link "Voltar ao Workspace" abaixo do header (não dentro dele)
