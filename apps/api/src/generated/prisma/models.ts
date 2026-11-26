@@ -8,8 +8,9 @@
  *
  * 🟢 You can import this file directly.
  */
-export type * from './models/Demand.js'
-export type * from './models/Developer.js'
-export type * from './models/Repository.js'
-export type * from './models/Project.js'
-export type * from './commonInputTypes.js'
+export type * from './models/Demand.ts'
+export type * from './models/Developer.ts'
+export type * from './models/GitHubAccount.ts'
+export type * from './models/Repository.ts'
+export type * from './models/Project.ts'
+export type * from './commonInputTypes.ts'

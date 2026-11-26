@@ -64,7 +64,7 @@
   - Teste primeiro: `npm run start` em `apps/api` sobe a API na porta 3000 sem UnknownDependenciesException; o endpoint `GET /auth/github` responde
   - Arquivos previstos: `apps/api/src/modules/demands/demands.module.ts` (importar o módulo que exporta ProjectsRepository ou fornecer o provider no DemandsModule)
 
-- [x] **Tarefa 11 — Tela de seletor de Projeto (frontend) consumindo GET /projects**
+- [ ] **Tarefa 11 — Tela de seletor de Projeto (frontend) consumindo GET /projects**
   - Cobre: CA4
   - Teste primeiro: teste de componente — seletor exibe lista de projetos retornada pelo mock do `GET /projects`
   - Arquivos previstos: `apps/web/src/features/projects/`, `apps/web/src/features/projects/ProjectsSelect.tsx`
@@ -83,6 +83,22 @@
   - Cobre: CA1, CA2, CA3, CA4
   - Teste primeiro: e2e `POST /demandas` — sucesso (201), dados vazios (400), projeto não pertence (403), sem token (401); `GET /projects` — sucesso (200), sem token (401)
   - Arquivos previstos: `apps/api/test/demands.e2e-spec.ts`, `apps/api/test/projects.e2e-spec.ts` (adicionar GET)
+
+- [ ] **Tarefa 15 — Dependência técnica: fluxo de OAuth GitHub (pré-requisito da issue #3)**
+  - Cobre: US01 (autenticação necessária para criar demanda)
+  - Justificativa: a issue #3 está fechada no GitHub, mas seu código de auth nunca foi entregue na main. Para a #5 funcionar (tela de criar demanda exigindo token JWT), o fluxo de autorização precisou ser implementado como dependência desta branch.
+  - Arquivos envolvidos:
+    - `apps/api/src/modules/auth/auth.controller.ts` (novo)
+    - `apps/api/src/modules/auth/auth.service.ts` (novo)
+    - `apps/api/src/modules/auth/github-account.repository.ts` (novo)
+    - `apps/api/src/modules/auth/developer.repository.ts` (novo)
+    - `apps/api/src/modules/auth/jwt-auth.guard.ts` (modificado — respeita @Public())
+    - `apps/api/src/main.ts` (modificado — CORS)
+    - `apps/api/prisma/schema.prisma` + migration `20261126023309_add_github_account` (novo)
+    - `apps/api/src/app.module.ts` (modificado — registro de AuthController + providers)
+    - `apps/web/src/features/auth/apiService.ts` (modificado — navegação direta p/ backend)
+    - `apps/web/src/features/auth/Login.tsx` (modificado — captura ?token=)
+    - Teste primeiro: não se aplica (código já implementado e validado manualmente; complementar com testes e2e se necessário)
 
 ## Critérios sem tarefa
 

@@ -3,6 +3,20 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { ProjectsSelect } from './ProjectsSelect';
 import { apiService } from '../auth/apiService';
 
+// Mock de localStorage para ambiente jsdom (não disponível por padrão nesta versão)
+const localStorageStore: Record<string, string> = {};
+Object.defineProperty(window, 'localStorage', {
+  value: {
+    getItem: (key: string) => localStorageStore[key] ?? null,
+    setItem: (key: string, value: string) => { localStorageStore[key] = value; },
+    clear: () => { Object.keys(localStorageStore).forEach((k) => delete localStorageStore[k]); },
+    removeItem: (key: string) => { delete localStorageStore[key]; },
+    length: 0,
+    key: () => null,
+  },
+  writable: true,
+});
+
 const PROJECTS = [
   { id: 'proj-1', name: 'Projeto Alpha', repositoryName: 'alpha-repo', demandCount: 3 },
   { id: 'proj-2', name: 'Projeto Beta', repositoryName: 'beta-repo', demandCount: 1 },
@@ -11,7 +25,7 @@ const PROJECTS = [
 describe('ProjectsSelect — tela de seletor de Projeto (CA4)', () => {
   beforeEach(() => {
     vi.spyOn(globalThis, 'fetch').mockResolvedValue(
-      new Response(JSON.stringify(PROJECTS), { status: 200, headers: { 'Content-Type': 'application/json' } }),
+      new Response(JSON.stringify({ data: PROJECTS }), { status: 200, headers: { 'Content-Type': 'application/json' } }),
     );
     localStorage.setItem('token', 'token-teste');
   });
@@ -23,7 +37,7 @@ describe('ProjectsSelect — tela de seletor de Projeto (CA4)', () => {
 
   it('chama apiService.request com "/projects" ao montar', async () => {
     const requestSpy = vi.spyOn(apiService, 'request').mockResolvedValue(
-      new Response(JSON.stringify(PROJECTS), { status: 200 }),
+      new Response(JSON.stringify({ data: PROJECTS }), { status: 200 }),
     );
 
     render(<ProjectsSelect />);

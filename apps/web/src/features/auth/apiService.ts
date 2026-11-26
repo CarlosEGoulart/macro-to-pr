@@ -35,15 +35,14 @@ export const apiService = {
 
   /**
    * Inicia o fluxo de autorização OAuth com o GitHub.
-   * Chama o backend para obter a URL de autorização do GitHub e inicia o redirecionamento.
+   *
+   * Navega o navegador de nível superior para o backend, que redireciona para
+   * a página de autorização do GitHub. Usamos navigation direta (`window.location`)
+   * em vez de `fetch` porque o GitHub não responde com o cabeçalho
+   * `Access-Control-Allow-Origin`, o que bloquearia uma requisição cross-origin.
    */
   async authGitHub(): Promise<void> {
-    try {
-      await fetch(`${API_BASE_URL}/auth/github`, { method: 'GET' });
-    } catch (error) {
-      console.error('Erro ao iniciar autorização GitHub:', error);
-      throw error;
-    }
+    window.location.href = `${API_BASE_URL}/auth/github`;
   },
 
   /**

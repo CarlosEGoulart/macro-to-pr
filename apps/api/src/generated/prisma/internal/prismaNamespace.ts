@@ -16,10 +16,10 @@
  */
 
 import * as runtime from "@prisma/client/runtime/client"
-import type * as Prisma from "../models.js"
-import { type PrismaClient } from "./class.js"
+import type * as Prisma from "../models.ts"
+import { type PrismaClient } from "./class.ts"
 
-export type * from '../models.js'
+export type * from '../models.ts'
 
 export type DMMF = typeof runtime.DMMF
 
@@ -399,6 +399,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   Demand: 'Demand',
   Developer: 'Developer',
+  GitHubAccount: 'GitHubAccount',
   Repository: 'Repository',
   Project: 'Project'
 } as const
@@ -416,7 +417,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "demand" | "developer" | "repository" | "project"
+    modelProps: "demand" | "developer" | "gitHubAccount" | "repository" | "project"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -565,6 +566,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.DeveloperCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.DeveloperCountAggregateOutputType> | number
+        }
+      }
+    }
+    GitHubAccount: {
+      payload: Prisma.$GitHubAccountPayload<ExtArgs>
+      fields: Prisma.GitHubAccountFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.GitHubAccountFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GitHubAccountPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.GitHubAccountFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GitHubAccountPayload>
+        }
+        findFirst: {
+          args: Prisma.GitHubAccountFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GitHubAccountPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.GitHubAccountFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GitHubAccountPayload>
+        }
+        findMany: {
+          args: Prisma.GitHubAccountFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GitHubAccountPayload>[]
+        }
+        create: {
+          args: Prisma.GitHubAccountCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GitHubAccountPayload>
+        }
+        createMany: {
+          args: Prisma.GitHubAccountCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.GitHubAccountCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GitHubAccountPayload>[]
+        }
+        delete: {
+          args: Prisma.GitHubAccountDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GitHubAccountPayload>
+        }
+        update: {
+          args: Prisma.GitHubAccountUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GitHubAccountPayload>
+        }
+        deleteMany: {
+          args: Prisma.GitHubAccountDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.GitHubAccountUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.GitHubAccountUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GitHubAccountPayload>[]
+        }
+        upsert: {
+          args: Prisma.GitHubAccountUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GitHubAccountPayload>
+        }
+        aggregate: {
+          args: Prisma.GitHubAccountAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateGitHubAccount>
+        }
+        groupBy: {
+          args: Prisma.GitHubAccountGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GitHubAccountGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.GitHubAccountCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GitHubAccountCountAggregateOutputType> | number
         }
       }
     }
@@ -779,6 +854,18 @@ export const DeveloperScalarFieldEnum = {
 } as const
 
 export type DeveloperScalarFieldEnum = (typeof DeveloperScalarFieldEnum)[keyof typeof DeveloperScalarFieldEnum]
+
+
+export const GitHubAccountScalarFieldEnum = {
+  id: 'id',
+  githubUserId: 'githubUserId',
+  githubLogin: 'githubLogin',
+  accessToken: 'accessToken',
+  scopes: 'scopes',
+  createdAt: 'createdAt'
+} as const
+
+export type GitHubAccountScalarFieldEnum = (typeof GitHubAccountScalarFieldEnum)[keyof typeof GitHubAccountScalarFieldEnum]
 
 
 export const RepositoryScalarFieldEnum = {
@@ -1066,6 +1153,7 @@ export type PrismaClientOptions = PrismaClientOptionsWithAccelerateUrl | PrismaC
 export type GlobalOmitConfig = {
   demand?: Prisma.DemandOmit
   developer?: Prisma.DeveloperOmit
+  gitHubAccount?: Prisma.GitHubAccountOmit
   repository?: Prisma.RepositoryOmit
   project?: Prisma.ProjectOmit
 }

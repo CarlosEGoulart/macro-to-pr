@@ -9,8 +9,8 @@
  * 🟢 You can import this file directly.
  */
 import type * as runtime from "@prisma/client/runtime/client"
-import type * as $Enums from "../enums.js"
-import type * as Prisma from "../internal/prismaNamespace.js"
+import type * as $Enums from "../enums.ts"
+import type * as Prisma from "../internal/prismaNamespace.ts"
 
 /**
  * Model Developer
@@ -196,7 +196,7 @@ export type DeveloperWhereInput = {
   name?: Prisma.StringFilter<"Developer"> | string
   avatarUrl?: Prisma.StringNullableFilter<"Developer"> | string | null
   role?: Prisma.EnumRoleFilter<"Developer"> | $Enums.Role
-  githubAccountId?: Prisma.StringNullableFilter<"Developer"> | string | null
+  githubAccountId?: Prisma.UuidNullableFilter<"Developer"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Developer"> | Date | string
   projects?: Prisma.ProjectListRelationFilter
 }
@@ -248,7 +248,7 @@ export type DeveloperScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"Developer"> | string
   avatarUrl?: Prisma.StringNullableWithAggregatesFilter<"Developer"> | string | null
   role?: Prisma.EnumRoleWithAggregatesFilter<"Developer"> | $Enums.Role
-  githubAccountId?: Prisma.StringNullableWithAggregatesFilter<"Developer"> | string | null
+  githubAccountId?: Prisma.UuidNullableWithAggregatesFilter<"Developer"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Developer"> | Date | string
 }
 

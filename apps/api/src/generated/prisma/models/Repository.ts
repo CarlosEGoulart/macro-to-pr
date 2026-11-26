@@ -9,8 +9,8 @@
  * 🟢 You can import this file directly.
  */
 import type * as runtime from "@prisma/client/runtime/client"
-import type * as $Enums from "../enums.js"
-import type * as Prisma from "../internal/prismaNamespace.js"
+import type * as $Enums from "../enums.ts"
+import type * as Prisma from "../internal/prismaNamespace.ts"
 
 /**
  * Model Repository
@@ -199,13 +199,14 @@ export type RepositoryWhereInput = {
   OR?: Prisma.RepositoryWhereInput[]
   NOT?: Prisma.RepositoryWhereInput | Prisma.RepositoryWhereInput[]
   id?: Prisma.UuidFilter<"Repository"> | string
-  githubAccountId?: Prisma.StringFilter<"Repository"> | string
+  githubAccountId?: Prisma.UuidFilter<"Repository"> | string
   name?: Prisma.StringFilter<"Repository"> | string
   fullName?: Prisma.StringFilter<"Repository"> | string
   url?: Prisma.StringFilter<"Repository"> | string
   owner?: Prisma.StringFilter<"Repository"> | string
   private?: Prisma.BoolFilter<"Repository"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Repository"> | Date | string
+  githubAccount?: Prisma.XOR<Prisma.GitHubAccountScalarRelationFilter, Prisma.GitHubAccountWhereInput>
   projects?: Prisma.ProjectListRelationFilter
 }
 
@@ -218,6 +219,7 @@ export type RepositoryOrderByWithRelationInput = {
   owner?: Prisma.SortOrder
   private?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  githubAccount?: Prisma.GitHubAccountOrderByWithRelationInput
   projects?: Prisma.ProjectOrderByRelationAggregateInput
 }
 
@@ -226,13 +228,14 @@ export type RepositoryWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.RepositoryWhereInput | Prisma.RepositoryWhereInput[]
   OR?: Prisma.RepositoryWhereInput[]
   NOT?: Prisma.RepositoryWhereInput | Prisma.RepositoryWhereInput[]
-  githubAccountId?: Prisma.StringFilter<"Repository"> | string
+  githubAccountId?: Prisma.UuidFilter<"Repository"> | string
   name?: Prisma.StringFilter<"Repository"> | string
   fullName?: Prisma.StringFilter<"Repository"> | string
   url?: Prisma.StringFilter<"Repository"> | string
   owner?: Prisma.StringFilter<"Repository"> | string
   private?: Prisma.BoolFilter<"Repository"> | boolean
   createdAt?: Prisma.DateTimeFilter<"Repository"> | Date | string
+  githubAccount?: Prisma.XOR<Prisma.GitHubAccountScalarRelationFilter, Prisma.GitHubAccountWhereInput>
   projects?: Prisma.ProjectListRelationFilter
 }, "id">
 
@@ -255,7 +258,7 @@ export type RepositoryScalarWhereWithAggregatesInput = {
   OR?: Prisma.RepositoryScalarWhereWithAggregatesInput[]
   NOT?: Prisma.RepositoryScalarWhereWithAggregatesInput | Prisma.RepositoryScalarWhereWithAggregatesInput[]
   id?: Prisma.UuidWithAggregatesFilter<"Repository"> | string
-  githubAccountId?: Prisma.StringWithAggregatesFilter<"Repository"> | string
+  githubAccountId?: Prisma.UuidWithAggregatesFilter<"Repository"> | string
   name?: Prisma.StringWithAggregatesFilter<"Repository"> | string
   fullName?: Prisma.StringWithAggregatesFilter<"Repository"> | string
   url?: Prisma.StringWithAggregatesFilter<"Repository"> | string
@@ -266,13 +269,13 @@ export type RepositoryScalarWhereWithAggregatesInput = {
 
 export type RepositoryCreateInput = {
   id?: string
-  githubAccountId: string
   name: string
   fullName: string
   url: string
   owner: string
   private?: boolean
   createdAt?: Date | string
+  githubAccount: Prisma.GitHubAccountCreateNestedOneWithoutRepositoriesInput
   projects?: Prisma.ProjectCreateNestedManyWithoutRepositoryInput
 }
 
@@ -290,13 +293,13 @@ export type RepositoryUncheckedCreateInput = {
 
 export type RepositoryUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  githubAccountId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
   owner?: Prisma.StringFieldUpdateOperationsInput | string
   private?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  githubAccount?: Prisma.GitHubAccountUpdateOneRequiredWithoutRepositoriesNestedInput
   projects?: Prisma.ProjectUpdateManyWithoutRepositoryNestedInput
 }
 
@@ -325,7 +328,6 @@ export type RepositoryCreateManyInput = {
 
 export type RepositoryUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  githubAccountId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
@@ -343,6 +345,16 @@ export type RepositoryUncheckedUpdateManyInput = {
   owner?: Prisma.StringFieldUpdateOperationsInput | string
   private?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type RepositoryListRelationFilter = {
+  every?: Prisma.RepositoryWhereInput
+  some?: Prisma.RepositoryWhereInput
+  none?: Prisma.RepositoryWhereInput
+}
+
+export type RepositoryOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type RepositoryCountOrderByAggregateInput = {
@@ -383,6 +395,48 @@ export type RepositoryScalarRelationFilter = {
   isNot?: Prisma.RepositoryWhereInput
 }
 
+export type RepositoryCreateNestedManyWithoutGithubAccountInput = {
+  create?: Prisma.XOR<Prisma.RepositoryCreateWithoutGithubAccountInput, Prisma.RepositoryUncheckedCreateWithoutGithubAccountInput> | Prisma.RepositoryCreateWithoutGithubAccountInput[] | Prisma.RepositoryUncheckedCreateWithoutGithubAccountInput[]
+  connectOrCreate?: Prisma.RepositoryCreateOrConnectWithoutGithubAccountInput | Prisma.RepositoryCreateOrConnectWithoutGithubAccountInput[]
+  createMany?: Prisma.RepositoryCreateManyGithubAccountInputEnvelope
+  connect?: Prisma.RepositoryWhereUniqueInput | Prisma.RepositoryWhereUniqueInput[]
+}
+
+export type RepositoryUncheckedCreateNestedManyWithoutGithubAccountInput = {
+  create?: Prisma.XOR<Prisma.RepositoryCreateWithoutGithubAccountInput, Prisma.RepositoryUncheckedCreateWithoutGithubAccountInput> | Prisma.RepositoryCreateWithoutGithubAccountInput[] | Prisma.RepositoryUncheckedCreateWithoutGithubAccountInput[]
+  connectOrCreate?: Prisma.RepositoryCreateOrConnectWithoutGithubAccountInput | Prisma.RepositoryCreateOrConnectWithoutGithubAccountInput[]
+  createMany?: Prisma.RepositoryCreateManyGithubAccountInputEnvelope
+  connect?: Prisma.RepositoryWhereUniqueInput | Prisma.RepositoryWhereUniqueInput[]
+}
+
+export type RepositoryUpdateManyWithoutGithubAccountNestedInput = {
+  create?: Prisma.XOR<Prisma.RepositoryCreateWithoutGithubAccountInput, Prisma.RepositoryUncheckedCreateWithoutGithubAccountInput> | Prisma.RepositoryCreateWithoutGithubAccountInput[] | Prisma.RepositoryUncheckedCreateWithoutGithubAccountInput[]
+  connectOrCreate?: Prisma.RepositoryCreateOrConnectWithoutGithubAccountInput | Prisma.RepositoryCreateOrConnectWithoutGithubAccountInput[]
+  upsert?: Prisma.RepositoryUpsertWithWhereUniqueWithoutGithubAccountInput | Prisma.RepositoryUpsertWithWhereUniqueWithoutGithubAccountInput[]
+  createMany?: Prisma.RepositoryCreateManyGithubAccountInputEnvelope
+  set?: Prisma.RepositoryWhereUniqueInput | Prisma.RepositoryWhereUniqueInput[]
+  disconnect?: Prisma.RepositoryWhereUniqueInput | Prisma.RepositoryWhereUniqueInput[]
+  delete?: Prisma.RepositoryWhereUniqueInput | Prisma.RepositoryWhereUniqueInput[]
+  connect?: Prisma.RepositoryWhereUniqueInput | Prisma.RepositoryWhereUniqueInput[]
+  update?: Prisma.RepositoryUpdateWithWhereUniqueWithoutGithubAccountInput | Prisma.RepositoryUpdateWithWhereUniqueWithoutGithubAccountInput[]
+  updateMany?: Prisma.RepositoryUpdateManyWithWhereWithoutGithubAccountInput | Prisma.RepositoryUpdateManyWithWhereWithoutGithubAccountInput[]
+  deleteMany?: Prisma.RepositoryScalarWhereInput | Prisma.RepositoryScalarWhereInput[]
+}
+
+export type RepositoryUncheckedUpdateManyWithoutGithubAccountNestedInput = {
+  create?: Prisma.XOR<Prisma.RepositoryCreateWithoutGithubAccountInput, Prisma.RepositoryUncheckedCreateWithoutGithubAccountInput> | Prisma.RepositoryCreateWithoutGithubAccountInput[] | Prisma.RepositoryUncheckedCreateWithoutGithubAccountInput[]
+  connectOrCreate?: Prisma.RepositoryCreateOrConnectWithoutGithubAccountInput | Prisma.RepositoryCreateOrConnectWithoutGithubAccountInput[]
+  upsert?: Prisma.RepositoryUpsertWithWhereUniqueWithoutGithubAccountInput | Prisma.RepositoryUpsertWithWhereUniqueWithoutGithubAccountInput[]
+  createMany?: Prisma.RepositoryCreateManyGithubAccountInputEnvelope
+  set?: Prisma.RepositoryWhereUniqueInput | Prisma.RepositoryWhereUniqueInput[]
+  disconnect?: Prisma.RepositoryWhereUniqueInput | Prisma.RepositoryWhereUniqueInput[]
+  delete?: Prisma.RepositoryWhereUniqueInput | Prisma.RepositoryWhereUniqueInput[]
+  connect?: Prisma.RepositoryWhereUniqueInput | Prisma.RepositoryWhereUniqueInput[]
+  update?: Prisma.RepositoryUpdateWithWhereUniqueWithoutGithubAccountInput | Prisma.RepositoryUpdateWithWhereUniqueWithoutGithubAccountInput[]
+  updateMany?: Prisma.RepositoryUpdateManyWithWhereWithoutGithubAccountInput | Prisma.RepositoryUpdateManyWithWhereWithoutGithubAccountInput[]
+  deleteMany?: Prisma.RepositoryScalarWhereInput | Prisma.RepositoryScalarWhereInput[]
+}
+
 export type BoolFieldUpdateOperationsInput = {
   set?: boolean
 }
@@ -401,15 +455,77 @@ export type RepositoryUpdateOneRequiredWithoutProjectsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.RepositoryUpdateToOneWithWhereWithoutProjectsInput, Prisma.RepositoryUpdateWithoutProjectsInput>, Prisma.RepositoryUncheckedUpdateWithoutProjectsInput>
 }
 
-export type RepositoryCreateWithoutProjectsInput = {
+export type RepositoryCreateWithoutGithubAccountInput = {
   id?: string
-  githubAccountId: string
   name: string
   fullName: string
   url: string
   owner: string
   private?: boolean
   createdAt?: Date | string
+  projects?: Prisma.ProjectCreateNestedManyWithoutRepositoryInput
+}
+
+export type RepositoryUncheckedCreateWithoutGithubAccountInput = {
+  id?: string
+  name: string
+  fullName: string
+  url: string
+  owner: string
+  private?: boolean
+  createdAt?: Date | string
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutRepositoryInput
+}
+
+export type RepositoryCreateOrConnectWithoutGithubAccountInput = {
+  where: Prisma.RepositoryWhereUniqueInput
+  create: Prisma.XOR<Prisma.RepositoryCreateWithoutGithubAccountInput, Prisma.RepositoryUncheckedCreateWithoutGithubAccountInput>
+}
+
+export type RepositoryCreateManyGithubAccountInputEnvelope = {
+  data: Prisma.RepositoryCreateManyGithubAccountInput | Prisma.RepositoryCreateManyGithubAccountInput[]
+  skipDuplicates?: boolean
+}
+
+export type RepositoryUpsertWithWhereUniqueWithoutGithubAccountInput = {
+  where: Prisma.RepositoryWhereUniqueInput
+  update: Prisma.XOR<Prisma.RepositoryUpdateWithoutGithubAccountInput, Prisma.RepositoryUncheckedUpdateWithoutGithubAccountInput>
+  create: Prisma.XOR<Prisma.RepositoryCreateWithoutGithubAccountInput, Prisma.RepositoryUncheckedCreateWithoutGithubAccountInput>
+}
+
+export type RepositoryUpdateWithWhereUniqueWithoutGithubAccountInput = {
+  where: Prisma.RepositoryWhereUniqueInput
+  data: Prisma.XOR<Prisma.RepositoryUpdateWithoutGithubAccountInput, Prisma.RepositoryUncheckedUpdateWithoutGithubAccountInput>
+}
+
+export type RepositoryUpdateManyWithWhereWithoutGithubAccountInput = {
+  where: Prisma.RepositoryScalarWhereInput
+  data: Prisma.XOR<Prisma.RepositoryUpdateManyMutationInput, Prisma.RepositoryUncheckedUpdateManyWithoutGithubAccountInput>
+}
+
+export type RepositoryScalarWhereInput = {
+  AND?: Prisma.RepositoryScalarWhereInput | Prisma.RepositoryScalarWhereInput[]
+  OR?: Prisma.RepositoryScalarWhereInput[]
+  NOT?: Prisma.RepositoryScalarWhereInput | Prisma.RepositoryScalarWhereInput[]
+  id?: Prisma.UuidFilter<"Repository"> | string
+  githubAccountId?: Prisma.UuidFilter<"Repository"> | string
+  name?: Prisma.StringFilter<"Repository"> | string
+  fullName?: Prisma.StringFilter<"Repository"> | string
+  url?: Prisma.StringFilter<"Repository"> | string
+  owner?: Prisma.StringFilter<"Repository"> | string
+  private?: Prisma.BoolFilter<"Repository"> | boolean
+  createdAt?: Prisma.DateTimeFilter<"Repository"> | Date | string
+}
+
+export type RepositoryCreateWithoutProjectsInput = {
+  id?: string
+  name: string
+  fullName: string
+  url: string
+  owner: string
+  private?: boolean
+  createdAt?: Date | string
+  githubAccount: Prisma.GitHubAccountCreateNestedOneWithoutRepositoriesInput
 }
 
 export type RepositoryUncheckedCreateWithoutProjectsInput = {
@@ -441,6 +557,17 @@ export type RepositoryUpdateToOneWithWhereWithoutProjectsInput = {
 
 export type RepositoryUpdateWithoutProjectsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  owner?: Prisma.StringFieldUpdateOperationsInput | string
+  private?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  githubAccount?: Prisma.GitHubAccountUpdateOneRequiredWithoutRepositoriesNestedInput
+}
+
+export type RepositoryUncheckedUpdateWithoutProjectsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   githubAccountId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.StringFieldUpdateOperationsInput | string
@@ -450,9 +577,40 @@ export type RepositoryUpdateWithoutProjectsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type RepositoryUncheckedUpdateWithoutProjectsInput = {
+export type RepositoryCreateManyGithubAccountInput = {
+  id?: string
+  name: string
+  fullName: string
+  url: string
+  owner: string
+  private?: boolean
+  createdAt?: Date | string
+}
+
+export type RepositoryUpdateWithoutGithubAccountInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  githubAccountId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  owner?: Prisma.StringFieldUpdateOperationsInput | string
+  private?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  projects?: Prisma.ProjectUpdateManyWithoutRepositoryNestedInput
+}
+
+export type RepositoryUncheckedUpdateWithoutGithubAccountInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  owner?: Prisma.StringFieldUpdateOperationsInput | string
+  private?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutRepositoryNestedInput
+}
+
+export type RepositoryUncheckedUpdateManyWithoutGithubAccountInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
@@ -501,6 +659,7 @@ export type RepositorySelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   owner?: boolean
   private?: boolean
   createdAt?: boolean
+  githubAccount?: boolean | Prisma.GitHubAccountDefaultArgs<ExtArgs>
   projects?: boolean | Prisma.Repository$projectsArgs<ExtArgs>
   _count?: boolean | Prisma.RepositoryCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["repository"]>
@@ -514,6 +673,7 @@ export type RepositorySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   owner?: boolean
   private?: boolean
   createdAt?: boolean
+  githubAccount?: boolean | Prisma.GitHubAccountDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["repository"]>
 
 export type RepositorySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -525,6 +685,7 @@ export type RepositorySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   owner?: boolean
   private?: boolean
   createdAt?: boolean
+  githubAccount?: boolean | Prisma.GitHubAccountDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["repository"]>
 
 export type RepositorySelectScalar = {
@@ -540,15 +701,21 @@ export type RepositorySelectScalar = {
 
 export type RepositoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "githubAccountId" | "name" | "fullName" | "url" | "owner" | "private" | "createdAt", ExtArgs["result"]["repository"]>
 export type RepositoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  githubAccount?: boolean | Prisma.GitHubAccountDefaultArgs<ExtArgs>
   projects?: boolean | Prisma.Repository$projectsArgs<ExtArgs>
   _count?: boolean | Prisma.RepositoryCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type RepositoryIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type RepositoryIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type RepositoryIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  githubAccount?: boolean | Prisma.GitHubAccountDefaultArgs<ExtArgs>
+}
+export type RepositoryIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  githubAccount?: boolean | Prisma.GitHubAccountDefaultArgs<ExtArgs>
+}
 
 export type $RepositoryPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Repository"
   objects: {
+    githubAccount: Prisma.$GitHubAccountPayload<ExtArgs>
     projects: Prisma.$ProjectPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -954,6 +1121,7 @@ readonly fields: RepositoryFieldRefs;
  */
 export interface Prisma__RepositoryClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  githubAccount<T extends Prisma.GitHubAccountDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GitHubAccountDefaultArgs<ExtArgs>>): Prisma.Prisma__GitHubAccountClient<runtime.Types.Result.GetResult<Prisma.$GitHubAccountPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   projects<T extends Prisma.Repository$projectsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Repository$projectsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1246,6 +1414,10 @@ export type RepositoryCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Exte
    */
   data: Prisma.RepositoryCreateManyInput | Prisma.RepositoryCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RepositoryIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1316,6 +1488,10 @@ export type RepositoryUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Exte
    * Limit how many Repositories to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RepositoryIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

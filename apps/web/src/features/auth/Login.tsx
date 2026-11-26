@@ -425,8 +425,18 @@ function NextSteps() {
 export function Login() {
   const [authorizing, setAuthorizing] = useState(false);
 
-  // Se já há token (após callback OAuth bem-sucedido), vai direto para Projetos.
+  // Se há token na URL (callback do OAuth via backend), armazena e entra.
+  // Se já há token em localStorage, vai direto para Projetos.
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const tokenFromUrl = params.get('token');
+
+    if (tokenFromUrl) {
+      localStorage.setItem('token', tokenFromUrl);
+      window.location.href = '/projects';
+      return;
+    }
+
     if (localStorage.getItem('token')) {
       window.location.href = '/projects';
     }
@@ -434,9 +444,7 @@ export function Login() {
 
   const handleAuthorizeClick = () => {
     setAuthorizing(true);
-    apiService.authGitHub().then(() => {
-      window.location.href = '/auth/github';
-    }).catch((error) => {
+    apiService.authGitHub().catch((error) => {
       console.error('Erro ao iniciar autorização GitHub:', error);
     }).finally(() => {
       setAuthorizing(false);

@@ -17,6 +17,10 @@ import { TransformInterceptor } from './transform/transform.interceptor.js';
 import { PrismaModule } from './prisma/prisma.module.js';
 import { JwtStrategy } from './modules/auth/jwt.strategy.js';
 import { JwtAuthGuard } from './modules/auth/jwt-auth.guard.js';
+import { AuthController } from './modules/auth/auth.controller.js';
+import { AuthService } from './modules/auth/auth.service.js';
+import { GitHubAccountRepository } from './modules/auth/github-account.repository.js';
+import { DeveloperRepository } from './modules/auth/developer.repository.js';
 import { AuthGuard } from './common/guards/auth.guard.js';
 import { RolesGuard } from './common/guards/roles.guard.js';
 import { ProjectsModule } from './modules/projects/projects.module.js';
@@ -37,11 +41,14 @@ import { NotionModule } from './modules/notion/notion.module.js';
     DemandsModule,
     NotionModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, AuthController],
   providers: [
     AppService,
     JwtStrategy,
     JwtAuthGuard,
+    AuthService,
+    GitHubAccountRepository,
+    DeveloperRepository,
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
