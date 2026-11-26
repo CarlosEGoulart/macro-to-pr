@@ -16,7 +16,7 @@ export const apiService = {
    */
   async request(input: RequestInfo | URL, init: ApiInit = {}): Promise<Response> {
     const token = localStorage.getItem('token');
-    const headers = new Headers(init.headers);
+    const headers = new Headers(init.headers ?? {});
     if (token) {
       headers.set('Authorization', `Bearer ${token}`);
     }
@@ -78,5 +78,49 @@ export const apiService = {
     }
     const { data } = await response.json();
     return data;
+  },
+
+  /**
+   * Cria uma Demanda (POST /demandas).
+   * Envia o token de localStorage no cabeçalho Authorization: Bearer via request().
+   * CA1: com dados válidos retorna o objeto completo (incluindo o `id` gerado).
+   * CA2: com dados obrigatórios ausentes, o backend responde 400 e o front exibe o campo.
+   * Lança erro quando response.ok for false (400, 403, 500, etc.).
+   */
+  async createDemand(data: {
+    title: string;
+    description: string;
+    type: string;
+    priority: string;
+    projectId: string;
+  }): Promise<{
+    id: string;
+    title: string;
+    description: string;
+    type: string;
+    priority: string;
+    projectId: string;
+  }> {
+    const response = await this.request('/demandas', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      throw new Error(`Falha ao criar Demanda: ${response.status}`);
+    }
+    return response.json();
+  },
+
+  /**
+   * Cria um Projeto (POST /projects).
+   * Envia o token de localStorage no cabeçalho Authorization: Bearer via request().
+   */
+  async createProject(data: { name: string; repositoryId: string }): Promise<Response> {
+    return this.request('/projects', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
   },
 };

@@ -16,6 +16,10 @@
  */
 import { type CSSProperties, useEffect, useState } from 'react';
 import { apiService } from '../auth/apiService';
+import { Header } from '../layout/Header';
+import { Sidebar, defaultSidebarSections } from '../layout/Sidebar';
+import { CreateDemandModal } from '../demands/CreateDemandModal';
+import { CreateProjectModal } from './CreateProjectModal';
 
 // --- Design tokens (modo claro) ---------------------------------------------
 const tokens = {
@@ -77,141 +81,6 @@ function BoltIcon() {
     </svg>
   );
 }
-
-function HeaderUser() {
-  const [developer, setDeveloper] = useState<{
-    name: string;
-    avatarUrl: string | null;
-  } | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    async function loadDeveloper() {
-      try {
-        const profile = await apiService.developerProfile();
-        if (!cancelled) {
-          setDeveloper(profile);
-        }
-      } catch {
-        if (!cancelled) {
-          setDeveloper(null);
-        }
-      } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
-      }
-    }
-
-    loadDeveloper();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  if (loading) {
-    return (
-      <div style={headerUserStyle}>
-        <div style={headerUserBadgeStyle}>Desenvolvedor</div>
-        <div style={avatarStyle}>D</div>
-      </div>
-    );
-  }
-
-  const displayName = developer?.name ?? 'Desenvolvedor';
-  const initial = displayName.charAt(0).toUpperCase();
-  const avatarUrl = developer?.avatarUrl ?? null;
-
-  return (
-    <div style={headerUserStyle}>
-      <div style={headerUserBadgeStyle}>{displayName}</div>
-      {avatarUrl ? (
-        <img
-          src={avatarUrl}
-          alt={displayName}
-          style={{
-            ...avatarStyle,
-            backgroundColor: 'transparent',
-            border: `2px solid ${tokens.primaria}`,
-            color: 'transparent',
-            fontSize: 0,
-          } as CSSProperties}
-        />
-      ) : (
-        <div style={avatarStyle}>{initial}</div>
-      )}
-    </div>
-  );
-}
-
-const headerUserStyle: CSSProperties = {
-  display: 'flex',
-  alignItems: 'center',
-  gap: tokens.sm,
-};
-
-const headerUserBadgeStyle: CSSProperties = {
-  display: 'flex',
-  alignItems: 'center',
-  height: 28,
-  fontFamily: tokens.font,
-  fontWeight: '500',
-  fontSize: 13,
-  color: tokens.texto,
-  lineHeight: 1,
-  padding: '0 10px',
-  backgroundColor: tokens.superficieCard,
-  border: '1px solid #D1D5DB',
-  borderRadius: 20,
-};
-
-const avatarStyle: CSSProperties = {
-  width: 28,
-  height: 28,
-  backgroundColor: tokens.superficieCard,
-  border: `2px solid ${tokens.primaria}`,
-  borderRadius: '50%',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  color: tokens.primaria,
-  fontFamily: tokens.font,
-  fontWeight: '700',
-  fontSize: 13,
-  lineHeight: 1,
-  flexShrink: 0,
-};
-
-function CreditsBadge() {
-  return (
-    <div style={creditsBadgeStyle}>
-      <BoltIcon />
-      <span style={creditsTextStyle}>24 Créditos</span>
-    </div>
-  );
-}
-
-const creditsBadgeStyle: CSSProperties = {
-  display: 'flex',
-  alignItems: 'center',
-  gap: tokens.xs,
-  height: 28,
-  fontFamily: tokens.font,
-  fontWeight: '500',
-  fontSize: 13,
-  color: tokens.texto,
-  lineHeight: 1,
-  padding: '0 10px',
-  backgroundColor: tokens.superficieCard,
-  border: '1px solid #D1D5DB',
-  borderRadius: 20,
-};
-
-const creditsTextStyle: CSSProperties = {
-  lineHeight: 1,
-};
 
 // --- Componentes internos ---------------------------------------------------
 function FolderIcon() {
@@ -322,16 +191,17 @@ function ProjectCard({
   const cardStyle: CSSProperties = {
     backgroundColor: selected ? tokens.primariaRgba004 : tokens.superficieCard,
     border: selected ? `2px solid ${tokens.primaria}` : `1px solid ${tokens.border}`,
-    borderRadius: 10,
-    padding: '14px 16px',
+    borderRadius: 12,
+    padding: selected ? '26px' : '25px',
     display: 'flex',
     flexDirection: 'column',
-    gap: 10,
+    gap: tokens.lg,
     width: '100%',
     boxSizing: 'border-box',
     cursor: 'pointer',
     transition: 'all 0.2s ease',
-  };
+    boxShadow: selected ? '0px 1px 2px 0px rgba(0,0,0,0.05)' : undefined,
+  } as CSSProperties;
 
   const badgeStyle: CSSProperties = {
     backgroundColor: tokens.primariaRgba004,
@@ -567,6 +437,8 @@ export function ProjectsSelect({ onProjectSelect }: ProjectsSelectProps = {}) {
   const [demands, setDemands] = useState<Demand[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [openDemandModal, setOpenDemandModal] = useState(false);
+  const [openProjectModal, setOpenProjectModal] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -606,6 +478,19 @@ export function ProjectsSelect({ onProjectSelect }: ProjectsSelectProps = {}) {
     onProjectSelect?.(project);
   };
 
+  const handleProjectCreated = (project: { id: string; name: string; repositoryId: string }) => {
+    setProjects((prev) => [
+      {
+        id: project.id,
+        name: project.name,
+        demandCount: 0,
+      } as Project,
+      ...prev,
+    ]);
+    setSelectedId(project.id);
+    setDemands([]);
+  };
+
   if (loading) {
     return (
       <section
@@ -638,43 +523,6 @@ export function ProjectsSelect({ onProjectSelect }: ProjectsSelectProps = {}) {
 
   const selectedProject = projects.find((p) => p.id === selectedId);
   const columnGap = tokens.xl;
-
-  // 1. header (node-id=44-336) — cabeçalho da aplicação
-  const headerStyle: CSSProperties = {
-    backgroundColor: tokens.superficieSidebar,
-    borderBottom: `1px solid ${tokens.border}`,
-    height: 64,
-    padding: `20px ${tokens.xl}px`,
-    display: 'flex',
-    alignItems: 'center',
-    gap: tokens.md,
-    boxSizing: 'border-box',
-  } as CSSProperties;
-
-  const headerLogoStyle: CSSProperties = {
-    width: 30,
-    height: 30,
-    backgroundColor: tokens.primaria,
-    borderRadius: 6,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    color: '#FFFFFF',
-    fontFamily: tokens.font,
-    fontWeight: '700',
-    fontSize: 16,
-    lineHeight: 1,
-    flexShrink: 0,
-  } as CSSProperties;
-
-  const headerWordmarkStyle: CSSProperties = {
-    fontFamily: tokens.font,
-    fontWeight: '600',
-    fontSize: 18,
-    color: tokens.texto,
-    letterSpacing: '-0.45px',
-    lineHeight: '27px',
-  } as CSSProperties;
 
   // 4. cabeçalho (node-id=2-8379) — cabeçalho da página
   const pageHeaderStyle: CSSProperties = {
@@ -813,61 +661,6 @@ export function ProjectsSelect({ onProjectSelect }: ProjectsSelectProps = {}) {
     marginTop: -4,
   } as CSSProperties;
 
-  // Sidebar styles (node-id=27-263)
-  const sidebarStyle: CSSProperties = {
-    width: 260,
-    flexShrink: 0,
-    backgroundColor: tokens.superficieSidebar,
-    borderRight: `1px solid ${tokens.border}`,
-    display: 'flex',
-    flexDirection: 'column',
-    padding: tokens.lg,
-    boxSizing: 'border-box',
-  } as CSSProperties;
-
-  const sidebarSectionStyle: CSSProperties = {
-    marginBottom: tokens.lg,
-  } as CSSProperties;
-
-  const sidebarSectionTitleStyle: CSSProperties = {
-    fontFamily: tokens.font,
-    fontWeight: '600',
-    fontSize: 11,
-    color: tokens.textoSuave,
-    textTransform: 'uppercase',
-    letterSpacing: '0.05em',
-    margin: '0 0 8px 0',
-  } as CSSProperties;
-
-  const sidebarItemStyle: CSSProperties = {
-    display: 'flex',
-    alignItems: 'center',
-    gap: tokens.sm,
-    padding: '8px 12px',
-    borderRadius: 6,
-    color: tokens.textoSuave,
-    fontFamily: tokens.font,
-    fontSize: 14,
-    fontWeight: '400',
-    lineHeight: '1.4',
-    cursor: 'pointer',
-    textDecoration: 'none',
-    border: '1px solid transparent',
-  } as CSSProperties;
-
-  const sidebarItemActiveStyle: CSSProperties = {
-    ...sidebarItemStyle,
-    backgroundColor: tokens.primariaRgba004,
-    color: tokens.primaria,
-    border: `1px solid ${tokens.primaria}`,
-  } as CSSProperties;
-
-  const sidebarItemIconStyle: CSSProperties = {
-    width: 16,
-    height: 16,
-    flexShrink: 0,
-  } as CSSProperties;
-
   return (
     <section
       data-testid="projects-select-root"
@@ -881,54 +674,13 @@ export function ProjectsSelect({ onProjectSelect }: ProjectsSelectProps = {}) {
         boxSizing: 'border-box',
       } as CSSProperties}
     >
-      {/* 1. header — node-id=44-336 */}
-      <header data-testid="projects-select-header" style={headerStyle}>
-        <div style={headerLogoStyle}>M</div>
-        <span style={headerWordmarkStyle}>Macro2PR</span>
-        <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: tokens.md }}>
-          <CreditsBadge />
-          <HeaderUser />
-        </div>
-      </header>
+      {/* 1. header — node-id=44-336 (componente reutilizável Header) */}
+      <Header />
 
       {/* Layout principal — sidebar + main */}
       <div style={{ display: 'flex', flexDirection: 'row', flex: 1, minHeight: 0 }}>
-        {/* 2. sidebar — node-id=27-263 */}
-        <aside data-testid="projects-select-sidebar" style={sidebarStyle}>
-          <div style={sidebarSectionStyle}>
-            <p style={sidebarSectionTitleStyle}>PRINCIPAL</p>
-            <a href="#" style={sidebarItemStyle}>
-              <span style={sidebarItemIconStyle}><IconInicio /></span>
-              Início / Acesso
-            </a>
-            <a href="#" style={sidebarItemActiveStyle}>
-              <span style={sidebarItemIconStyle}><IconWorkspace /></span>
-              Workspace
-            </a>
-            <a href="#" style={sidebarItemStyle}>
-              <span style={sidebarItemIconStyle}><IconDemanda /></span>
-              Detalhe da Demanda
-            </a>
-            <a href="#" style={sidebarItemStyle}>
-              <span style={sidebarItemIconStyle}><IconRevisao /></span>
-              Revisão de Resultados
-            </a>
-          </div>
-          <div style={sidebarSectionStyle}>
-            <p style={sidebarSectionTitleStyle}>FINANCEIRO</p>
-            <a href="#" style={sidebarItemStyle}>
-              <span style={sidebarItemIconStyle}><IconCreditos /></span>
-              Créditos & Faturamento
-            </a>
-          </div>
-          <div style={sidebarSectionStyle}>
-            <p style={sidebarSectionTitleStyle}>GESTÃO</p>
-            <a href="#" style={sidebarItemStyle}>
-              <span style={sidebarItemIconStyle}><IconContas /></span>
-              Contas de Desenvolvedores
-            </a>
-          </div>
-        </aside>
+        {/* 2. sidebar — node-id=27-263 (componente reutilizável Sidebar) */}
+        <Sidebar sections={defaultSidebarSections} />
 
         {/* 3. main — node-id=2-8377 */}
         <main data-testid="projects-select-main" style={{ flex: 1, width: '100%', minHeight: 0, padding: `0 ${tokens.xl}px ${tokens.xl}px` }}>
@@ -1046,6 +798,19 @@ export function ProjectsSelect({ onProjectSelect }: ProjectsSelectProps = {}) {
           </div>
         </main>
       </div>
+
+      {openDemandModal && (
+        <CreateDemandModal
+          onClose={() => setOpenDemandModal(false)}
+        />
+      )}
+      {openProjectModal && (
+        <CreateProjectModal
+          repositories={[]}
+          onClose={() => setOpenProjectModal(false)}
+          onProjectCreated={handleProjectCreated}
+        />
+      )}
     </section>
   );
 }
