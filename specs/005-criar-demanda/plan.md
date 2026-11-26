@@ -69,7 +69,7 @@
   - Teste primeiro: teste de componente — seletor exibe lista de projetos retornada pelo mock do `GET /projects`
   - Arquivos previstos: `apps/web/src/features/projects/`, `apps/web/src/features/projects/ProjectsSelect.tsx`
 
-- [ ] **Tarefa 12 — Tela de criar Demanda via modal na `/projects` + tela `/demandas` (detalhe) + componentes reutilizáveis (header/sidebar)**
+- [x] **Tarefa 12 — Tela de criar Demanda via modal na `/projects` + tela `/demandas` (detalhe) + componentes reutilizáveis (header/sidebar)**
   - Cobre: CA1, CA2, CA4
   - Justificativa: o fluxo de usuário identificado no Figma mostra que a criação de Demanda ocorre via modal na tela `/projects` (não como tela separada), e a criação de Projeto também ocorre via modal. O header e a sidebar são componentes reutilizáveis entre `/projects` e `/demandas`. A seção de Demandas é sincronizada dentro de `/projects` (design `2-8451` / `2-8461`).
   - Teste primeiro: teste de componente — envio de formulário com campo obrigatório vazio → exibe erro de validação e não chama `POST /demandas`; envio válido → chama `POST /demandas` com dados e token (CA1, CA2). Teste de componente do modal de criação de Projeto abre com select de repositórios (CA4).
