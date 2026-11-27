@@ -33,21 +33,33 @@ describe('Demands (e2e) - POST /demands', () => {
 
     const jwtService = moduleFixture.get(JwtService);
 
+    // Conta GitHub vinculada ao desenvolvedor (exige tabela GitHubAccount após migration add_github_account)
+    await prisma.gitHubAccount.deleteMany({ where: { id: '00000000-0000-0000-0000-000000000300' } });
+    await prisma.gitHubAccount.create({
+      data: {
+        id: '00000000-0000-0000-0000-000000000300',
+        githubUserId: 'gh-e2e-demand-user',
+        githubLogin: 'e2edemand',
+        accessToken: 'ghp_e2e_demand_token',
+        scopes: 'repo user:email',
+      },
+    });
+
     // Dados de seed (idempotentes entre rodadas)
     await prisma.developer.deleteMany({ where: { email: 'dev-demand@test.com' } });
     const developer = await prisma.developer.create({
       data: {
         email: 'dev-demand@test.com',
         name: 'Dev Demand Teste',
-        githubAccountId: 'gh-e2e-demand',
+        githubAccountId: '00000000-0000-0000-0000-000000000300',
       },
     });
     developerId = developer.id;
 
-    await prisma.repository.deleteMany({ where: { githubAccountId: 'gh-e2e-demand' } });
+    await prisma.repository.deleteMany({ where: { githubAccountId: '00000000-0000-0000-0000-000000000300' } });
     const repository = await prisma.repository.create({
       data: {
-        githubAccountId: 'gh-e2e-demand',
+        githubAccountId: '00000000-0000-0000-0000-000000000300',
         name: 'repo-demand',
         fullName: 'owner/repo-demand',
         url: 'https://github.com/owner/repo-demand',
@@ -69,20 +81,31 @@ describe('Demands (e2e) - POST /demands', () => {
     projectId = project.id;
 
     // Outro desenvolvedor com seu próprio projeto (cenário de permissão CA3)
+    await prisma.gitHubAccount.deleteMany({ where: { id: '00000000-0000-0000-0000-000000000301' } });
+    await prisma.gitHubAccount.create({
+      data: {
+        id: '00000000-0000-0000-0000-000000000301',
+        githubUserId: 'gh-e2e-other-user',
+        githubLogin: 'e2eother',
+        accessToken: 'ghp_e2e_other_token',
+        scopes: 'repo user:email',
+      },
+    });
+
     await prisma.developer.deleteMany({ where: { email: 'dev-other@test.com' } });
     const otherDeveloper = await prisma.developer.create({
       data: {
         email: 'dev-other@test.com',
         name: 'Dev Outro Teste',
-        githubAccountId: 'gh-e2e-other',
+        githubAccountId: '00000000-0000-0000-0000-000000000301',
       },
     });
     otherDeveloperId = otherDeveloper.id;
 
-    await prisma.repository.deleteMany({ where: { githubAccountId: 'gh-e2e-other' } });
+    await prisma.repository.deleteMany({ where: { githubAccountId: '00000000-0000-0000-0000-000000000301' } });
     const otherRepository = await prisma.repository.create({
       data: {
-        githubAccountId: 'gh-e2e-other',
+        githubAccountId: '00000000-0000-0000-0000-000000000301',
         name: 'repo-other',
         fullName: 'owner/repo-other',
         url: 'https://github.com/owner/repo-other',
@@ -133,11 +156,13 @@ describe('Demands (e2e) - POST /demands', () => {
         throw error;
       }
     }
-    await prisma.repository.deleteMany({ where: { githubAccountId: 'gh-e2e-demand' } });
+    await prisma.repository.deleteMany({ where: { githubAccountId: '00000000-0000-0000-0000-000000000300' } });
     await prisma.developer.deleteMany({ where: { email: 'dev-demand@test.com' } });
+    await prisma.gitHubAccount.deleteMany({ where: { id: '00000000-0000-0000-0000-000000000300' } });
     await prisma.project.deleteMany({ where: { developerId: otherDeveloperId } });
-    await prisma.repository.deleteMany({ where: { githubAccountId: 'gh-e2e-other' } });
+    await prisma.repository.deleteMany({ where: { githubAccountId: '00000000-0000-0000-0000-000000000301' } });
     await prisma.developer.deleteMany({ where: { email: 'dev-other@test.com' } });
+    await prisma.gitHubAccount.deleteMany({ where: { id: '00000000-0000-0000-0000-000000000301' } });
     await app.close();
   });
 
@@ -166,6 +191,40 @@ describe('Demands (e2e) - POST /demands', () => {
     expect(body.title).toBe('Nova demanda');
     expect(body.description).toBe('Descrição da demanda');
     expect(body.projectId).toBe(projectId);
+  });
+
+  it('deve retornar 400 quando o corpo da requisição está vazio (CA2)', async () => {
+    const response = await request(app.getHttpServer())
+      .post('/demands')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send({})
+      .expect(400);
+
+    expect(response.body.statusCode).toBe(400);
+    const fields = Array.isArray(response.body.message)
+      ? response.body.message.map((m: any) => (m && m.property ? m.property : m))
+      : [response.body.message];
+    expect(fields.some((f: string) => String(f).includes('title'))).toBe(true);
+    expect(fields.some((f: string) => String(f).includes('description'))).toBe(true);
+  });
+
+  it('deve retornar 400 quando um campo obrigatório está faltando (CA2)', async () => {
+    const response = await request(app.getHttpServer())
+      .post('/demands')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send({
+        description: 'Descrição sem título',
+        type: 'feature',
+        priority: 'high',
+        projectId,
+      })
+      .expect(400);
+
+    expect(response.body.statusCode).toBe(400);
+    const fields = Array.isArray(response.body.message)
+      ? response.body.message.map((m: any) => (m && m.property ? m.property : m))
+      : [response.body.message];
+    expect(fields.some((f: string) => String(f).includes('title'))).toBe(true);
   });
 
   it('deve retornar 403 quando o projeto não pertence ao desenvolvedor autenticado (CA3)', async () => {

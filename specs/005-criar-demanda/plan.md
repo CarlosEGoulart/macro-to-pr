@@ -87,7 +87,7 @@
   - Teste primeiro: teste de componente — resposta 403 → exibe "sem permissão"; resposta 400 → exibe campo inválido; resposta 401 → limpa token e redireciona para login; erro de rede → exibe mensagem de conexão
   - Arquivos previstos: `apps/web/src/features/auth/apiService.ts`, `apps/web/src/features/demands/CreateDemand.tsx`
 
-- [ ] **Tarefa 14 — Testes e2e completos (sucesso e erro) no backend**
+- [x] **Tarefa 14 — Testes e2e completos (sucesso e erro) no backend**
   - Cobre: CA1, CA2, CA3, CA4
   - Teste primeiro: e2e `POST /demandas` — sucesso (201), dados vazios (400), projeto não pertence (403), sem token (401); `GET /projects` — sucesso (200), sem token (401)
   - Arquivos previstos: `apps/api/test/demands.e2e-spec.ts`, `apps/api/test/projects.e2e-spec.ts` (adicionar GET)
