@@ -155,4 +155,42 @@ export const apiService = {
       body: JSON.stringify(data),
     });
   },
+
+  /**
+   * Busca uma Demanda pelo id (GET /demands/:id).
+   * Envia o token de localStorage no cabeçalho Authorization: Bearer via request().
+   * Lança erro quando response.ok for false (401, 404, etc.).
+   */
+  async getDemandById(id: string): Promise<{
+    id: string;
+    title: string;
+    description: string;
+    type: string;
+    priority: string;
+    status: string;
+    project: { id: string; name: string; repository: { id: string; name: string } };
+    createdAt: string;
+  }> {
+    let response: Response;
+    try {
+      response = await this.request(`/demands/${id}`);
+    } catch {
+      throw new ApiError(
+        'Erro de conexão com o servidor. Verifique sua internet e tente novamente.',
+        null
+      );
+    }
+    if (!response.ok) {
+      let message: string;
+      try {
+        const body = await response.json();
+        message = typeof body?.message === 'string' ? body.message : `Falha ao buscar Demanda: ${response.status}`;
+      } catch {
+        message = `Falha ao buscar Demanda: ${response.status}`;
+      }
+      throw new ApiError(message, response.status);
+    }
+    const { data } = await response.json();
+    return data;
+  },
 };

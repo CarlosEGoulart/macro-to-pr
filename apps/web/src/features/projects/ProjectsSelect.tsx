@@ -15,11 +15,12 @@
  *  7. seção demandas (node-id=2-8451) — lista de Demandas do projeto
  */
 import { type CSSProperties, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { apiService } from '../auth/apiService';
 import { Header } from '../layout/Header';
 import { Sidebar, defaultSidebarSections } from '../layout/Sidebar';
 import { CreateDemandModal } from '../demands/CreateDemandModal';
-import { CreateProjectModal } from './CreateProjectModal';
+import { CreateProjectModal, type Repository } from './CreateProjectModal';
 
 // --- Design tokens (modo claro) ---------------------------------------------
 const tokens = {
@@ -65,6 +66,8 @@ interface Demand {
 
 interface ProjectsSelectProps {
   onProjectSelect?: (project: Project) => void;
+  demands?: Demand[];
+  navigate?: (to: string) => void;
 }
 
 // --- Componentes internos ---------------------------------------------------
@@ -431,14 +434,16 @@ function WarningMessage() {
 }
 
 // --- Componente principal ---------------------------------------------------
-export function ProjectsSelect({ onProjectSelect }: ProjectsSelectProps = {}) {
+export function ProjectsSelect({ onProjectSelect, demands: initialDemands, navigate: navigateProp }: ProjectsSelectProps = {}) {
   const [projects, setProjects] = useState<Project[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const [demands, setDemands] = useState<Demand[]>([]);
+  const [demands, setDemands] = useState<Demand[]>(initialDemands ?? []);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [openDemandModal, setOpenDemandModal] = useState(false);
   const [openProjectModal, setOpenProjectModal] = useState(false);
+  const [repositories, setRepositories] = useState<Repository[]>([]);
+  const navigate = navigateProp ?? useNavigate();
 
   useEffect(() => {
     let cancelled = false;
@@ -447,13 +452,24 @@ export function ProjectsSelect({ onProjectSelect }: ProjectsSelectProps = {}) {
       setLoading(true);
       setError(null);
       try {
-        const response = await apiService.request('/projects');
-        if (!response.ok) {
-          throw new Error(`Falha ao carregar projetos: ${response.status}`);
+        // Projetos do desenvolvedor (CA4)
+        const projectsResponse = await apiService.request('/projects');
+        if (!projectsResponse.ok) {
+          throw new Error(`Falha ao carregar projetos: ${projectsResponse.status}`);
         }
-        const { data } = (await response.json()) as { data: Project[] };
+        const { data: projectsData } = (await projectsResponse.json()) as { data: Project[] };
         if (!cancelled) {
-          setProjects(data);
+          setProjects(projectsData);
+        }
+
+        // Repositórios disponíveis para associar a um novo Projeto (Bug C)
+        const repositoriesResponse = await apiService.request('/projects/repositories');
+        if (!repositoriesResponse.ok) {
+          throw new Error(`Falha ao carregar repositórios: ${repositoriesResponse.status}`);
+        }
+        const { data: repositoriesData } = (await repositoriesResponse.json()) as { data: Repository[] };
+        if (!cancelled) {
+          setRepositories(repositoriesData);
         }
       } catch (err) {
         if (!cancelled) {
@@ -481,7 +497,6 @@ export function ProjectsSelect({ onProjectSelect }: ProjectsSelectProps = {}) {
 
   const handleSelect = (project: Project) => {
     setSelectedId(project.id);
-    setDemands([]);
     onProjectSelect?.(project);
   };
 
@@ -707,6 +722,7 @@ export function ProjectsSelect({ onProjectSelect }: ProjectsSelectProps = {}) {
                 type="button"
                 role="button"
                 style={actionButtonOutlineStyle}
+                onClick={() => setOpenProjectModal(true)}
                 onMouseEnter={(e) => {
                   (e.currentTarget as HTMLButtonElement).style.backgroundColor = tokens.primariaRgba004;
                 }}
@@ -720,6 +736,7 @@ export function ProjectsSelect({ onProjectSelect }: ProjectsSelectProps = {}) {
                 type="button"
                 role="button"
                 style={actionButtonStyle}
+                onClick={() => setOpenDemandModal(true)}
                 onMouseEnter={(e) => {
                   (e.currentTarget as HTMLButtonElement).style.backgroundColor = tokens.primariaHover;
                 }}
@@ -785,9 +802,7 @@ export function ProjectsSelect({ onProjectSelect }: ProjectsSelectProps = {}) {
                       <DemandCard
                         key={demand.id}
                         demand={demand}
-                        onOpen={() => {
-                          // placeholder: abertura de demanda (issue futura)
-                        }}
+                        onOpen={() => navigate(`/demands/${demand.id}`)}
                       />
                     ))}
                   </div>
@@ -813,7 +828,7 @@ export function ProjectsSelect({ onProjectSelect }: ProjectsSelectProps = {}) {
       )}
       {openProjectModal && (
         <CreateProjectModal
-          repositories={[]}
+          repositories={repositories}
           onClose={() => setOpenProjectModal(false)}
           onProjectCreated={handleProjectCreated}
         />

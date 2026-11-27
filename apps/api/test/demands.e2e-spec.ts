@@ -257,4 +257,62 @@ describe('Demands (e2e) - POST /demands', () => {
       })
       .expect(401);
   });
+
+  describe('GET /demands/:id', () => {
+    let demandId: string;
+
+    beforeAll(async () => {
+      const created = await request(app.getHttpServer())
+        .post('/demands')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send({
+          title: 'Demanda para detalhe',
+          description: 'Descrição da demanda de detalhe',
+          type: 'feature',
+          priority: 'high',
+          projectId,
+        })
+        .expect(201);
+      const body = (created.body.data ?? created.body) as { id: string };
+      demandId = body.id;
+    });
+
+    it('deve retornar 200 com dados completos da demanda (incluindo projeto e repositório) com token válido', async () => {
+      const response = await request(app.getHttpServer())
+        .get(`/demands/${demandId}`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(200);
+
+      const body = (response.body.data ?? response.body) as {
+        id: string;
+        title: string;
+        description: string;
+        type: string;
+        priority: string;
+        status: string;
+        project: { id: string; name: string; repository: { id: string; name: string } };
+      };
+      expect(body.id).toBe(demandId);
+      expect(body.title).toBe('Demanda para detalhe');
+      expect(body.description).toBe('Descrição da demanda de detalhe');
+      expect(body.type).toBe('feature');
+      expect(body.priority).toBe('high');
+      expect(body.project.id).toBe(projectId);
+      expect(body.project.repository).toBeDefined();
+    });
+
+    it('deve retornar 401 quando GET /demands/:id é chamado sem token', async () => {
+      await request(app.getHttpServer())
+        .get(`/demands/${demandId}`)
+        .expect(401);
+    });
+
+    it('deve retornar 404 quando a demanda não existe', async () => {
+      const naoExiste = '00000000-0000-0000-0000-000000000999';
+      await request(app.getHttpServer())
+        .get(`/demands/${naoExiste}`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(404);
+    });
+  });
 });

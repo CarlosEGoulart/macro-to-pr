@@ -133,6 +133,27 @@
   - Teste primeiro: e2e `POST /demandas` sucesso 201 deve asserir que o objeto retornado inclui `id`, `title`, `description`, `projectId`, `type` e `priority`.
   - Arquivos previstos: `apps/api/prisma/schema.prisma` (colunas `type` enum feature|bug|refactor e `priority` enum low|medium|high), nova migration para `Demand.type`/`Demand.priority`, `apps/api/src/modules/demands/demands.service.ts` (passar `type`/`priority` ao `prisma.demand.create`), `apps/api/test/demands.e2e-spec.ts` (asserir `type`/`priority` no objeto retornado).
 
+- [x] **Tarefa 18 — Navegação frontend: sidebar, botões criar projeto/demanda e tela de detalhe da demanda (correção de navegação)**
+  - Cobre: US03 (criar demanda), detalhamento de demanda (fora do escopo original da issue #5, mas necessário para o fluxo funcionar).
+  - Problema relatado: (1) o `Sidebar` não navega (todos os itens usam `href="#"`, sem `onClick`, não há React Router); (2) os botões "+ Novo Projeto" e "+ Nova Demanda" em `ProjectsSelect.tsx` não têm `onClick`, apenas `onMouseEnter`/`onMouseLeave` de hover; (3) o botão "Abrir Demanda →" em `DemandCard` é um placeholder sem ação; (4) o componente `DemandDetail.tsx` existe mas não é importado nem renderizado em lugar nenhum — acessar `/demands/:id` continua mostrando a tela de Projetos.
+  - Decisão do usuário: rota de detalhe = `/demand/:id`; o `Sidebar` deve destacar o item ativo conforme a rota atual; testes seguindo TDD (vitest + jsdom + react-router-dom).
+  - Teste primeiro:
+    - Backend: e2e `GET /demands/:id` com token válido → 200 com dados completos da demanda; sem token → 401; demanda inexistente → 404.
+    - Frontend: teste de componente — clique no botão "+ Novo Projeto" abre o modal `CreateProjectModal`; clique em "+ Nova Demanda" abre o modal `CreateDemandModal`; clique em "Abrir Demanda →" navega para `/demands/:id`; `Sidebar` destaca o item ativo conforme a rota; `DemandDetail` renderiza o título, status, metadados (projeto/repositório), tabs e tarefas da demanda recebida pela API; link "Voltar ao Workspace" navega de volta para `/projects`.
+  - Arquivos envolvidos (backend):
+    - `apps/api/src/modules/demands/demands.controller.ts` — adicionar `GET /demands/:id` (`@Get(':id')`)
+    - `apps/api/src/modules/demands/demands.service.ts` — adicionar `findDemandById(id)` delegando ao repository
+    - `apps/api/src/modules/demands/demands.repository.ts` — adicionar `findDemandById(id)` com `prisma.demand.findUnique({ where: { id }, include: { project: { include: { repository: true } } } })`
+    - `apps/api/test/demands.e2e-spec.ts` — adicionar suíte `GET /demands/:id` (sucesso 200, sem token 401, inexistente 404)
+  - Arquivos envolvidos (frontend):
+    - `apps/web/src/App.tsx` — adicionar `BrowserRouter`, `Routes`, `Route` com rotas `/login`, `/projects`, `/demands/:id`
+    - `apps/web/src/features/layout/Sidebar.tsx` — substituir `href="#"` por navegação via `useNavigate`/`Link`; destacar item ativo conforme rota (`useLocation` ou `useMatch`)
+    - `apps/web/src/features/projects/ProjectsSelect.tsx` — ligar "+ Novo Projeto" a `setOpenProjectModal(true)`; ligar "+ Nova Demanda" a `setOpenDemandModal(true)`; ligar "Abrir Demanda →" a navegação para `/demands/:id` com o `demand.id`
+    - `apps/web/src/features/demands/DemandDetail.tsx` — ler `:id` via `useParams`; buscar demanda via `GET /demands/:id`; "Voltar ao Workspace" navega de volta para `/projects`
+    - `apps/web/src/features/auth/apiService.ts` — adicionar método `getDemandById(id): Promise<DemandDetail>` chamando `GET /demands/:id`
+    - Novos testes de componente em `apps/web/src/features/projects/ProjectsSelect.test.tsx` e `apps/web/src/features/demands/DemandDetail.test.tsx` (TDD: escrever teste antes da implementação)
+  - Fora de escopo desta tarefa: geração de Plano de Tarefas (US04), listagem detalhada de demandas (tela separada `/demandas`), salvamento de rascunho, tasks/tentativas da demanda (dependem de entidade `Task` que ainda não existe).
+
 ## Critérios sem tarefa
 
 -

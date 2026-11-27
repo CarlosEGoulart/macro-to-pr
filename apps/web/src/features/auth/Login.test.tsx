@@ -3,6 +3,21 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Login } from './Login';
 import { apiService } from './apiService';
 
+// jsdom não fornece localStorage por padrão. Mockamos aqui para este arquivo
+// ser autossuficiente (setupTests.ts apenas importa @testing-library/jest-dom).
+const localStorageStore: Record<string, string> = {};
+Object.defineProperty(window, 'localStorage', {
+  value: {
+    getItem: (key: string) => localStorageStore[key] ?? null,
+    setItem: (key: string, value: string) => { localStorageStore[key] = value; },
+    clear: () => { Object.keys(localStorageStore).forEach((k) => delete localStorageStore[k]); },
+    removeItem: (key: string) => { delete localStorageStore[key]; },
+    length: 0,
+    key: () => null,
+  },
+  writable: true,
+});
+
 describe('Login — tela de acesso com design tokens', () => {
   it('renderiza header com logo "M" e wordmark "Macro2PR"', () => {
     render(<Login />);

@@ -35,7 +35,7 @@ const tokens = {
 } as const;
 
 // --- Tipos ------------------------------------------------------------------
-interface Repository {
+export interface Repository {
   id: string;
   name: string;
   fullName?: string;
@@ -91,10 +91,8 @@ function ModalOverlay({ onClose, children }: { onClose: () => void; children: JS
         ✕
       </button>
       <section
-        style={{
-          ...modalCardStyle,
-          onClick: (e: React.MouseEvent) => e.stopPropagation(),
-        } as CSSProperties}
+        style={modalCardStyle as CSSProperties}
+        onClick={(e: React.MouseEvent) => e.stopPropagation()}
       >
         {children}
       </section>

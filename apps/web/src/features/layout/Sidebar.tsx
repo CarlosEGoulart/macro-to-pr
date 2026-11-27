@@ -9,6 +9,7 @@
  * Estilos inline (style) para funcionar no jsdom. Design tokens do modo claro.
  */
 import { type CSSProperties } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 // --- Design tokens (modo claro) ---------------------------------------------
 const tokens = {
@@ -33,9 +34,8 @@ const tokens = {
 interface SidebarItem {
   label: string;
   icon: JSX.Element;
-  active?: boolean;
-  href?: string;
-  onClick?: () => void;
+  to?: string;
+  matchPath?: string;
 }
 
 interface SidebarSection {
@@ -103,6 +103,34 @@ interface SidebarProps {
 }
 
 export function Sidebar({ sections }: SidebarProps) {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const isActive = (to?: string, matchPath?: string): boolean => {
+    const path = matchPath ?? to;
+    if (!path) {
+      return false;
+    }
+    // A rota raiz '/' só está ativa em match exato: caso contrário,
+    // `startsWith('/')` a marcaria ativa em QUALQUER rota, causando destaque
+    // duplo (ex.: "Início / Acesso" e "Workspace" ao mesmo tempo).
+    if (path === '/') {
+      return location.pathname === '/';
+    }
+    if (location.pathname === path) {
+      return true;
+    }
+    // Rotas com parâmetros (ex.: /demands/:id): ativo quando o pathname começa
+    // com o caminho base do item seguido de '/' (ex.: /demands/dem-1 começa com /demands/).
+    return location.pathname.startsWith(path + '/');
+  };
+
+  const handleItemClick = (to?: string) => {
+    if (to) {
+      navigate(to);
+    }
+  };
+
   const sidebarStyle: CSSProperties = {
     width: 240,
     flexShrink: 0,
@@ -183,17 +211,20 @@ export function Sidebar({ sections }: SidebarProps) {
       {sections.map((section) => (
         <div key={section.title} style={sidebarSectionStyle}>
           <p style={sidebarSectionTitleStyle}>{section.title}</p>
-          {section.items.map((item) => (
-            <a
-              key={item.label}
-              href={item.href}
-              onClick={item.onClick}
-              style={item.active ? sidebarItemActiveStyle : sidebarItemStyle}
-            >
-              <span style={sidebarItemIconStyle}>{item.icon}</span>
-              {item.label}
-            </a>
-          ))}
+          {section.items.map((item) => {
+            const active = isActive(item.to, item.matchPath);
+            return (
+              <a
+                key={item.label}
+                href={item.to ?? undefined}
+                onClick={() => handleItemClick(item.to)}
+                style={active ? sidebarItemActiveStyle : sidebarItemStyle}
+              >
+                <span style={sidebarItemIconStyle}>{item.icon}</span>
+                {item.label}
+              </a>
+            );
+          })}
         </div>
       ))}
     </aside>
@@ -205,18 +236,18 @@ export const defaultSidebarSections: SidebarSection[] = [
   {
     title: 'PRINCIPAL',
     items: [
-      { label: 'Início / Acesso', icon: <IconInicio />, href: '#' },
-      { label: 'Workspace', icon: <IconWorkspace />, active: true, href: '#' },
-      { label: 'Detalhe da Demanda', icon: <IconDemanda />, href: '#' },
-      { label: 'Revisão de Resultados', icon: <IconRevisao />, href: '#' },
+      { label: 'Início / Acesso', icon: <IconInicio />, to: '/', matchPath: '/' },
+      { label: 'Workspace', icon: <IconWorkspace />, to: '/projects', matchPath: '/projects' },
+      { label: 'Detalhe da Demanda', icon: <IconDemanda />, matchPath: '/demands' },
+      { label: 'Revisão de Resultados', icon: <IconRevisao /> },
     ],
   },
   {
     title: 'FINANCEIRO',
-    items: [{ label: 'Créditos & Faturamento', icon: <IconCreditos />, href: '#' }],
+    items: [{ label: 'Créditos & Faturamento', icon: <IconCreditos /> }],
   },
   {
     title: 'GESTÃO',
-    items: [{ label: 'Contas de Desenvolvedores', icon: <IconContas />, href: '#' }],
+    items: [{ label: 'Contas de Desenvolvedores', icon: <IconContas /> }],
   },
 ];

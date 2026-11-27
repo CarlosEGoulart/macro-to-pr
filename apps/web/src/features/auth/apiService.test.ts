@@ -1,6 +1,21 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { apiService, API_BASE_URL } from './apiService';
 
+// jsdom não fornece localStorage por padrão. Mockamos aqui para este arquivo
+// ser autossuficiente (setupTests.ts apenas importa @testing-library/jest-dom).
+const localStorageStore: Record<string, string> = {};
+Object.defineProperty(window, 'localStorage', {
+  value: {
+    getItem: (key: string) => localStorageStore[key] ?? null,
+    setItem: (key: string, value: string) => { localStorageStore[key] = value; },
+    clear: () => { Object.keys(localStorageStore).forEach((k) => delete localStorageStore[k]); },
+    removeItem: (key: string) => { delete localStorageStore[key]; },
+    length: 0,
+    key: () => null,
+  },
+  writable: true,
+});
+
 const API_URL = 'http://localhost:3000/api';
 
 function authorizationDe(init: RequestInit | undefined): string | null {

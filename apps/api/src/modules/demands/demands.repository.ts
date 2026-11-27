@@ -18,4 +18,11 @@ export class DemandsRepository {
       data: { title, description, type, priority, projectId },
     });
   }
+
+  async findDemandById(id: string) {
+    return this.prisma.demand.findUnique({
+      where: { id },
+      include: { project: { include: { repository: true } } },
+    });
+  }
 }

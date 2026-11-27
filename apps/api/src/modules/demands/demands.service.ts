@@ -1,4 +1,4 @@
-import { Injectable, ForbiddenException } from '@nestjs/common';
+import { Injectable, ForbiddenException, NotFoundException } from '@nestjs/common';
 import { CreateDemandDto } from './dto/create-demand.dto.js';
 import { DemandsRepository } from './demands.repository.js';
 import { ProjectsRepository } from '../projects/projects.repository.js';
@@ -33,5 +33,13 @@ export class DemandsService {
       priority: createDemandDto.priority,
       projectId: createDemandDto.projectId,
     });
+  }
+
+  async findDemandById(id: string) {
+    const demand = await this.demandsRepository.findDemandById(id);
+    if (!demand) {
+      throw new NotFoundException('Demanda não encontrada.');
+    }
+    return demand;
   }
 }

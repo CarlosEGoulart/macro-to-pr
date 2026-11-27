@@ -12,9 +12,11 @@
  * Reutiliza os componentes Header e Sidebar. Estilos inline (style) para jsdom.
  * Design tokens do modo claro.
  */
-import { type CSSProperties } from 'react';
+import { type CSSProperties, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Header } from '../layout/Header';
 import { Sidebar, defaultSidebarSections } from '../layout/Sidebar';
+import { apiService } from '../auth/apiService';
 
 // --- Design tokens (modo claro) ---------------------------------------------
 const tokens = {
@@ -61,20 +63,31 @@ interface DemandTask {
   canStartExecution?: boolean;
 }
 
-interface DemandDetailProps {
-  demand: {
-    id: string;
-    title: string;
-    description: string;
-    type: 'feature' | 'bug' | 'refactor';
-    priority: 'low' | 'medium' | 'high';
-    status: string;
-    projectName: string;
-    repositoryName: string;
-    taskCount: number;
-    createdAt: string;
-    tasks: DemandTask[];
-  };
+// Resposta crua da API (GET /demands/:id), envolta em { data } pelo interceptor.
+interface DemandApi {
+  id: string;
+  title: string;
+  description: string;
+  type: string;
+  priority: string;
+  status: string;
+  project: { id: string; name: string; repository: { id: string; name: string } };
+  createdAt: string;
+}
+
+// Visão de exibição da demanda, achatando projeto/repositório para os metadados.
+interface DemandView {
+  id: string;
+  title: string;
+  description: string;
+  type: string;
+  priority: string;
+  status: string;
+  projectName: string;
+  repositoryName: string;
+  taskCount: number;
+  createdAt: string;
+  tasks: DemandTask[];
 }
 
 // --- Labels -----------------------------------------------------------------
@@ -450,7 +463,71 @@ const panelTextStyle: CSSProperties = {
 } as CSSProperties;
 
 // --- Componente principal ----------------------------------------------------
-export function DemandDetail({ demand }: DemandDetailProps) {
+export function DemandDetail() {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const [demand, setDemand] = useState<DemandView | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadDemand() {
+      if (!id) {
+        setLoading(false);
+        return;
+      }
+      try {
+        const data = await apiService.getDemandById(id);
+        if (!cancelled) {
+          setDemand({
+            id: data.id,
+            title: data.title,
+            description: data.description,
+            type: data.type,
+            priority: data.priority,
+            status: data.status,
+            projectName: data.project.name,
+            repositoryName: data.project.repository.name,
+            taskCount: 0,
+            createdAt: data.createdAt,
+            tasks: [],
+          });
+        }
+      } catch {
+        // Não exibimos tela de erro detalhada por escopo desta tarefa;
+        // demand permanece null e a UI mostra estado vazio.
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    }
+
+    loadDemand();
+    return () => {
+      cancelled = true;
+    };
+  }, [id]);
+
+  if (loading) {
+    return (
+      <section style={pageStyle}>
+        <Header />
+        <div style={{ padding: `${tokens.xl}px 0` }}>Carregando demanda…</div>
+      </section>
+    );
+  }
+
+  if (!demand) {
+    return (
+      <section style={pageStyle}>
+        <Header />
+        <div style={{ padding: `${tokens.xl}px 0` }}>Não foi possível carregar a demanda.</div>
+      </section>
+    );
+  }
+
   const statusColors: Record<string, { bg: string; fg: string }> = {
     Draft: { bg: '#F3F4F6', fg: tokens.textoSuave },
     AwaitingPlanApproval: { bg: 'rgba(97, 100, 241, 0.12)', fg: tokens.primaria },
@@ -480,8 +557,8 @@ export function DemandDetail({ demand }: DemandDetailProps) {
             <section style={leftColumnStyle}>
               {/* Link "Voltar ao Workspace" — abaixo do header, não dentro */}
               <a
-                href="#"
                 role="link"
+                onClick={() => navigate('/projects')}
                 style={backLinkStyle}
               >
                 <span style={backArrowStyle} aria-hidden="true">
