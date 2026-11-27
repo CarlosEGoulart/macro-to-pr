@@ -84,7 +84,7 @@
 
 ---
 
-### US03 — Criar Demanda · `Must Have` · `S` · Status: `🟡 Ready`
+### US03 — Criar Demanda · `Must Have` · `S` · Status: `🟢 Live`
 
 **Como** Desenvolvedor, **quero** criar uma Demanda em alto nível dentro de um Projeto meu, **para que** eu possa registrar o objetivo de desenvolvimento que desejo realizar.
 
