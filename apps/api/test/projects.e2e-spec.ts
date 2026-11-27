@@ -6,6 +6,7 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime/client';
 import { AppModule } from '../src/app.module.js';
 import request from 'supertest';
 import { JwtModule } from '@nestjs/jwt';
+import { vi } from 'vitest';
 
 // Variáveis de ambiente exigidas para bootar a AppModule (JwtStrategy + PrismaClient)
 process.env.JWT_SECRET = 'test-secret-123456';
@@ -540,5 +541,141 @@ describe('Projects (e2e) - GET /developer/me', () => {
     expect(body.name).toBe('Dev Me Teste');
     expect(body.email).toBe('dev-me@test.com');
     expect(body.avatarUrl).toBe('https://github.com/avatar.png');
+  });
+});
+
+describe('Projects (e2e) - POST /repositories/sync', () => {
+  let app: INestApplication;
+  let prisma: PrismaService;
+  let jwtService: JwtService;
+  let accessToken: string;
+  let developerId: string;
+
+  const GITHUB_ACCOUNT_SYNC_ID = '00000000-0000-0000-0000-000000000300';
+
+  beforeAll(async () => {
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+      imports: [AppModule, JwtModule.register({ secret: process.env.JWT_SECRET })],
+    }).compile();
+
+    app = moduleFixture.createNestApplication();
+    prisma = moduleFixture.get(PrismaService);
+    jwtService = moduleFixture.get(JwtService);
+    await app.init();
+
+    // Desenvolvedor COM Conta GitHub vinculada (cenário de sucesso)
+    await prisma.developer.deleteMany({ where: { email: 'dev-sync@test.com' } });
+    const developer = await prisma.developer.create({
+      data: {
+        email: 'dev-sync@test.com',
+        name: 'Dev Sync Teste',
+        githubAccountId: GITHUB_ACCOUNT_SYNC_ID,
+      },
+    });
+    developerId = developer.id;
+
+    await prisma.gitHubAccount.deleteMany({ where: { id: GITHUB_ACCOUNT_SYNC_ID } });
+    await prisma.gitHubAccount.create({
+      data: {
+        id: GITHUB_ACCOUNT_SYNC_ID,
+        githubUserId: 'gh-sync-user',
+        githubLogin: 'syncdev',
+        accessToken: 'ghp_sync_token',
+        scopes: 'repo user:email',
+      },
+    });
+
+    accessToken = await jwtService.signAsync({
+      userId: developerId,
+      email: developer.email,
+    });
+  });
+
+  afterAll(async () => {
+    try {
+      await prisma.project.deleteMany({ where: {} });
+    } catch (error) {
+      const isTableNotFound =
+        error instanceof PrismaClientKnownRequestError &&
+        (error.message.includes('does not exist') ||
+          error.message.includes('undefined_table'));
+      if (!isTableNotFound) {
+        throw error;
+      }
+    }
+    await prisma.repository.deleteMany({ where: { githubAccountId: GITHUB_ACCOUNT_SYNC_ID } });
+    await prisma.gitHubAccount.deleteMany({ where: { id: GITHUB_ACCOUNT_SYNC_ID } });
+    await prisma.developer.deleteMany({ where: { email: 'dev-sync@test.com' } });
+    await app.close();
+  });
+
+  it('deve retornar 200 com a lista de repositórios sincronizados quando há GitHubAccount vinculada', async () => {
+    // Mock da API do GitHub (GET /user/repos com paginação simples — uma única página)
+    const fetchSpy = vi.spyOn(globalThis, 'fetch').mockImplementation((url: any) => {
+      if (String(url).includes('api.github.com/user/repos')) {
+        return Promise.resolve(
+          new Response(
+            JSON.stringify([
+              {
+                id: 1,
+                name: 'repo-sync-1',
+                full_name: 'syncdev/repo-sync-1',
+                html_url: 'https://github.com/syncdev/repo-sync-1',
+                owner: { login: 'syncdev' },
+                private: false,
+              },
+              {
+                id: 2,
+                name: 'repo-sync-2',
+                full_name: 'syncdev/repo-sync-2',
+                html_url: 'https://github.com/syncdev/repo-sync-2',
+                owner: { login: 'syncdev' },
+                private: true,
+              },
+            ]),
+            { status: 200, headers: { 'Content-Type': 'application/json' } },
+          ),
+        );
+      }
+      return Promise.resolve(new Response(null, { status: 200 }));
+    });
+
+    const response = await request(app.getHttpServer())
+      .post('/projects/repositories/sync')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .expect(200);
+
+    const body = (response.body.data ?? response.body) as {
+      synced: number;
+      repositories: Array<{ id: string; name: string; fullName: string; githubAccountId: string }>;
+    };
+    expect(body.synced).toBe(2);
+    expect(Array.isArray(body.repositories)).toBe(true);
+    expect(body.repositories.length).toBe(2);
+    expect(body.repositories.every((r) => r.githubAccountId === GITHUB_ACCOUNT_SYNC_ID)).toBe(true);
+    expect(body.repositories.map((r) => r.name).sort()).toEqual(['repo-sync-1', 'repo-sync-2']);
+
+    fetchSpy.mockRestore();
+  });
+
+  it('deve retornar 400 quando não há GitHubAccount vinculada ao desenvolvedor', async () => {
+    // Desenvolvedor SEM Conta GitHub vinculada
+    await prisma.developer.deleteMany({ where: { email: 'dev-no-account@test.com' } });
+    const devNoAccount = await prisma.developer.create({
+      data: { email: 'dev-no-account@test.com', name: 'Dev Sem Conta' },
+    });
+    const tokenNoAccount = await jwtService.signAsync({
+      userId: devNoAccount.id,
+      email: devNoAccount.email,
+    });
+
+    const response = await request(app.getHttpServer())
+      .post('/projects/repositories/sync')
+      .set('Authorization', `Bearer ${tokenNoAccount}`)
+      .expect(400);
+
+    expect(response.body.statusCode).toBe(400);
+
+    await prisma.developer.deleteMany({ where: { id: devNoAccount.id } });
   });
 });

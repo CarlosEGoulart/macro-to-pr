@@ -74,6 +74,40 @@ export class ProjectsService {
   }
 
   /**
+   * Re-sincroniza os repositórios do GitHub sob demanda para o desenvolvedor
+   * informado. Descobre a `GitHubAccount` vinculada ao desenvolvedor, chama a
+   * sincronização contra a API do GitHub e retorna a lista de repositórios
+   * sincronizados com a contagem.
+   * Lança BadRequestException (400) quando o desenvolvedor não possui
+   * Conta GitHub vinculada.
+   */
+  async syncRepositoriesByDeveloper(developerId: string) {
+    const developer = await this.projectsRepository.findDeveloperById(developerId);
+    if (!developer || !developer.githubAccountId) {
+      throw new BadRequestException(
+        'Desenvolvedor não possui Conta GitHub vinculada. Faça login novamente com o GitHub.',
+      );
+    }
+
+    const account = await this.projectsRepository.findGitHubAccountById(
+      developer.githubAccountId,
+    );
+    if (!account) {
+      throw new BadRequestException(
+        'Conta GitHub não encontrada para este desenvolvedor.',
+      );
+    }
+
+    await this.syncRepositories(account.id, account.accessToken);
+
+    const repositories = await this.findRepositoriesByDeveloper(developerId);
+    return {
+      synced: repositories.length,
+      repositories,
+    };
+  }
+
+  /**
    * Sincroniza os repositórios da Conta GitHub vinculada com o banco local,
    * buscando `GET /user/repos` com paginação (Link header rel="next") e
    * fazendo upsert na tabela `Repository` vinculada à `GitHubAccount`.

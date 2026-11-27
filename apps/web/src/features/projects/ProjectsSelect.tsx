@@ -443,6 +443,9 @@ export function ProjectsSelect({ onProjectSelect, demands: initialDemands, navig
   const [openDemandModal, setOpenDemandModal] = useState(false);
   const [openProjectModal, setOpenProjectModal] = useState(false);
   const [repositories, setRepositories] = useState<Repository[]>([]);
+  const [syncResult, setSyncResult] = useState<{ synced: number } | null>(null);
+  const [syncError, setSyncError] = useState<string | null>(null);
+  const [syncing, setSyncing] = useState(false);
   const navigate = navigateProp ?? useNavigate();
 
   useEffect(() => {
@@ -511,6 +514,24 @@ export function ProjectsSelect({ onProjectSelect, demands: initialDemands, navig
     ]);
     setSelectedId(project.id);
     setDemands([]);
+  };
+
+  const handleSyncRepositories = async () => {
+    setSyncing(true);
+    setSyncError(null);
+    setSyncResult(null);
+    try {
+      const result = await apiService.syncRepositories();
+      setSyncResult(result);
+      // Atualiza a lista local de repositórios com o resultado do sync
+      setRepositories(result.repositories);
+    } catch (err) {
+      setSyncError(
+        err instanceof Error ? err.message : 'Erro ao sincronizar repositórios',
+      );
+    } finally {
+      setSyncing(false);
+    }
   };
 
   if (loading) {
@@ -746,8 +767,64 @@ export function ProjectsSelect({ onProjectSelect, demands: initialDemands, navig
               >
                 + Nova Demanda
               </button>
+              <button
+                type="button"
+                role="button"
+                aria-label="Re-sincronizar repositórios do GitHub"
+                style={actionButtonOutlineStyle}
+                onClick={handleSyncRepositories}
+                disabled={syncing}
+              >
+                {syncing ? 'Sincronizando…' : '↻ Re-sincronizar repositórios'}
+              </button>
             </div>
           </header>
+
+          {/* Exibição do resultado da re-sincronização de repositórios */}
+          {syncError && (
+            <div
+              data-testid="repos-sync-error"
+              style={{
+                backgroundColor: '#FEE2E2',
+                border: `1px solid ${tokens.perigo}`,
+                color: tokens.perigo,
+                borderRadius: 6,
+                padding: `${tokens.sm}px ${tokens.md}px`,
+                marginBottom: tokens.md,
+                fontFamily: tokens.font,
+                fontSize: 13,
+                display: 'flex',
+                alignItems: 'center',
+                gap: tokens.xs,
+              } as CSSProperties}
+            >
+              <span aria-hidden="true">⚠</span>
+              <span>Erro ao sincronizar repositórios: {syncError}</span>
+            </div>
+          )}
+          {syncResult && !syncError && (
+            <div
+              data-testid="repos-sync-success"
+              style={{
+                backgroundColor: '#DCFCE7',
+                border: `1px solid ${tokens.sucesso}`,
+                color: '#14532d',
+                borderRadius: 6,
+                padding: `${tokens.sm}px ${tokens.md}px`,
+                marginBottom: tokens.md,
+                fontFamily: tokens.font,
+                fontSize: 13,
+                display: 'flex',
+                alignItems: 'center',
+                gap: tokens.xs,
+              } as CSSProperties}
+            >
+              <span aria-hidden="true">✓</span>
+              <span>
+                {syncResult.synced} repositório{syncResult.synced !== 1 ? 's' : ''} sincronizado{syncResult.synced !== 1 ? 's' : ''}
+              </span>
+            </div>
+          )}
 
           {/* 5. layout — node-id=2-8394 */}
           <div data-testid="projects-select-layout" style={columnsStyle}>

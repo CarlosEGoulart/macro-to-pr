@@ -157,6 +157,52 @@ export const apiService = {
   },
 
   /**
+   * Re-sincroniza os repositórios do GitHub do desenvolvedor autenticado
+   * (POST /repositories/sync).
+   * Envia o token de localStorage no cabeçalho Authorization: Bearer via request().
+   * Retorna { synced: number, repositories: Repository[] } em caso de sucesso.
+   * Lança ApiError quando a resposta não é ok (400, 401, etc.) ou erro de rede.
+   */
+  async syncRepositories(): Promise<{
+    synced: number;
+    repositories: Array<{
+      id: string;
+      name: string;
+      fullName: string;
+      githubAccountId: string;
+    }>;
+  }> {
+    let response: Response;
+    try {
+      response = await this.request('/projects/repositories/sync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+    } catch {
+      // Rede: a requisição falhou antes de obter resposta do servidor.
+      throw new ApiError(
+        'Erro de conexão com o servidor. Verifique sua internet e tente novamente.',
+        null,
+      );
+    }
+    if (!response.ok) {
+      let message: string;
+      try {
+        const body = await response.json();
+        message =
+          typeof body?.message === 'string'
+            ? body.message
+            : `Falha ao sincronizar repositórios: ${response.status}`;
+      } catch {
+        message = `Falha ao sincronizar repositórios: ${response.status}`;
+      }
+      throw new ApiError(message, response.status);
+    }
+    const { data } = await response.json();
+    return data;
+  },
+
+  /**
    * Busca uma Demanda pelo id (GET /demands/:id).
    * Envia o token de localStorage no cabeçalho Authorization: Bearer via request().
    * Lança erro quando response.ok for false (401, 404, etc.).

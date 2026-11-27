@@ -20,6 +20,13 @@ export class ProjectsRepository {
     });
   }
 
+  async findGitHubAccountById(githubAccountId: string) {
+    return this.prisma.gitHubAccount.findUnique({
+      where: { id: githubAccountId },
+      select: { id: true, accessToken: true },
+    });
+  }
+
   async findRepositoryById(id: string) {
     return this.prisma.repository.findUnique({
       where: { id },

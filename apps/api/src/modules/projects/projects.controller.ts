@@ -1,4 +1,11 @@
-import { Controller, Get, Post, Body, Req } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Req,
+  HttpCode,
+} from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { ProjectsService } from './projects.service.js';
 import { CreateProjectDto } from './dto/create-project.dto.js';
@@ -31,5 +38,12 @@ export class ProjectsController {
   ) {
     const developerId = req.user.userId;
     return this.projectsService.create(createProjectDto, developerId);
+  }
+
+  @Post('repositories/sync')
+  @HttpCode(200)
+  async syncRepositories(@Req() req: { user: { userId: string } }) {
+    const developerId = req.user.userId;
+    return this.projectsService.syncRepositoriesByDeveloper(developerId);
   }
 }

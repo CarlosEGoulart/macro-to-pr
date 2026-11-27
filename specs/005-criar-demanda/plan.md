@@ -154,6 +154,19 @@
     - Novos testes de componente em `apps/web/src/features/projects/ProjectsSelect.test.tsx` e `apps/web/src/features/demands/DemandDetail.test.tsx` (TDD: escrever teste antes da implementação)
   - Fora de escopo desta tarefa: geração de Plano de Tarefas (US04), listagem detalhada de demandas (tela separada `/demandas`), salvamento de rascunho, tasks/tentativas da demanda (dependem de entidade `Task` que ainda não existe).
 
+- [x] **Tarefa 19 — Re-sincronização de repositórios do GitHub (endpoint sob demanda + tratamento de erro)**
+  - Cobre: US03 (criar demanda depende de repositórios disponíveis), CA4 (seletor de Projeto exibe lista de repositórios).
+  - Justificativa: a sincronização de repositórios ocorre apenas uma vez, durante o callback do OAuth (`AuthService.handleGitHubCallback`), e falha silenciosamente (apenas loga o erro, emite o JWT mesmo assim). Não existe mecanismo para re-sincronizar sem fazer logout/login novamente. Se a sincronização falhar na primeira vez (escopo OAuth insuficiente, erro de rede, etc.), o desenvolvedor fica sem repositórios listados, não consegue criar Projetos, nem Demandas.
+  - Teste primeiro: e2e `POST /repositories/sync` → 200 com lista de repositórios quando há `GitHubAccount` vinculada; → 400 quando não há `GitHubAccount` vinculada. Teste de componente frontend — botão de re-sincronização chama a API e exibe resultado (sucesso com contagem ou erro).
+  - Arquivos previstos:
+    - `apps/api/src/modules/projects/projects.controller.ts` — novo endpoint `POST /repositories/sync` protegido por `JwtAuthGuard`
+    - `apps/api/src/modules/projects/projects.service.ts` — método `syncRepositoriesByDeveloper(developerId)` que descobre a `GitHubAccount` e chama a sincronização
+    - `apps/api/src/modules/auth/auth.service.ts` — ajuste no `handleGitHubCallback` para log mais informativo do erro de sincronização
+    - `apps/api/test/projects.e2e-spec.ts` — adicionar suíte `POST /repositories/sync` (sucesso 200, sem conta GitHub 400)
+    - `apps/web/src/features/auth/apiService.ts` — método `syncRepositories()` → `POST /repositories/sync`
+    - `apps/web/src/features/projects/ProjectsSelect.tsx` — botão/ação de re-sincronização + exibição de resultado (sucesso com contagem, ou erro)
+    - `apps/web/src/features/projects/ProjectsSelect.test.tsx` — teste de componente para re-sincronização
+
 ## Critérios sem tarefa
 
 -

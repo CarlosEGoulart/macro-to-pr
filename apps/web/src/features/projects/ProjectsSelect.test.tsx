@@ -414,6 +414,68 @@ describe('ProjectsSelect — navegação e modais', () => {
   });
 });
 
+describe('ProjectsSelect — re-sincronização de repositórios', () => {
+  const REPOS = [
+    { id: 'repo-1', name: 'alpha-repo', fullName: 'owner/alpha-repo' },
+    { id: 'repo-2', name: 'beta-repo', fullName: 'owner/beta-repo' },
+  ];
+
+  beforeEach(() => {
+    localStorage.setItem('token', 'token-teste');
+    vi.spyOn(apiService, 'request').mockImplementation(async (input: string) => {
+      if (input === '/projects') {
+        return new Response(JSON.stringify({ data: PROJECTS }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      }
+      if (input === '/projects/repositories') {
+        return new Response(JSON.stringify({ data: REPOS }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      }
+      return new Response(JSON.stringify({ data: [] }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    });
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+    localStorage.clear();
+  });
+
+  it('botão de re-sincronização chama syncRepositories e exibe sucesso com contagem', async () => {
+    const syncSpy = vi.spyOn(apiService, 'syncRepositories').mockResolvedValue({
+      synced: 2,
+      repositories: REPOS,
+    });
+
+    renderWithRouter('/projects');
+
+    await waitFor(() => {
+      expect(screen.getByTestId('project-card-proj-1')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: /re-sincronizar repositórios/i }));
+
+    expect(syncSpy).toHaveBeenCalled();
+
+    await waitFor(() => {
+      expect(screen.getByText(/2 repositórios sincronizados/i)).toBeInTheDocument();
+    });
+  });
+
+  it('exibe mensagem de erro quando a re-sincronização falha', async () => {
+    vi.spyOn(apiService, 'syncRepositories').mockRejectedValue(new Error('Falha ao sincronizar repositórios'));
+
+    renderWithRouter('/projects');
+
+    await waitFor(() => {
+      expect(screen.getByTestId('project-card-proj-1')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: /re-sincronizar repositórios/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/erro ao sincronizar/i)).toBeInTheDocument();
+    });
+  });
+});
+
 // Tipo auxiliar para a prop demands usada nos testes de navegação
 interface ProjectsSelectPropsDemand {
   id: string;

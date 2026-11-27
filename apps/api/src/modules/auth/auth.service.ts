@@ -143,12 +143,12 @@ export class AuthService {
     }
 
     // 5.5. Sincroniza repositórios da Conta GitHub com o banco local.
-    // Falha no sync não impede a emissão do JWT: apenas loga o erro.
+    // Falha no sync não impede a emissão do JWT: apenas loga o erro com contexto.
     try {
       await this.projectsService.syncRepositories(account.id, accessToken);
     } catch (err) {
       this.logger.error(
-        'Falha ao sincronizar repositórios do GitHub (ignorado — JWT será emitido)',
+        `Falha ao sincronizar repositórios do GitHub para o desenvolvedor ${developer.id} (login: ${profile.login}, account: ${account.id}) — ignorado: JWT será emitido. Use POST /repositories/sync para re-sincronizar.`,
         err instanceof Error ? err.stack : String(err),
       );
     }
