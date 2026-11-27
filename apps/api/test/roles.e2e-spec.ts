@@ -28,13 +28,25 @@ describe('Roles (e2e) - CA2: Desenvolvedor em rota de Admin recebe 403', () => {
 
     const jwtService = moduleFixture.get(JwtService);
 
+    const GITHUB_ACCOUNT_ROLES_ID = '00000000-0000-0000-0000-000000000400';
+
     // Desenvolvedor (papel padrão Developer) — idempotente entre rodadas
     await prisma.developer.deleteMany({ where: { email: 'dev-roles@test.com' } });
+    await prisma.gitHubAccount.deleteMany({ where: { id: GITHUB_ACCOUNT_ROLES_ID } });
+    await prisma.gitHubAccount.create({
+      data: {
+        id: GITHUB_ACCOUNT_ROLES_ID,
+        githubUserId: 'gh-roles-test',
+        githubLogin: 'rolestest',
+        accessToken: 'ghp_roles_test_token',
+        scopes: 'repo user:email',
+      },
+    });
     await prisma.developer.create({
       data: {
         email: 'dev-roles@test.com',
         name: 'Dev Roles',
-        githubAccountId: 'gh-roles-test',
+        githubAccountId: GITHUB_ACCOUNT_ROLES_ID,
       },
     });
 
@@ -52,6 +64,7 @@ describe('Roles (e2e) - CA2: Desenvolvedor em rota de Admin recebe 403', () => {
   });
 
   afterAll(async () => {
+    await prisma.gitHubAccount.deleteMany({ where: { id: '00000000-0000-0000-0000-000000000400' } });
     await prisma.developer.deleteMany({ where: { email: 'dev-roles@test.com' } });
     await app.close();
   });
