@@ -100,6 +100,7 @@ describe('Projects (e2e) - POST /projects', () => {
 
   afterAll(async () => {
     try {
+      await prisma.demand.deleteMany({ where: {} });
       await prisma.project.deleteMany({ where: {} });
     } catch (error) {
       const isTableNotFound =
@@ -315,6 +316,7 @@ describe('Projects (e2e) - GET /projects (CA4)', () => {
 
   afterAll(async () => {
     try {
+      await prisma.demand.deleteMany({ where: {} });
       await prisma.project.deleteMany({ where: {} });
     } catch (error) {
       const isTableNotFound =
@@ -432,6 +434,7 @@ describe('Projects (e2e) - GET /projects/repositories', () => {
 
   afterAll(async () => {
     try {
+      await prisma.demand.deleteMany({ where: {} });
       await prisma.project.deleteMany({ where: {} });
     } catch (error) {
       const isTableNotFound =
@@ -507,6 +510,7 @@ describe('Projects (e2e) - GET /developer/me', () => {
 
   afterAll(async () => {
     try {
+      await prisma.demand.deleteMany({ where: {} });
       await prisma.project.deleteMany({ where: {} });
     } catch (error) {
       const isTableNotFound =
@@ -593,6 +597,7 @@ describe('Projects (e2e) - POST /repositories/sync', () => {
 
   afterAll(async () => {
     try {
+      await prisma.demand.deleteMany({ where: {} });
       await prisma.project.deleteMany({ where: {} });
     } catch (error) {
       const isTableNotFound =
