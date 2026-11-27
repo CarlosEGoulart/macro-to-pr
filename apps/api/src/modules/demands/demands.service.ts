@@ -29,6 +29,8 @@ export class DemandsService {
     return this.demandsRepository.create({
       title: createDemandDto.title,
       description: createDemandDto.description,
+      type: createDemandDto.type,
+      priority: createDemandDto.priority,
       projectId: createDemandDto.projectId,
     });
   }

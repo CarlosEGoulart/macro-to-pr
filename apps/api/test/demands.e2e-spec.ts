@@ -184,6 +184,8 @@ describe('Demands (e2e) - POST /demands', () => {
       title: string;
       description: string;
       projectId: string;
+      type: string;
+      priority: string;
     };
     expect(body).toHaveProperty('id');
     expect(typeof body.id).toBe('string');
@@ -191,6 +193,8 @@ describe('Demands (e2e) - POST /demands', () => {
     expect(body.title).toBe('Nova demanda');
     expect(body.description).toBe('Descrição da demanda');
     expect(body.projectId).toBe(projectId);
+    expect(body.type).toBe('feature');
+    expect(body.priority).toBe('high');
   });
 
   it('deve retornar 400 quando o corpo da requisição está vazio (CA2)', async () => {

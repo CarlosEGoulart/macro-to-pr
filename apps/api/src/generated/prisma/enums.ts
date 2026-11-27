@@ -28,3 +28,21 @@ export const DemandStatus = {
 } as const
 
 export type DemandStatus = (typeof DemandStatus)[keyof typeof DemandStatus]
+
+
+export const TypeDemand = {
+  feature: 'feature',
+  bug: 'bug',
+  refactor: 'refactor'
+} as const
+
+export type TypeDemand = (typeof TypeDemand)[keyof typeof TypeDemand]
+
+
+export const PriorityDemand = {
+  low: 'low',
+  medium: 'medium',
+  high: 'high'
+} as const
+
+export type PriorityDemand = (typeof PriorityDemand)[keyof typeof PriorityDemand]

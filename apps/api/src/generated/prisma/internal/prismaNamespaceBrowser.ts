@@ -78,6 +78,8 @@ export const DemandScalarFieldEnum = {
   id: 'id',
   title: 'title',
   description: 'description',
+  type: 'type',
+  priority: 'priority',
   projectId: 'projectId',
   status: 'status',
   createdAt: 'createdAt',

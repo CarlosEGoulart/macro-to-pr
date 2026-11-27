@@ -834,6 +834,8 @@ export const DemandScalarFieldEnum = {
   id: 'id',
   title: 'title',
   description: 'description',
+  type: 'type',
+  priority: 'priority',
   projectId: 'projectId',
   status: 'status',
   createdAt: 'createdAt',
@@ -935,6 +937,34 @@ export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 
  * Reference to a field of type 'String[]'
  */
 export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>
+    
+
+
+/**
+ * Reference to a field of type 'TypeDemand'
+ */
+export type EnumTypeDemandFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TypeDemand'>
+    
+
+
+/**
+ * Reference to a field of type 'TypeDemand[]'
+ */
+export type ListEnumTypeDemandFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TypeDemand[]'>
+    
+
+
+/**
+ * Reference to a field of type 'PriorityDemand'
+ */
+export type EnumPriorityDemandFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PriorityDemand'>
+    
+
+
+/**
+ * Reference to a field of type 'PriorityDemand[]'
+ */
+export type ListEnumPriorityDemandFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PriorityDemand[]'>
     
 
 

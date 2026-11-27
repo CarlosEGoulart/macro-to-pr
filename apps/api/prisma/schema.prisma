@@ -27,10 +27,24 @@ enum DemandStatus {
   Concluded
 }
 
+enum TypeDemand {
+  feature
+  bug
+  refactor
+}
+
+enum PriorityDemand {
+  low
+  medium
+  high
+}
+
 model Demand {
   id          String       @id @default(uuid()) @db.Uuid
   title       String
   description String
+  type        TypeDemand
+  priority    PriorityDemand
   projectId   String       @db.Uuid
   status      DemandStatus @default(Draft)
   createdAt   DateTime     @default(now())

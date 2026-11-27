@@ -127,6 +127,12 @@
     - `apps/web/src/features/auth/apiService.ts` (modificado — adicionar método para buscar perfil do desenvolvedor, ex.: `GET /developer/me`, com token no header)
     - Novo endpoint backend `GET /developer/me` (controller/service/repository ou reuso de módulo existente) que retorna dados do desenvolvedor a partir do token JWT.
 
+- [x] **Tarefa 17 — Persistir tipo e prioridade na entidade Demand (fechar CA1 — objeto completo)**
+  - Cobre: CA1
+  - Justificativa: o auditor final apontou que `type` e `priority` são obrigatórios de entrada (validados pelo DTO e pelo front) mas não são persistidos nem retornados no objeto da Demanda, deixando o critério CA1 parcialmente coberto ("objeto completo" não inclui tipo nem prioridade).
+  - Teste primeiro: e2e `POST /demandas` sucesso 201 deve asserir que o objeto retornado inclui `id`, `title`, `description`, `projectId`, `type` e `priority`.
+  - Arquivos previstos: `apps/api/prisma/schema.prisma` (colunas `type` enum feature|bug|refactor e `priority` enum low|medium|high), nova migration para `Demand.type`/`Demand.priority`, `apps/api/src/modules/demands/demands.service.ts` (passar `type`/`priority` ao `prisma.demand.create`), `apps/api/test/demands.e2e-spec.ts` (asserir `type`/`priority` no objeto retornado).
+
 ## Critérios sem tarefa
 
 -

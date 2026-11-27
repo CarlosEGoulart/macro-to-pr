@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service.js';
+import { PriorityDemand, TypeDemand } from '../../generated/prisma/client.js';
 
 @Injectable()
 export class DemandsRepository {
@@ -8,11 +9,13 @@ export class DemandsRepository {
   async create(data: {
     title: string;
     description: string;
+    type: TypeDemand;
+    priority: PriorityDemand;
     projectId: string;
   }) {
-    const { title, description, projectId } = data;
+    const { title, description, type, priority, projectId } = data;
     return this.prisma.demand.create({
-      data: { title, description, projectId },
+      data: { title, description, type, priority, projectId },
     });
   }
 }

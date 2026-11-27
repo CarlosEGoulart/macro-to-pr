@@ -28,6 +28,8 @@ export type DemandMinAggregateOutputType = {
   id: string | null
   title: string | null
   description: string | null
+  type: $Enums.TypeDemand | null
+  priority: $Enums.PriorityDemand | null
   projectId: string | null
   status: $Enums.DemandStatus | null
   createdAt: Date | null
@@ -38,6 +40,8 @@ export type DemandMaxAggregateOutputType = {
   id: string | null
   title: string | null
   description: string | null
+  type: $Enums.TypeDemand | null
+  priority: $Enums.PriorityDemand | null
   projectId: string | null
   status: $Enums.DemandStatus | null
   createdAt: Date | null
@@ -48,6 +52,8 @@ export type DemandCountAggregateOutputType = {
   id: number
   title: number
   description: number
+  type: number
+  priority: number
   projectId: number
   status: number
   createdAt: number
@@ -60,6 +66,8 @@ export type DemandMinAggregateInputType = {
   id?: true
   title?: true
   description?: true
+  type?: true
+  priority?: true
   projectId?: true
   status?: true
   createdAt?: true
@@ -70,6 +78,8 @@ export type DemandMaxAggregateInputType = {
   id?: true
   title?: true
   description?: true
+  type?: true
+  priority?: true
   projectId?: true
   status?: true
   createdAt?: true
@@ -80,6 +90,8 @@ export type DemandCountAggregateInputType = {
   id?: true
   title?: true
   description?: true
+  type?: true
+  priority?: true
   projectId?: true
   status?: true
   createdAt?: true
@@ -163,6 +175,8 @@ export type DemandGroupByOutputType = {
   id: string
   title: string
   description: string
+  type: $Enums.TypeDemand
+  priority: $Enums.PriorityDemand
   projectId: string
   status: $Enums.DemandStatus
   createdAt: Date
@@ -194,6 +208,8 @@ export type DemandWhereInput = {
   id?: Prisma.UuidFilter<"Demand"> | string
   title?: Prisma.StringFilter<"Demand"> | string
   description?: Prisma.StringFilter<"Demand"> | string
+  type?: Prisma.EnumTypeDemandFilter<"Demand"> | $Enums.TypeDemand
+  priority?: Prisma.EnumPriorityDemandFilter<"Demand"> | $Enums.PriorityDemand
   projectId?: Prisma.UuidFilter<"Demand"> | string
   status?: Prisma.EnumDemandStatusFilter<"Demand"> | $Enums.DemandStatus
   createdAt?: Prisma.DateTimeFilter<"Demand"> | Date | string
@@ -205,6 +221,8 @@ export type DemandOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  type?: Prisma.SortOrder
+  priority?: Prisma.SortOrder
   projectId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -219,6 +237,8 @@ export type DemandWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.DemandWhereInput | Prisma.DemandWhereInput[]
   title?: Prisma.StringFilter<"Demand"> | string
   description?: Prisma.StringFilter<"Demand"> | string
+  type?: Prisma.EnumTypeDemandFilter<"Demand"> | $Enums.TypeDemand
+  priority?: Prisma.EnumPriorityDemandFilter<"Demand"> | $Enums.PriorityDemand
   projectId?: Prisma.UuidFilter<"Demand"> | string
   status?: Prisma.EnumDemandStatusFilter<"Demand"> | $Enums.DemandStatus
   createdAt?: Prisma.DateTimeFilter<"Demand"> | Date | string
@@ -230,6 +250,8 @@ export type DemandOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  type?: Prisma.SortOrder
+  priority?: Prisma.SortOrder
   projectId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -246,6 +268,8 @@ export type DemandScalarWhereWithAggregatesInput = {
   id?: Prisma.UuidWithAggregatesFilter<"Demand"> | string
   title?: Prisma.StringWithAggregatesFilter<"Demand"> | string
   description?: Prisma.StringWithAggregatesFilter<"Demand"> | string
+  type?: Prisma.EnumTypeDemandWithAggregatesFilter<"Demand"> | $Enums.TypeDemand
+  priority?: Prisma.EnumPriorityDemandWithAggregatesFilter<"Demand"> | $Enums.PriorityDemand
   projectId?: Prisma.UuidWithAggregatesFilter<"Demand"> | string
   status?: Prisma.EnumDemandStatusWithAggregatesFilter<"Demand"> | $Enums.DemandStatus
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Demand"> | Date | string
@@ -256,6 +280,8 @@ export type DemandCreateInput = {
   id?: string
   title: string
   description: string
+  type: $Enums.TypeDemand
+  priority: $Enums.PriorityDemand
   status?: $Enums.DemandStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -266,6 +292,8 @@ export type DemandUncheckedCreateInput = {
   id?: string
   title: string
   description: string
+  type: $Enums.TypeDemand
+  priority: $Enums.PriorityDemand
   projectId: string
   status?: $Enums.DemandStatus
   createdAt?: Date | string
@@ -276,6 +304,8 @@ export type DemandUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTypeDemandFieldUpdateOperationsInput | $Enums.TypeDemand
+  priority?: Prisma.EnumPriorityDemandFieldUpdateOperationsInput | $Enums.PriorityDemand
   status?: Prisma.EnumDemandStatusFieldUpdateOperationsInput | $Enums.DemandStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -286,6 +316,8 @@ export type DemandUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTypeDemandFieldUpdateOperationsInput | $Enums.TypeDemand
+  priority?: Prisma.EnumPriorityDemandFieldUpdateOperationsInput | $Enums.PriorityDemand
   projectId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumDemandStatusFieldUpdateOperationsInput | $Enums.DemandStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -296,6 +328,8 @@ export type DemandCreateManyInput = {
   id?: string
   title: string
   description: string
+  type: $Enums.TypeDemand
+  priority: $Enums.PriorityDemand
   projectId: string
   status?: $Enums.DemandStatus
   createdAt?: Date | string
@@ -306,6 +340,8 @@ export type DemandUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTypeDemandFieldUpdateOperationsInput | $Enums.TypeDemand
+  priority?: Prisma.EnumPriorityDemandFieldUpdateOperationsInput | $Enums.PriorityDemand
   status?: Prisma.EnumDemandStatusFieldUpdateOperationsInput | $Enums.DemandStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -315,6 +351,8 @@ export type DemandUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTypeDemandFieldUpdateOperationsInput | $Enums.TypeDemand
+  priority?: Prisma.EnumPriorityDemandFieldUpdateOperationsInput | $Enums.PriorityDemand
   projectId?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.EnumDemandStatusFieldUpdateOperationsInput | $Enums.DemandStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -325,6 +363,8 @@ export type DemandCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  type?: Prisma.SortOrder
+  priority?: Prisma.SortOrder
   projectId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -335,6 +375,8 @@ export type DemandMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  type?: Prisma.SortOrder
+  priority?: Prisma.SortOrder
   projectId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -345,6 +387,8 @@ export type DemandMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  type?: Prisma.SortOrder
+  priority?: Prisma.SortOrder
   projectId?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -363,6 +407,14 @@ export type DemandOrderByRelationAggregateInput = {
 
 export type StringFieldUpdateOperationsInput = {
   set?: string
+}
+
+export type EnumTypeDemandFieldUpdateOperationsInput = {
+  set?: $Enums.TypeDemand
+}
+
+export type EnumPriorityDemandFieldUpdateOperationsInput = {
+  set?: $Enums.PriorityDemand
 }
 
 export type EnumDemandStatusFieldUpdateOperationsInput = {
@@ -419,6 +471,8 @@ export type DemandCreateWithoutProjectInput = {
   id?: string
   title: string
   description: string
+  type: $Enums.TypeDemand
+  priority: $Enums.PriorityDemand
   status?: $Enums.DemandStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -428,6 +482,8 @@ export type DemandUncheckedCreateWithoutProjectInput = {
   id?: string
   title: string
   description: string
+  type: $Enums.TypeDemand
+  priority: $Enums.PriorityDemand
   status?: $Enums.DemandStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -466,6 +522,8 @@ export type DemandScalarWhereInput = {
   id?: Prisma.UuidFilter<"Demand"> | string
   title?: Prisma.StringFilter<"Demand"> | string
   description?: Prisma.StringFilter<"Demand"> | string
+  type?: Prisma.EnumTypeDemandFilter<"Demand"> | $Enums.TypeDemand
+  priority?: Prisma.EnumPriorityDemandFilter<"Demand"> | $Enums.PriorityDemand
   projectId?: Prisma.UuidFilter<"Demand"> | string
   status?: Prisma.EnumDemandStatusFilter<"Demand"> | $Enums.DemandStatus
   createdAt?: Prisma.DateTimeFilter<"Demand"> | Date | string
@@ -476,6 +534,8 @@ export type DemandCreateManyProjectInput = {
   id?: string
   title: string
   description: string
+  type: $Enums.TypeDemand
+  priority: $Enums.PriorityDemand
   status?: $Enums.DemandStatus
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -485,6 +545,8 @@ export type DemandUpdateWithoutProjectInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTypeDemandFieldUpdateOperationsInput | $Enums.TypeDemand
+  priority?: Prisma.EnumPriorityDemandFieldUpdateOperationsInput | $Enums.PriorityDemand
   status?: Prisma.EnumDemandStatusFieldUpdateOperationsInput | $Enums.DemandStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -494,6 +556,8 @@ export type DemandUncheckedUpdateWithoutProjectInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTypeDemandFieldUpdateOperationsInput | $Enums.TypeDemand
+  priority?: Prisma.EnumPriorityDemandFieldUpdateOperationsInput | $Enums.PriorityDemand
   status?: Prisma.EnumDemandStatusFieldUpdateOperationsInput | $Enums.DemandStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -503,6 +567,8 @@ export type DemandUncheckedUpdateManyWithoutProjectInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumTypeDemandFieldUpdateOperationsInput | $Enums.TypeDemand
+  priority?: Prisma.EnumPriorityDemandFieldUpdateOperationsInput | $Enums.PriorityDemand
   status?: Prisma.EnumDemandStatusFieldUpdateOperationsInput | $Enums.DemandStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -514,6 +580,8 @@ export type DemandSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   id?: boolean
   title?: boolean
   description?: boolean
+  type?: boolean
+  priority?: boolean
   projectId?: boolean
   status?: boolean
   createdAt?: boolean
@@ -525,6 +593,8 @@ export type DemandSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extens
   id?: boolean
   title?: boolean
   description?: boolean
+  type?: boolean
+  priority?: boolean
   projectId?: boolean
   status?: boolean
   createdAt?: boolean
@@ -536,6 +606,8 @@ export type DemandSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extens
   id?: boolean
   title?: boolean
   description?: boolean
+  type?: boolean
+  priority?: boolean
   projectId?: boolean
   status?: boolean
   createdAt?: boolean
@@ -547,13 +619,15 @@ export type DemandSelectScalar = {
   id?: boolean
   title?: boolean
   description?: boolean
+  type?: boolean
+  priority?: boolean
   projectId?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type DemandOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "projectId" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["demand"]>
+export type DemandOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "type" | "priority" | "projectId" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["demand"]>
 export type DemandInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   project?: boolean | Prisma.ProjectDefaultArgs<ExtArgs>
 }
@@ -573,6 +647,8 @@ export type $DemandPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     id: string
     title: string
     description: string
+    type: $Enums.TypeDemand
+    priority: $Enums.PriorityDemand
     projectId: string
     status: $Enums.DemandStatus
     createdAt: Date
@@ -1004,6 +1080,8 @@ export interface DemandFieldRefs {
   readonly id: Prisma.FieldRef<"Demand", 'String'>
   readonly title: Prisma.FieldRef<"Demand", 'String'>
   readonly description: Prisma.FieldRef<"Demand", 'String'>
+  readonly type: Prisma.FieldRef<"Demand", 'TypeDemand'>
+  readonly priority: Prisma.FieldRef<"Demand", 'PriorityDemand'>
   readonly projectId: Prisma.FieldRef<"Demand", 'String'>
   readonly status: Prisma.FieldRef<"Demand", 'DemandStatus'>
   readonly createdAt: Prisma.FieldRef<"Demand", 'DateTime'>
