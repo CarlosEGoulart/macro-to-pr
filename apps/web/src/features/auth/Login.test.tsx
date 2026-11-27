@@ -1,13 +1,204 @@
-import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Login } from './Login';
+import { apiService } from './apiService';
 
-describe('Login — tela de redirecionamento após 401', () => {
-  it('renderiza a tela de login com chamada para entrar via GitHub', () => {
+// jsdom não fornece localStorage por padrão. Mockamos aqui para este arquivo
+// ser autossuficiente (setupTests.ts apenas importa @testing-library/jest-dom).
+const localStorageStore: Record<string, string> = {};
+Object.defineProperty(window, 'localStorage', {
+  value: {
+    getItem: (key: string) => localStorageStore[key] ?? null,
+    setItem: (key: string, value: string) => { localStorageStore[key] = value; },
+    clear: () => { Object.keys(localStorageStore).forEach((k) => delete localStorageStore[k]); },
+    removeItem: (key: string) => { delete localStorageStore[key]; },
+    length: 0,
+    key: () => null,
+  },
+  writable: true,
+});
+
+describe('Login — tela de acesso com design tokens', () => {
+  it('renderiza header com logo "M" e wordmark "Macro2PR"', () => {
     render(<Login />);
 
-    expect(screen.getByRole('heading', { name: /login/i })).toBeInTheDocument();
-    expect(screen.getByText(/sessão expirada/i)).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /entrar com github/i })).toBeInTheDocument();
+    expect(screen.getByTestId('login-header')).toBeInTheDocument();
+    const logo = screen.getByTestId('login-logo');
+    expect(logo).toBeInTheDocument();
+    expect(logo.textContent).toBe('M');
+    expect(screen.getByText('Macro2PR')).toBeInTheDocument();
+  });
+
+  it('renderiza container principal "Acesso ao Macro2PR"', () => {
+    render(<Login />);
+
+    expect(screen.getByTestId('login-main')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Acesso ao Macro2PR' })).toBeInTheDocument();
+    expect(screen.getByText(/Autorize sua Conta GitHub para acessar os Repositórios disponíveis/)).toBeInTheDocument();
+  });
+
+  it('renderiza seção de autorização GitHub com card e botão', () => {
+    render(<Login />);
+
+    expect(screen.getByTestId('login-card')).toBeInTheDocument();
+    expect(screen.getByText('Transforme demandas em trabalho estruturado e revisável')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Autorizar com GitHub/ })).toBeInTheDocument();
+  });
+
+  it('renderiza próximos passos com 3 etapas numeradas', () => {
+    render(<Login />);
+
+    expect(screen.getByTestId('login-next-steps')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Depois da autorização' })).toBeInTheDocument();
+    expect(screen.getByText('Escolha um Repositório')).toBeInTheDocument();
+    expect(screen.getByText('Crie um Projeto')).toBeInTheDocument();
+    expect(screen.getByText('Organize Demandas')).toBeInTheDocument();
+  });
+
+  it('aplica tokens de cor de superfície ao card', () => {
+    render(<Login />);
+
+    const card = screen.getByTestId('login-card');
+    expect(card).toHaveStyle('background-color: rgb(255, 255, 255)');
+  });
+
+  it('aplica token de cor primária ao botão de autorizar', () => {
+    render(<Login />);
+
+    const button = screen.getByRole('button', { name: /Autorizar com GitHub/ });
+    expect(button).toHaveStyle('background-color: rgb(97, 100, 241)');
+  });
+
+  it('aplica token de tipografia Inter ao heading', () => {
+    render(<Login />);
+
+    const heading = screen.getByRole('heading', { name: /macro2pr/i });
+    expect(heading.style.fontFamily).toContain('Inter');
+  });
+
+  it('troca cor do botão de autorizar nos estados hover', () => {
+    render(<Login />);
+
+    const button = screen.getByTestId('login-authorize-button');
+
+    fireEvent.mouseEnter(button);
+    expect(button).toHaveStyle('background-color: rgb(79, 70, 229)');
+
+    fireEvent.mouseLeave(button);
+    expect(button).toHaveStyle('background-color: rgb(97, 100, 241)');
+  });
+
+  describe('clicar no botão "Autorizar com GitHub"', () => {
+    const originalLocation = window.location;
+    let redirectUrl = '';
+
+    beforeEach(() => {
+      redirectUrl = '';
+      Object.defineProperty(window, 'location', {
+        configurable: true,
+        get: () => ({
+          get href() {
+            return redirectUrl;
+          },
+          set href(value: string) {
+            redirectUrl = value;
+          },
+        }),
+      });
+      vi.spyOn(globalThis, 'fetch').mockResolvedValue(new Response(null, { status: 200 }));
+      vi.spyOn(apiService, 'authGitHub').mockResolvedValue(undefined);
+    });
+
+    afterEach(() => {
+      vi.restoreAllMocks();
+      Object.defineProperty(window, 'location', { value: originalLocation, configurable: true });
+    });
+
+    it('dispara o fluxo de autorização OAuth (chama apiService.authGitHub)', () => {
+      render(<Login />);
+
+      const button = screen.getByTestId('login-authorize-button');
+      fireEvent.click(button);
+
+      // O fluxo OAuth deve ser disparado (inicia requisição de autorização)
+      expect(apiService.authGitHub).toHaveBeenCalled();
+    });
+
+    it('exibe estado de carregamento no botão durante a ação', () => {
+      render(<Login />);
+
+      const button = screen.getByTestId('login-authorize-button');
+      expect(button).toBeInTheDocument();
+
+      fireEvent.click(button);
+
+      // Durante o loading, o botão exibe estado de carregamento (desativado e/ou com indicação visual)
+      expect(button).toBeDisabled();
+    });
+  });
+
+  describe('tratamento de erros', () => {
+    const originalLocation = window.location;
+    let redirectUrl = '';
+
+    beforeEach(() => {
+      redirectUrl = '';
+      Object.defineProperty(window, 'location', {
+        configurable: true,
+        get: () => ({
+          get href() {
+            return redirectUrl;
+          },
+          set href(value: string) {
+            redirectUrl = value;
+          },
+        }),
+      });
+    });
+
+    afterEach(() => {
+      vi.restoreAllMocks();
+      Object.defineProperty(window, 'location', { value: originalLocation, configurable: true });
+    });
+
+    it('erro de rede ao iniciar a autorização exibe mensagem de conexão', async () => {
+      vi.spyOn(apiService, 'authGitHub').mockRejectedValue(new TypeError('Failed to fetch'));
+
+      render(<Login />);
+
+      const button = screen.getByTestId('login-authorize-button');
+      fireEvent.click(button);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('login-error')).toBeInTheDocument();
+      });
+
+      expect(screen.getByText(/conexão/i)).toBeInTheDocument();
+    });
+
+    it('callback do OAuth com credenciais inválidas (401) exibe "e-mail ou senha inválidos"', () => {
+      // Simula o backend redirecionando de volta ao /login com ?error=invalid_credentials
+      // após falhar a troca do código por token (resposta 401 do backend).
+      const searchValue = '?error=invalid_credentials';
+      Object.defineProperty(window, 'location', {
+        configurable: true,
+        get: () => ({
+          get href() {
+            return redirectUrl;
+          },
+          set href(value: string) {
+            redirectUrl = value;
+          },
+          get search() {
+            return searchValue;
+          },
+        }),
+      });
+
+      render(<Login />);
+
+      expect(screen.getByTestId('login-error')).toBeInTheDocument();
+      expect(screen.getByText('e-mail ou senha inválidos')).toBeInTheDocument();
+    });
   });
 });

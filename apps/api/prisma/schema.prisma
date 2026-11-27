@@ -17,20 +17,67 @@ enum Role {
   Admin
 }
 
+enum DemandStatus {
+  Draft
+  AwaitingPlanApproval
+  AwaitingNewPlan
+  PlanApproved
+  InExecution
+  ReadyForPR
+  Concluded
+}
+
+enum TypeDemand {
+  feature
+  bug
+  refactor
+}
+
+enum PriorityDemand {
+  low
+  medium
+  high
+}
+
+model Demand {
+  id          String       @id @default(uuid()) @db.Uuid
+  title       String
+  description String
+  type        TypeDemand
+  priority    PriorityDemand
+  projectId   String       @db.Uuid
+  status      DemandStatus @default(Draft)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  project     Project      @relation(fields: [projectId], references: [id])
+}
+
 model Developer {
-  id                String   @id @default(uuid()) @db.Uuid
-  email             String   @unique
+  id                String        @id @default(uuid()) @db.Uuid
+  email             String        @unique
   name              String
   avatarUrl         String?
-  role              Role     @default(Developer)
-  githubAccountId   String?  @unique
-  createdAt         DateTime @default(now())
+  role              Role          @default(Developer)
+  githubAccountId   String?  @unique @db.Uuid
+  createdAt         DateTime      @default(now())
   projects          Project[]
+}
+
+model GitHubAccount {
+  id            String      @id @default(uuid()) @db.Uuid
+  githubUserId  String      @unique
+  githubLogin   String
+  accessToken   String
+  scopes        String
+  createdAt     DateTime    @default(now())
+  repositories  Repository[]
 }
 
 model Repository {
   id                String   @id @default(uuid()) @db.Uuid
-  githubAccountId   String
+  githubAccountId   String   @db.Uuid
+  githubAccount     GitHubAccount @relation(fields: [githubAccountId], references: [id])
   name              String
   fullName          String
   url               String
@@ -50,4 +97,5 @@ model Project {
 
   developer         Developer @relation(fields: [developerId], references: [id])
   repository        Repository @relation(fields: [repositoryId], references: [id])
+  demands           Demand[]
 }

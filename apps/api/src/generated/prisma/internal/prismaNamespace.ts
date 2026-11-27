@@ -16,10 +16,10 @@
  */
 
 import * as runtime from "@prisma/client/runtime/client"
-import type * as Prisma from "../models.js"
-import { type PrismaClient } from "./class.js"
+import type * as Prisma from "../models.ts"
+import { type PrismaClient } from "./class.ts"
 
-export type * from '../models.js'
+export type * from '../models.ts'
 
 export type DMMF = typeof runtime.DMMF
 
@@ -397,7 +397,9 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 
 export const ModelName = {
+  Demand: 'Demand',
   Developer: 'Developer',
+  GitHubAccount: 'GitHubAccount',
   Repository: 'Repository',
   Project: 'Project'
 } as const
@@ -415,10 +417,84 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "developer" | "repository" | "project"
+    modelProps: "demand" | "developer" | "gitHubAccount" | "repository" | "project"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
+    Demand: {
+      payload: Prisma.$DemandPayload<ExtArgs>
+      fields: Prisma.DemandFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DemandFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DemandFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandPayload>
+        }
+        findFirst: {
+          args: Prisma.DemandFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DemandFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandPayload>
+        }
+        findMany: {
+          args: Prisma.DemandFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandPayload>[]
+        }
+        create: {
+          args: Prisma.DemandCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandPayload>
+        }
+        createMany: {
+          args: Prisma.DemandCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.DemandCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandPayload>[]
+        }
+        delete: {
+          args: Prisma.DemandDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandPayload>
+        }
+        update: {
+          args: Prisma.DemandUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandPayload>
+        }
+        deleteMany: {
+          args: Prisma.DemandDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DemandUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.DemandUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandPayload>[]
+        }
+        upsert: {
+          args: Prisma.DemandUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DemandPayload>
+        }
+        aggregate: {
+          args: Prisma.DemandAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDemand>
+        }
+        groupBy: {
+          args: Prisma.DemandGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DemandGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DemandCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DemandCountAggregateOutputType> | number
+        }
+      }
+    }
     Developer: {
       payload: Prisma.$DeveloperPayload<ExtArgs>
       fields: Prisma.DeveloperFieldRefs
@@ -490,6 +566,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.DeveloperCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.DeveloperCountAggregateOutputType> | number
+        }
+      }
+    }
+    GitHubAccount: {
+      payload: Prisma.$GitHubAccountPayload<ExtArgs>
+      fields: Prisma.GitHubAccountFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.GitHubAccountFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GitHubAccountPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.GitHubAccountFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GitHubAccountPayload>
+        }
+        findFirst: {
+          args: Prisma.GitHubAccountFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GitHubAccountPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.GitHubAccountFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GitHubAccountPayload>
+        }
+        findMany: {
+          args: Prisma.GitHubAccountFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GitHubAccountPayload>[]
+        }
+        create: {
+          args: Prisma.GitHubAccountCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GitHubAccountPayload>
+        }
+        createMany: {
+          args: Prisma.GitHubAccountCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.GitHubAccountCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GitHubAccountPayload>[]
+        }
+        delete: {
+          args: Prisma.GitHubAccountDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GitHubAccountPayload>
+        }
+        update: {
+          args: Prisma.GitHubAccountUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GitHubAccountPayload>
+        }
+        deleteMany: {
+          args: Prisma.GitHubAccountDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.GitHubAccountUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.GitHubAccountUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GitHubAccountPayload>[]
+        }
+        upsert: {
+          args: Prisma.GitHubAccountUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$GitHubAccountPayload>
+        }
+        aggregate: {
+          args: Prisma.GitHubAccountAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateGitHubAccount>
+        }
+        groupBy: {
+          args: Prisma.GitHubAccountGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GitHubAccountGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.GitHubAccountCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GitHubAccountCountAggregateOutputType> | number
         }
       }
     }
@@ -680,6 +830,21 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+export const DemandScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  type: 'type',
+  priority: 'priority',
+  projectId: 'projectId',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DemandScalarFieldEnum = (typeof DemandScalarFieldEnum)[keyof typeof DemandScalarFieldEnum]
+
+
 export const DeveloperScalarFieldEnum = {
   id: 'id',
   email: 'email',
@@ -691,6 +856,18 @@ export const DeveloperScalarFieldEnum = {
 } as const
 
 export type DeveloperScalarFieldEnum = (typeof DeveloperScalarFieldEnum)[keyof typeof DeveloperScalarFieldEnum]
+
+
+export const GitHubAccountScalarFieldEnum = {
+  id: 'id',
+  githubUserId: 'githubUserId',
+  githubLogin: 'githubLogin',
+  accessToken: 'accessToken',
+  scopes: 'scopes',
+  createdAt: 'createdAt'
+} as const
+
+export type GitHubAccountScalarFieldEnum = (typeof GitHubAccountScalarFieldEnum)[keyof typeof GitHubAccountScalarFieldEnum]
 
 
 export const RepositoryScalarFieldEnum = {
@@ -764,16 +941,44 @@ export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMod
 
 
 /**
- * Reference to a field of type 'Role'
+ * Reference to a field of type 'TypeDemand'
  */
-export type EnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role'>
+export type EnumTypeDemandFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TypeDemand'>
     
 
 
 /**
- * Reference to a field of type 'Role[]'
+ * Reference to a field of type 'TypeDemand[]'
  */
-export type ListEnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role[]'>
+export type ListEnumTypeDemandFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TypeDemand[]'>
+    
+
+
+/**
+ * Reference to a field of type 'PriorityDemand'
+ */
+export type EnumPriorityDemandFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PriorityDemand'>
+    
+
+
+/**
+ * Reference to a field of type 'PriorityDemand[]'
+ */
+export type ListEnumPriorityDemandFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PriorityDemand[]'>
+    
+
+
+/**
+ * Reference to a field of type 'DemandStatus'
+ */
+export type EnumDemandStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DemandStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'DemandStatus[]'
+ */
+export type ListEnumDemandStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DemandStatus[]'>
     
 
 
@@ -788,6 +993,20 @@ export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'DateTime[]'
  */
 export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Role'
+ */
+export type EnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role'>
+    
+
+
+/**
+ * Reference to a field of type 'Role[]'
+ */
+export type ListEnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role[]'>
     
 
 
@@ -962,7 +1181,9 @@ export interface PrismaClientOptionsWithAdapter extends PrismaClientBaseOptions 
  */
 export type PrismaClientOptions = PrismaClientOptionsWithAccelerateUrl | PrismaClientOptionsWithAdapter
 export type GlobalOmitConfig = {
+  demand?: Prisma.DemandOmit
   developer?: Prisma.DeveloperOmit
+  gitHubAccount?: Prisma.GitHubAccountOmit
   repository?: Prisma.RepositoryOmit
   project?: Prisma.ProjectOmit
 }

@@ -17,8 +17,8 @@
 
 import * as runtime from "@prisma/client/runtime/index-browser"
 
-export type * from '../models.js'
-export type * from './prismaNamespace.js'
+export type * from '../models.ts'
+export type * from './prismaNamespace.ts'
 
 export const Decimal = runtime.Decimal
 
@@ -51,7 +51,9 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
+  Demand: 'Demand',
   Developer: 'Developer',
+  GitHubAccount: 'GitHubAccount',
   Repository: 'Repository',
   Project: 'Project'
 } as const
@@ -72,6 +74,21 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+export const DemandScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  type: 'type',
+  priority: 'priority',
+  projectId: 'projectId',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DemandScalarFieldEnum = (typeof DemandScalarFieldEnum)[keyof typeof DemandScalarFieldEnum]
+
+
 export const DeveloperScalarFieldEnum = {
   id: 'id',
   email: 'email',
@@ -83,6 +100,18 @@ export const DeveloperScalarFieldEnum = {
 } as const
 
 export type DeveloperScalarFieldEnum = (typeof DeveloperScalarFieldEnum)[keyof typeof DeveloperScalarFieldEnum]
+
+
+export const GitHubAccountScalarFieldEnum = {
+  id: 'id',
+  githubUserId: 'githubUserId',
+  githubLogin: 'githubLogin',
+  accessToken: 'accessToken',
+  scopes: 'scopes',
+  createdAt: 'createdAt'
+} as const
+
+export type GitHubAccountScalarFieldEnum = (typeof GitHubAccountScalarFieldEnum)[keyof typeof GitHubAccountScalarFieldEnum]
 
 
 export const RepositoryScalarFieldEnum = {
