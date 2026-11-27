@@ -3,14 +3,20 @@ import { CreateDemandDto } from './dto/create-demand.dto.js';
 import { DemandsService } from './demands.service.js';
 import { DemandsRepository } from './demands.repository.js';
 import { ProjectsRepository } from '../projects/projects.repository.js';
+import type { TypeDemand, PriorityDemand } from './dto/create-demand.dto.ts';
+
+const mockCreate = vi.fn();
+const mockFindDemandById = vi.fn();
 
 const mockDemandsRepository = {
-  create: vi.fn(),
-  findDemandById: vi.fn(),
+  create: mockCreate,
+  findDemandById: mockFindDemandById,
 } as unknown as DemandsRepository;
 
+const mockFindProjectByIdAndDeveloper = vi.fn();
+
 const mockProjectsRepository = {
-  findProjectByIdAndDeveloper: vi.fn(),
+  findProjectByIdAndDeveloper: mockFindProjectByIdAndDeveloper,
 } as unknown as ProjectsRepository;
 
 describe('DemandsService', () => {
@@ -25,17 +31,17 @@ describe('DemandsService', () => {
     const dto: CreateDemandDto = {
       title: 'Nova demanda',
       description: 'Descrição',
-      type: 'feature',
-      priority: 'high',
+      type: 'feature' as TypeDemand,
+      priority: 'high' as PriorityDemand,
       projectId: 'proj-1',
     };
 
     it('deve criar demanda quando projeto pertence ao desenvolvedor', async () => {
-      mockProjectsRepository.findProjectByIdAndDeveloper.mockResolvedValue({
+      mockFindProjectByIdAndDeveloper.mockResolvedValue({
         id: 'proj-1',
         developerId: 'dev-1',
       });
-      mockDemandsRepository.create.mockResolvedValue({
+      mockCreate.mockResolvedValue({
         id: 'demand-1',
         ...dto,
         projectId: 'proj-1',
@@ -44,7 +50,7 @@ describe('DemandsService', () => {
       const result = await service.create(dto, 'dev-1');
 
       expect(result.id).toBe('demand-1');
-      expect(mockDemandsRepository.create).toHaveBeenCalledWith({
+      expect(mockCreate).toHaveBeenCalledWith({
         title: dto.title,
         description: dto.description,
         type: dto.type,
@@ -54,7 +60,7 @@ describe('DemandsService', () => {
     });
 
     it('deve lançar ForbiddenException quando projeto não existe', async () => {
-      mockProjectsRepository.findProjectByIdAndDeveloper.mockResolvedValue(null);
+      mockFindProjectByIdAndDeveloper.mockResolvedValue(null);
 
       await expect(service.create(dto, 'dev-1')).rejects.toThrow(
         ForbiddenException,
@@ -62,7 +68,7 @@ describe('DemandsService', () => {
     });
 
     it('deve lançar ForbiddenException quando projeto não pertence ao desenvolvedor', async () => {
-      mockProjectsRepository.findProjectByIdAndDeveloper.mockResolvedValue({
+      mockFindProjectByIdAndDeveloper.mockResolvedValue({
         id: 'proj-1',
         developerId: 'dev-2',
       });
@@ -75,7 +81,7 @@ describe('DemandsService', () => {
 
   describe('findDemandById', () => {
     it('deve retornar demanda quando encontrada', async () => {
-      mockDemandsRepository.findDemandById.mockResolvedValue({
+      mockFindDemandById.mockResolvedValue({
         id: 'demand-1',
         title: 'Nova demanda',
       });
@@ -86,7 +92,7 @@ describe('DemandsService', () => {
     });
 
     it('deve lançar NotFoundException quando demanda não existe', async () => {
-      mockDemandsRepository.findDemandById.mockResolvedValue(null);
+      mockFindDemandById.mockResolvedValue(null);
 
       await expect(service.findDemandById('demand-1')).rejects.toThrow(
         NotFoundException,
